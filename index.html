@@ -5,10 +5,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MyStore</title>
-  <link rel="stylesheet" href="style.css">
 
-  <!-- STYLE MUST STAY IN HEAD -->
   <style>
+    body{
+      font-family: Arial, sans-serif;
+      margin:0;
+      padding:20px;
+    }
+
+    nav a{
+      margin-right:15px;
+      text-decoration:none;
+      font-weight:bold;
+      color:black;
+    }
+
+    .container{
+      margin-bottom:40px;
+    }
+
+    .card{
+      border:1px solid #ddd;
+      padding:15px;
+      border-radius:10px;
+      max-width:300px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card img{
+      width:100%;
+      border-radius:8px;
+    }
+
+    .buy{
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 12px;
+      background:black;
+      color:white;
+      text-decoration:none;
+      border-radius:5px;
+    }
+
+    /* AUTO PRODUCTS STYLE */
     .category-section{
       margin:40px 0;
     }
@@ -41,19 +80,66 @@
 
 <body>
 
-  <!-- ✅ MOVED HERE (IMPORTANT FIX) -->
-  <h2 style="text-align:center;">🛍 Our Products</h2>
-  <div id="product-container"></div>
+<h1 style="text-align:center;">My Affiliate Store</h1>
 
-  <nav>
-    <a href="#FitnessSports">Fitness & Sports</a>
-    <a href="#Kitchen">Kitchen</a>
-    <a href="#PhoneAccessories">Phone Accessories</a>
-    <a href="#Tech">Tech</a>
-  </nav>
+<!-- ✅ AUTO PRODUCTS AREA -->
+<h2 style="text-align:center;">🛍 Our Products</h2>
+<div id="product-container"></div>
 
-  <!-- Your existing manual categories stay unchanged -->
-  <!-- (Fitness, Kitchen, Phone Accessories, Tech sections remain same) -->
+<nav>
+  <a href="#FitnessSports">Fitness & Sports</a>
+  <a href="#Kitchen">Kitchen</a>
+  <a href="#PhoneAccessories">Phone Accessories</a>
+  <a href="#Tech">Tech</a>
+</nav>
+
+<!-- Fitness -->
+<h2 id="FitnessSports">Fitness & Sports</h2>
+<div class="container">
+  <div class="card">
+    <h3>Yoga Mat</h3>
+    <p>India: ₹629 | 4.2⭐</p>
+    <p>US: $21 | 4.6⭐</p>
+    <a class="buy" href="https://amzn.to/4uPoVZM" target="_blank">Buy in India</a>
+    <a class="buy" href="https://amzn.to/4szjv3F" target="_blank">Buy in US</a>
+  </div>
+</div>
+
+<!-- Kitchen -->
+<h2 id="Kitchen">Kitchen</h2>
+<div class="container">
+  <div class="card">
+    <h3>Digital Kitchen Scale</h3>
+    <p>India: ₹999 | 4.2⭐</p>
+    <p>US: $9 | 4.7⭐</p>
+    <a class="buy" href="https://amzn.to/3Plr3Zb" target="_blank">Buy in India</a>
+    <a class="buy" href="https://amzn.to/4rPReVa" target="_blank">Buy in US</a>
+  </div>
+</div>
+
+<!-- Phone Accessories -->
+<h2 id="PhoneAccessories">Phone Accessories</h2>
+<div class="container">
+  <div class="card">
+    <h3>Portable Phone Stand</h3>
+    <p>India: ₹619 | 4.2⭐</p>
+    <p>US: $16 | 4.6⭐</p>
+    <a class="buy" href="https://amzn.to/40NFLKS" target="_blank">Buy in India</a>
+    <a class="buy" href="https://amzn.to/4c3CNbn" target="_blank">Buy in US</a>
+  </div>
+</div>
+
+<!-- Tech -->
+<h2 id="Tech">Tech</h2>
+<div class="container">
+  <div class="card">
+    <h3>Logitech M185 Mouse Wireless</h3>
+    <p>India: ₹790 | 4.2⭐</p>
+    <p>US: $13 | 4.5⭐</p>
+    <a class="buy" href="https://amzn.to/4sZjWE2" target="_blank">Buy in India</a>
+    <a class="buy" href="https://amzn.to/40SG4UE" target="_blank">Buy in US</a>
+  </div>
+</div>
 
 <script>
 // ===== PRODUCT LIST =====
@@ -78,7 +164,6 @@ const categories = {};
 products.forEach(product => {
 
   if (!categories[product.category]) {
-
     const section = document.createElement("div");
     section.className = "category-section";
 
@@ -112,3 +197,4 @@ products.forEach(product => {
 
 </body>
 </html>
+
