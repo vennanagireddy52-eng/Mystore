@@ -1,200 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MyStore</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Store</title>
 
-  <style>
-    body{
-      font-family: Arial, sans-serif;
-      margin:0;
-      padding:20px;
-    }
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f4f4f4;
+}
 
-    nav a{
-      margin-right:15px;
-      text-decoration:none;
-      font-weight:bold;
-      color:black;
-    }
+/* STORE SWITCH */
+.store-switch{
+  background:black;
+  text-align:center;
+  padding:15px;
+}
 
-    .container{
-      margin-bottom:40px;
-    }
+.store-switch button{
+  padding:10px 20px;
+  margin:5px;
+  border:none;
+  border-radius:6px;
+  background:#444;
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+}
 
-    .card{
-      border:1px solid #ddd;
-      padding:15px;
-      border-radius:10px;
-      max-width:300px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
-    }
+.store-switch button.active{
+  background:#ff6600;
+}
 
-    .card img{
-      width:100%;
-      border-radius:8px;
-    }
+/* CATEGORY */
+.category{
+  margin:30px auto;
+  width:90%;
+  max-width:1100px;
+}
 
-    .buy{
-      display:inline-block;
-      margin-top:10px;
-      padding:8px 12px;
-      background:black;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-    }
+.category img.banner{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:10px;
+}
 
-    /* AUTO PRODUCTS STYLE */
-    .category-section{
-      margin:40px 0;
-    }
+.category h2{
+  margin:10px 0;
+}
 
-    .product-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
-    }
+/* PRODUCT GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
 
-    .product-card{
-      border:1px solid #ddd;
-      padding:15px;
-      border-radius:10px;
-      text-align:center;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
-    }
+/* CARD */
+.card{
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
 
-    .product-card a{
-      display:inline-block;
-      margin-top:10px;
-      padding:8px 15px;
-      background:black;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-    }
-  </style>
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:contain;
+}
+
+.buy{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 15px;
+  background:black;
+  color:white;
+  text-decoration:none;
+  border-radius:5px;
+}
+</style>
 </head>
 
 <body>
 
-<h1 style="text-align:center;">My Affiliate Store</h1>
-
-<!-- ✅ AUTO PRODUCTS AREA -->
-<h2 style="text-align:center;">🛍 Our Products</h2>
-<div id="product-container"></div>
-
-<nav>
-  <a href="#FitnessSports">Fitness & Sports</a>
-  <a href="#Kitchen">Kitchen</a>
-  <a href="#PhoneAccessories">Phone Accessories</a>
-  <a href="#Tech">Tech</a>
-</nav>
-
-<!-- Fitness -->
-<h2 id="FitnessSports">Fitness & Sports</h2>
-<div class="container">
-  <div class="card">
-    <h3>Yoga Mat</h3>
-    <p>India: ₹629 | 4.2⭐</p>
-    <p>US: $21 | 4.6⭐</p>
-    <a class="buy" href="https://amzn.to/4uPoVZM" target="_blank">Buy in India</a>
-    <a class="buy" href="https://amzn.to/4szjv3F" target="_blank">Buy in US</a>
-  </div>
+<div class="store-switch">
+  <button onclick="switchStore('India')" class="active" id="btnIndia">🇮🇳 India Store</button>
+  <button onclick="switchStore('US')" id="btnUS">🇺🇸 US Store</button>
 </div>
 
-<!-- Kitchen -->
-<h2 id="Kitchen">Kitchen</h2>
-<div class="container">
-  <div class="card">
-    <h3>Digital Kitchen Scale</h3>
-    <p>India: ₹999 | 4.2⭐</p>
-    <p>US: $9 | 4.7⭐</p>
-    <a class="buy" href="https://amzn.to/3Plr3Zb" target="_blank">Buy in India</a>
-    <a class="buy" href="https://amzn.to/4rPReVa" target="_blank">Buy in US</a>
-  </div>
-</div>
-
-<!-- Phone Accessories -->
-<h2 id="PhoneAccessories">Phone Accessories</h2>
-<div class="container">
-  <div class="card">
-    <h3>Portable Phone Stand</h3>
-    <p>India: ₹619 | 4.2⭐</p>
-    <p>US: $16 | 4.6⭐</p>
-    <a class="buy" href="https://amzn.to/40NFLKS" target="_blank">Buy in India</a>
-    <a class="buy" href="https://amzn.to/4c3CNbn" target="_blank">Buy in US</a>
-  </div>
-</div>
-
-<!-- Tech -->
-<h2 id="Tech">Tech</h2>
-<div class="container">
-  <div class="card">
-    <h3>Logitech M185 Mouse Wireless</h3>
-    <p>India: ₹790 | 4.2⭐</p>
-    <p>US: $13 | 4.5⭐</p>
-    <a class="buy" href="https://amzn.to/4sZjWE2" target="_blank">Buy in India</a>
-    <a class="buy" href="https://amzn.to/40SG4UE" target="_blank">Buy in US</a>
-  </div>
-</div>
+<div id="store"></div>
 
 <script>
-// ===== PRODUCT LIST =====
-const products = [
-  {category:"Tech",country:"India",name:"JBL Bluetooth Speaker",price:"₹2799",rating:"4⭐",link:"https://amzn.to/40OZeuH"},
-  {category:"Tech",country:"US",name:"JBL Bluetooth Speaker",price:"$97",rating:"4.7⭐",link:"https://amzn.to/3PvtdW7"},
 
-  {category:"Travel",country:"India",name:"6 Pack Travel Bags",price:"₹799",rating:"4.3⭐",link:"https://amzn.to/47iPnky"},
-  {category:"Travel",country:"US",name:"6 Pack Travel Bags",price:"$27",rating:"4.8⭐",link:"https://amzn.to/4uRA649"},
+let currentStore="India";
 
-  {category:"Home",country:"India",name:"10 Pack Picture Frames",price:"₹999",rating:"4.6⭐",link:"https://amzn.to/481afgb"},
-  {category:"Home",country:"US",name:"10 Pack Picture Frames",price:"$19",rating:"4.6⭐",link:"https://amzn.to/3O0WgjM"},
+/* PRODUCTS */
+const products=[
 
-  {category:"Fashion",country:"India",name:"Men's Hoodie",price:"₹899",rating:"4.1⭐",link:"https://amzn.to/4swz0ZY"},
-  {category:"Fashion",country:"US",name:"3 Pack Men's Hoodies",price:"$35",rating:"4.3⭐",link:"https://amzn.to/488Nuaee"}
+{
+category:"Tech",
+name:"JBL Bluetooth Speaker",
+indiaPrice:"₹2799",
+usPrice:"$97",
+indiaLink:"https://amzn.to/40OZeuH",
+usLink:"https://amzn.to/3PvtdW7",
+indiaImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
+usImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp"
+},
+
+{
+category:"Travel",
+name:"6 Pack Travel Bags",
+indiaPrice:"₹799",
+usPrice:"$27",
+indiaLink:"https://amzn.to/47iPnky",
+usLink:"https://amzn.to/4uRA649",
+indiaImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
+usImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg"
+},
+
+{
+category:"Home",
+name:"10 Pack Picture Frames",
+indiaPrice:"₹999",
+usPrice:"$19",
+indiaLink:"https://amzn.to/481afgb",
+usLink:"https://amzn.to/3O0WgjM",
+indiaImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
+usImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp"
+},
+
+{
+category:"Fashion",
+name:"Men's Hoodie",
+indiaPrice:"₹899",
+usPrice:"$35",
+indiaLink:"https://amzn.to/4swz0ZY",
+usLink:"https://amzn.to/488Nuaee",
+indiaImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37be5e34-5bb5-4705-a06d-fd2a00a108dc.jpg",
+usImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84666b61-2360-42e9-b4d3-283f8e2f4292.jpg"
+}
+
 ];
 
-// ===== AUTO CATEGORY SYSTEM =====
-const container = document.getElementById("product-container");
-const categories = {};
+function renderStore(){
 
-products.forEach(product => {
+const store=document.getElementById("store");
+store.innerHTML="";
+const categories={};
 
-  if (!categories[product.category]) {
-    const section = document.createElement("div");
-    section.className = "category-section";
+products.forEach(p=>{
 
-    const title = document.createElement("h3");
-    title.innerText = product.category;
+if(!categories[p.category]){
+categories[p.category]=[];
+}
+categories[p.category].push(p);
 
-    const grid = document.createElement("div");
-    grid.className = "product-grid";
-
-    section.appendChild(title);
-    section.appendChild(grid);
-    container.appendChild(section);
-
-    categories[product.category] = grid;
-  }
-
-  const card = document.createElement("div");
-  card.className = "product-card";
-
-  card.innerHTML = `
-    <h4>${product.name}</h4>
-    <p><b>${product.country}</b></p>
-    <p>Price: ${product.price}</p>
-    <p>Rating: ${product.rating}</p>
-    <a href="${product.link}" target="_blank">Buy Now</a>
-  `;
-
-  categories[product.category].appendChild(card);
 });
-</script>
 
+Object.keys(categories).forEach(cat=>{
+
+const section=document.createElement("div");
+section.className="category";
+
+const banner=document.createElement("img");
+banner.className="banner";
+banner.src=currentStore==="India"
+?categories[cat][0].indiaImg
+:categories[cat][0].usImg;
+
+const title=document.createElement("h2");
+title.innerText=cat;
+
+const grid=document.createElement("div");
+grid.className="grid";
+
+categories[cat].forEach(p=>{
+
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<img src="${currentStore==="India"?p.indiaImg:p.usImg}">
+<h3>${p.name}</h3>
+<p>${currentStore==="India"?p.indiaPrice:p.usPrice}</p>
+<a class="buy" target="_blank"
+href="${currentStore==="India"?p.indiaLink:p.usLink}">
+View ${cat}
+</a>
+`;
+
+grid.appendChild(card);
+
+});
+
+section.appendChild(banner);
+section.appendChild(title);
+section.appendChild(grid);
+store.appendChild(section);
+
+});
+
+}
+
+function switchStore(store){
+currentStore=store;
+
+document.getElementById("btnIndia").classList.remove("active");
+document.getElementById("btnUS").classList.remove("active");
+
+document.getElementById(
+store==="India"?"btnIndia":"btnUS"
+).classList.add("active");
+
+renderStore();
+}
+
+renderStore();
+
+</script>
 </body>
 </html>
-
