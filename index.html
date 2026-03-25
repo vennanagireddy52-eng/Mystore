@@ -2,66 +2,62 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Affiliate Store</title>
+<title>My Store</title>
 
 <style>
 
-/* ---------- GLOBAL ---------- */
+/* ===== GENERAL ===== */
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:#fafafa;
 }
 
-.hidden{display:none}
+/* ===== LAYER SYSTEM ===== */
+.layer{display:none;}
+.active{display:block;}
 
-/* ---------- STORE LAYER ---------- */
-
-#stores{
+/* ===== STORE PAGE ===== */
+.store-page{
 height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-gap:40px;
+gap:60px;
 }
 
-.store{
+.store-btn{
 font-size:28px;
-font-weight:bold;
-background:white;
-padding:25px 60px;
-border-radius:12px;
-box-shadow:0 3px 10px rgba(0,0,0,.2);
+padding:20px 40px;
+background:black;
+color:white;
+border-radius:10px;
 cursor:pointer;
 }
 
-/* ---------- STICKY SWITCH ---------- */
-
-#switchBar{
+/* ===== STICKY HEADER ===== */
+.header{
 position:sticky;
 top:0;
 background:white;
-display:flex;
-justify-content:center;
-gap:20px;
 padding:10px;
-z-index:999;
+z-index:1000;
 box-shadow:0 2px 5px rgba(0,0,0,.1);
+display:flex;
+justify-content:space-between;
 }
 
-/* ---------- SEARCH ---------- */
-
+/* ===== SEARCH ===== */
 .search{
 width:100%;
 padding:12px;
 border:none;
 outline:none;
-font-size:16px;
+border-bottom:1px solid #ccc;
 }
 
-/* ---------- GRID (Pinterest Style) ---------- */
-
+/* ===== PINTEREST GRID ===== */
 .grid{
 column-count:2;
 column-gap:0;
@@ -75,36 +71,27 @@ column-gap:0;
 break-inside:avoid;
 background:white;
 margin:0;
+padding:10px;
 cursor:pointer;
 }
 
 .card img{
 width:100%;
-display:block;
+border-radius:8px;
 }
 
-.card h3{
-margin:8px;
-}
+/* PRODUCT TEXT */
+.price{font-weight:bold;}
+.rating{color:orange;}
 
-.desc{
-font-size:13px;
-padding:0 8px 10px;
-}
-
-/* ---------- SHARE BUTTON ---------- */
-
-.share{
+.buy{
+display:inline-block;
+margin-top:8px;
 background:black;
 color:white;
-padding:6px;
-margin:8px;
-text-align:center;
-font-size:12px;
-}
-
-.highlight{
-outline:4px solid orange;
+padding:8px 12px;
+text-decoration:none;
+border-radius:5px;
 }
 
 </style>
@@ -113,246 +100,225 @@ outline:4px solid orange;
 <body>
 
 <!-- ================= LAYER 1 ================= -->
+<div id="storeLayer" class="layer active store-page">
 
-<div id="stores">
-<div class="store" onclick="openStore('india')">🇮🇳 INDIA STORE</div>
-<div class="store" onclick="openStore('us')">🇺🇸 US STORE</div>
+<div class="store-btn" onclick="openStore('IND')">
+🇮🇳 India Store
 </div>
+
+<div class="store-btn" onclick="openStore('US')">
+🇺🇸 US Store
+</div>
+
+</div>
+
 
 <!-- ================= LAYER 2 ================= -->
+<div id="categoryLayer" class="layer">
 
-<div id="categories" class="hidden">
-
-<div id="switchBar">
-<button onclick="openStore('india')">India</button>
-<button onclick="openStore('us')">US</button>
+<div class="header">
+<button onclick="backToStores()">⬅ Stores</button>
+<div>
+<button onclick="openStore('IND')">IND</button>
+<button onclick="openStore('US')">US</button>
+</div>
 </div>
 
-<input class="search" placeholder="Search categories..." onkeyup="searchCategory(this.value)">
+<input class="search" placeholder="Search categories..."
+oninput="filterCategories(this.value)">
 
 <div id="categoryGrid" class="grid"></div>
 
 </div>
 
+
 <!-- ================= LAYER 3 ================= -->
+<div id="productLayer" class="layer">
 
-<div id="products" class="hidden">
-
-<div id="switchBar">
-<button onclick="backCategories()">⬅ Categories</button>
+<div class="header">
+<button onclick="backToCategories()">⬅ Categories</button>
 </div>
 
-<input class="search" placeholder="Search products..." onkeyup="searchProduct(this.value)">
+<input class="search" placeholder="Search products..."
+oninput="filterProducts(this.value)">
 
 <div id="productGrid" class="grid"></div>
 
 </div>
 
+
 <script>
 
-/* ---------------- DATA (Yesterday + Today) ---------------- */
+/* ================= PRODUCTS ================= */
+/* Yesterday + Today together */
 
-const storeData = {
+const products = [
 
-india:{
-Tech:{
-desc:"Latest gadgets and smart electronics selected for daily productivity entertainment and modern digital lifestyle needs.",
-products:[
+/* -------- INDIA -------- */
 {
+store:"IND",
+category:"Tech",
+catImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
 name:"JBL Bluetooth Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
 price:"₹2799",
 rating:"4⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
-desc:"Portable wireless Bluetooth speaker delivering powerful sound, deep bass, durable build, long battery life and perfect performance for travel, parties, home entertainment and outdoor music enjoyment."
-},
-{
-name:"Logitech M185 Mouse",
-price:"₹790",
-rating:"4.2⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
-desc:"Reliable wireless mouse offering smooth tracking, plug‑and‑play USB receiver, comfortable ergonomic shape, long battery efficiency and ideal performance for laptops, office work and everyday computing."
-}
-]
+link:"https://amzn.to/40OZeuH"
 },
 
-Travel:{
-desc:"Travel essentials helping you organize luggage efficiently and travel comfortably during trips vacations and outdoor adventures.",
-products:[
 {
+store:"IND",
+category:"Travel",
+catImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
 name:"6 Pack Travel Bags",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
 price:"₹799",
 rating:"4.3⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
-desc:"Packing organizer cubes designed to separate clothes, reduce luggage mess, maximize suitcase space and simplify travel organization for vacations, business trips and frequent flyers."
-}
-]
+link:"https://amzn.to/47iPnky"
 },
 
-Home:{
-desc:"Decor and home improvement products designed to enhance comfort organization and modern interior aesthetics.",
-products:[
+/* -------- US -------- */
 {
-name:"Picture Frames",
-price:"₹999",
-rating:"4.6⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
-desc:"Elegant photo frame set perfect for wall decoration, memories display, home styling and creating beautiful personalized interior gallery arrangements."
-}
-]
-},
-
-Fashion:{
-desc:"Comfortable stylish fashion wear suitable for casual daily outfits modern looks and seasonal clothing needs.",
-products:[
-{
-name:"Men Hoodie",
-price:"₹899",
-rating:"4.1⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37be5e34-5bb5-4705-a06d-fd2a00a108dc.jpg",
-desc:"Soft cotton hoodie offering warmth comfort breathable fabric modern fit and ideal everyday wear for casual outings travel and relaxed styling."
-}
-]
-}
-},
-
-/* ---------- US STORE ---------- */
-
-us:{
-Tech:{
-desc:"Modern electronics and trending technology products carefully selected for productivity entertainment and smart living.",
-products:[
-{
+store:"US",
+category:"Tech",
+catImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
 name:"JBL Bluetooth Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
 price:"$97",
 rating:"4.7⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
-desc:"High performance Bluetooth speaker delivering immersive audio clarity strong bass extended battery life and premium portability for indoor and outdoor listening experiences."
-}
-]
+link:"https://amzn.to/3PvtdW7"
 },
 
-Travel:{
-desc:"Travel organization tools helping efficient packing easy movement and smarter luggage management.",
-products:[
 {
-name:"6 Pack Travel Bags",
-price:"$27",
-rating:"4.8⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg",
-desc:"Lightweight packing cubes improving suitcase organization clothing separation and travel convenience for frequent travelers and vacation planning."
-}
-]
-},
-
-Home:{
-desc:"Beautiful home décor items designed to upgrade interiors and showcase memories creatively.",
-products:[
-{
-name:"Picture Frames",
+store:"US",
+category:"Home",
+catImg:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
+name:"10 Pack Picture Frames",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
 price:"$19",
 rating:"4.6⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
-desc:"Minimalistic frame collection suitable for home walls office decoration photo displays and aesthetic gallery layouts."
-}
-]
-},
-
-Fashion:{
-desc:"Casual fashion clothing designed for comfort versatility and modern everyday styling.",
-products:[
-{
-name:"3 Pack Hoodies",
-price:"$35",
-rating:"4.3⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84666b61-2360-42e9-b4d3-283f8e2f4292.jpg",
-desc:"Comfortable multi‑pack hoodie set featuring soft fabric warmth relaxed fit and stylish everyday wear suitable for multiple seasons."
-}
-]
-}
+link:"https://amzn.to/3O0WgjM"
 }
 
-};
-
-/* ---------------- NAVIGATION ---------------- */
+];
 
 let currentStore="";
 let currentCategory="";
 
+/* ===== NAVIGATION ===== */
+
 function openStore(store){
 currentStore=store;
-document.getElementById("stores").classList.add("hidden");
-document.getElementById("categories").classList.remove("hidden");
-
-loadCategories();
+showLayer("categoryLayer");
+renderCategories();
 }
 
-function loadCategories(){
-let grid=document.getElementById("categoryGrid");
+function backToStores(){
+showLayer("storeLayer");
+}
+
+function backToCategories(){
+showLayer("categoryLayer");
+}
+
+function showLayer(id){
+document.querySelectorAll(".layer")
+.forEach(l=>l.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* ===== CATEGORIES ===== */
+
+function renderCategories(){
+
+const grid=document.getElementById("categoryGrid");
 grid.innerHTML="";
 
-Object.keys(storeData[currentStore]).forEach(cat=>{
+const cats={};
 
-grid.innerHTML+=`
-<div class="card" onclick="openCategory('${cat}')">
-<h3>${cat}</h3>
-<div class="desc">${storeData[currentStore][cat].desc}</div>
-<div class="share" onclick="share(event,'category','${cat}')">Share</div>
-</div>`;
+products
+.filter(p=>p.store===currentStore)
+.forEach(p=>{
+if(!cats[p.category]) cats[p.category]=p;
 });
+
+Object.values(cats).forEach(cat=>{
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<img src="${cat.catImg}">
+<h3>${cat.category}</h3>
+<p>Best curated products selected for quality, usability, affordability and daily lifestyle improvement recommendations.</p>
+`;
+
+div.onclick=()=>{
+currentCategory=cat.category;
+openProducts();
+};
+
+grid.appendChild(div);
+
+});
+
 }
 
-function openCategory(cat){
-currentCategory=cat;
-document.getElementById("categories").classList.add("hidden");
-document.getElementById("products").classList.remove("hidden");
+/* ===== PRODUCTS ===== */
 
-let grid=document.getElementById("productGrid");
+function openProducts(){
+showLayer("productLayer");
+
+const grid=document.getElementById("productGrid");
 grid.innerHTML="";
 
-storeData[currentStore][cat].products.forEach(p=>{
-grid.innerHTML+=`
-<div class="card">
+products
+.filter(p=>p.store===currentStore && p.category===currentCategory)
+.forEach(p=>{
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
 <img src="${p.img}">
 <h3>${p.name}</h3>
-<div class="desc">${p.price} | ${p.rating}</div>
-<div class="desc">${p.desc}</div>
-<div class="share" onclick="share(event,'product','${p.name}')">Share</div>
-</div>`;
+<p class="price">${p.price}</p>
+<p class="rating">${p.rating}</p>
+<p>
+This product is carefully selected based on user reviews, durability,
+performance, affordability, and real-world usability to provide
+maximum value and long-term satisfaction for everyday users.
+</p>
+<a class="buy" target="_blank" href="${p.link}">Buy</a>
+`;
+
+grid.appendChild(div);
+
+});
+
+}
+
+/* ===== SEARCH ===== */
+
+function filterCategories(q){
+document.querySelectorAll("#categoryGrid .card")
+.forEach(c=>{
+c.style.display=
+c.innerText.toLowerCase().includes(q.toLowerCase())
+?"block":"none";
 });
 }
 
-function backCategories(){
-document.getElementById("products").classList.add("hidden");
-document.getElementById("categories").classList.remove("hidden");
-}
-
-/* ---------------- SEARCH ---------------- */
-
-function searchCategory(q){
-q=q.toLowerCase();
-document.querySelectorAll("#categoryGrid .card")
-.forEach(c=>c.style.display=
-c.innerText.toLowerCase().includes(q)?"block":"none");
-}
-
-function searchProduct(q){
-q=q.toLowerCase();
+function filterProducts(q){
 document.querySelectorAll("#productGrid .card")
-.forEach(c=>c.style.display=
-c.innerText.toLowerCase().includes(q)?"block":"none");
-}
-
-/* ---------------- SHARE LINKS ---------------- */
-
-function share(e,type,name){
-e.stopPropagation();
-let url=location.origin+location.pathname+
-`?store=${currentStore}&${type}=${encodeURIComponent(name)}`;
-navigator.clipboard.writeText(url);
-alert("Link copied!");
+.forEach(c=>{
+c.style.display=
+c.innerText.toLowerCase().includes(q.toLowerCase())
+?"block":"none";
+});
 }
 
 </script>
 
 </body>
-</html> 
+</html>
