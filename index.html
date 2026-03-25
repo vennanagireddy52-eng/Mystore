@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+.category-section{
+  margin:40px 0;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.product-card{
+  border:1px solid #ddd;
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-card a{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 15px;
+  background:black;
+  color:white;
+  text-decoration:none;
+  border-radius:5px;
+}
+</style>
 <h2 style="text-align:center;">🛍 Our Products</h2>
 
 <div id="product-container"></div>
@@ -90,5 +119,116 @@
     </div>
   </div>
 
-</body>
+<script>
+// ===== PRODUCT LIST =====
+const products = [
+  {
+    category: "Tech",
+    country: "India",
+    name: "JBL Bluetooth Speaker",
+    price: "₹2799",
+    rating: "4⭐",
+    link: "https://amzn.to/40OZeuH"
+  },
+  {
+    category: "Tech",
+    country: "US",
+    name: "JBL Bluetooth Speaker",
+    price: "$97",
+    rating: "4.7⭐",
+    link: "https://amzn.to/3PvtdW7"
+  },
+
+  {
+    category: "Travel",
+    country: "India",
+    name: "6 Pack Travel Bags",
+    price: "₹799",
+    rating: "4.3⭐",
+    link: "https://amzn.to/47iPnky"
+  },
+  {
+    category: "Travel",
+    country: "US",
+    name: "6 Pack Travel Bags",
+    price: "$27",
+    rating: "4.8⭐",
+    link: "https://amzn.to/4uRA649"
+  },
+
+  {
+    category: "Home",
+    country: "India",
+    name: "10 Pack Picture Frames",
+    price: "₹999",
+    rating: "4.6⭐",
+    link: "https://amzn.to/481afgb"
+  },
+  {
+    category: "Home",
+    country: "US",
+    name: "10 Pack Picture Frames",
+    price: "$19",
+    rating: "4.6⭐",
+    link: "https://amzn.to/3O0WgjM"
+  },
+
+  {
+    category: "Fashion",
+    country: "India",
+    name: "Men's Hoodie",
+    price: "₹899",
+    rating: "4.1⭐",
+    link: "https://amzn.to/4swz0ZY"
+  },
+  {
+    category: "Fashion",
+    country: "US",
+    name: "3 Pack Men's Hoodies",
+    price: "$35",
+    rating: "4.3⭐",
+    link: "https://amzn.to/488Nuaee"
+  }
+];
+
+// ===== AUTO CATEGORY SYSTEM =====
+const container = document.getElementById("product-container");
+const categories = {};
+
+products.forEach(product => {
+
+  // Create category if not exists
+  if (!categories[product.category]) {
+
+    const section = document.createElement("div");
+    section.className = "category-section";
+
+    const title = document.createElement("h3");
+    title.innerText = product.category;
+
+    const grid = document.createElement("div");
+    grid.className = "product-grid";
+
+    section.appendChild(title);
+    section.appendChild(grid);
+    container.appendChild(section);
+
+    categories[product.category] = grid;
+  }
+
+  // Create product card
+  const card = document.createElement("div");
+  card.className = "product-card";
+
+  card.innerHTML = `
+    <h4>${product.name}</h4>
+    <p><b>${product.country}</b></p>
+    <p>Price: ${product.price}</p>
+    <p>Rating: ${product.rating}</p>
+    <a href="${product.link}" target="_blank">Buy Now</a>
+  `;
+
+  categories[product.category].appendChild(card);
+});
+</script></body>
 </html>
