@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Affiliate Store</title>
 
 <style>
 
+/* ---------- BODY ---------- */
 body{
 margin:0;
-font-family:Arial;
-background:#fafafa;
+font-family:Arial, sans-serif;
+background:#f3f3f3;
 }
 
-/* ===== COMMON PAGE ===== */
-.page{
+/* ---------- LAYERS ---------- */
+.layer{
 display:none;
-width:100%;
 min-height:100vh;
 }
 
@@ -23,28 +24,55 @@ min-height:100vh;
 display:block;
 }
 
-/* ===== STORE PAGE ===== */
-.store-container{
-height:100vh;
+/* ---------- STORE PAGE ---------- */
+
+#storeLayer{
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-gap:80px;
+height:100vh;
 }
 
 .store{
-font-size:28px;
+font-size:26px;
+padding:25px 40px;
+margin:40px;
+border-radius:12px;
+background:linear-gradient(45deg,#ff416c,#ff4b2b);
+color:white;
 cursor:pointer;
-text-align:center;
-transition:.3s;
 }
 
-.store:hover{
-transform:scale(1.05);
+/* ---------- TOP BAR ---------- */
+
+.topbar{
+display:flex;
+align-items:center;
+gap:10px;
+background:white;
+padding:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
-/* ===== GRID (Pinterest style) ===== */
+.back{
+font-size:22px;
+cursor:pointer;
+}
+
+/* ---------- SEARCH ---------- */
+
+.search{
+width:100%;
+padding:10px;
+border:none;
+outline:none;
+background:#eee;
+border-radius:8px;
+}
+
+/* ---------- GRID ---------- */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -52,7 +80,7 @@ gap:0;
 }
 
 .card{
-position:relative;
+background:white;
 cursor:pointer;
 }
 
@@ -62,38 +90,35 @@ display:block;
 }
 
 .title{
-position:absolute;
-top:10px;
-left:10px;
 font-weight:bold;
-background:rgba(255,255,255,.8);
-padding:4px 6px;
+padding:5px;
 }
 
-/* ===== PRODUCT TEXT ===== */
-.product-info{
-padding:8px;
-font-size:14px;
+.desc{
+font-size:12px;
+padding:0 5px 8px;
+color:#555;
+}
+
+.price{
+color:#e91e63;
+font-weight:bold;
+padding:0 5px;
+}
+
+.rating{
+padding:0 5px;
+font-size:13px;
 }
 
 .buy{
-background:#ff4d4d;
-color:white;
-padding:6px;
+display:block;
 text-align:center;
-margin-top:6px;
-}
-
-/* ===== BACK BUTTON ===== */
-.back{
-position:fixed;
-top:10px;
-left:10px;
-background:black;
+background:#ff416c;
 color:white;
-padding:8px 12px;
-z-index:10;
-cursor:pointer;
+padding:10px;
+text-decoration:none;
+margin-top:5px;
 }
 
 </style>
@@ -101,9 +126,8 @@ cursor:pointer;
 
 <body>
 
-<!-- ================= STORE PAGE ================= -->
-<div id="stores" class="page active">
-<div class="store-container">
+<!-- ================= STORE LAYER ================= -->
+<div id="storeLayer" class="layer active">
 
 <div class="store" onclick="openStore('IND')">
 IND STORE 🇮🇳
@@ -114,110 +138,165 @@ US STORE 🇺🇸
 </div>
 
 </div>
+
+
+<!-- ================= CATEGORY LAYER ================= -->
+<div id="categoryLayer" class="layer">
+
+<div class="topbar">
+<span class="back" onclick="goHome()">⬅</span>
+<input class="search" id="categorySearch"
+placeholder="Search category..."
+onkeyup="searchCategory()">
 </div>
 
-<!-- ================= CATEGORY PAGE ================= -->
-<div id="categories" class="page">
-
-<div class="back" onclick="goStores()">⬅ Back</div>
-
-<div class="grid">
-
-<div class="card" onclick="openCategory('tech')">
-<img src="https://picsum.photos/500/600?1">
-<div class="title">TECH</div>
-</div>
-
-<div class="card" onclick="openCategory('kitchen')">
-<img src="https://picsum.photos/500/600?2">
-<div class="title">KITCHEN</div>
-</div>
-
-<div class="card" onclick="openCategory('fashion')">
-<img src="https://picsum.photos/500/600?3">
-<div class="title">FASHION</div>
-</div>
-
-<div class="card" onclick="openCategory('travel')">
-<img src="https://picsum.photos/500/600?4">
-<div class="title">TRAVEL</div>
-</div>
+<div id="categoryGrid" class="grid"></div>
 
 </div>
+
+
+<!-- ================= PRODUCT LAYER ================= -->
+<div id="productLayer" class="layer">
+
+<div class="topbar">
+<span class="back" onclick="backToCategory()">⬅</span>
+<input class="search" id="productSearch"
+placeholder="Search product..."
+onkeyup="searchProduct()">
 </div>
 
-<!-- ================= PRODUCTS PAGE ================= -->
-<div id="products" class="page">
-
-<div class="back" onclick="goCategories()">⬅ Back</div>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://picsum.photos/500/600?5">
-<div class="product-info">
-<b>H1 Hoodie</b><br>
-₹899 ⭐4.3<br>
-Comfortable stylish hoodie perfect for daily wear and casual outings with premium fabric quality and modern fit design suitable for all seasons.<br>
-<div class="buy">BUY NOW</div>
-</div>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/500/600?6">
-<div class="product-info">
-<b>H2 Hoodie</b><br>
-₹999 ⭐4.5<br>
-Trendy lightweight hoodie offering soft texture breathable material and excellent durability making it ideal for travel workouts and everyday lifestyle usage.<br>
-<div class="buy">BUY NOW</div>
-</div>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/500/600?7">
-<div class="product-info">
-<b>H3 Hoodie</b><br>
-₹799 ⭐4.2<br>
-Modern casual hoodie crafted for comfort and style featuring strong stitching relaxed fit and versatile look matching jeans joggers and sneakers easily.<br>
-<div class="buy">BUY NOW</div>
-</div>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/500/600?8">
-<div class="product-info">
-<b>H4 Hoodie</b><br>
-₹899 ⭐4.4<br>
-Premium everyday hoodie designed with soft inner lining warm fabric and stylish minimal aesthetics perfect for college office travel and street fashion lovers.<br>
-<div class="buy">BUY NOW</div>
-</div>
-</div>
+<div id="productGrid" class="grid"></div>
 
 </div>
-</div>
+
 
 <script>
 
-/* ===== PAGE SWITCHING ===== */
+/* ---------- DATA ---------- */
+
+const categories = [
+{
+name:"TECH",
+img:"https://m.media-amazon.com/images/I/61LtuGzXeaL._SL1500_.jpg",
+desc:"Smart gadgets improving productivity and entertainment everyday."
+},
+{
+name:"KITCHEN",
+img:"https://m.media-amazon.com/images/I/61L1ItFgFHL._SL1500_.jpg",
+desc:"Essential kitchen tools for faster cooking and convenience."
+},
+{
+name:"FASHION",
+img:"https://m.media-amazon.com/images/I/61B0+qQriPL._UL1500_.jpg",
+desc:"Trending fashion styles designed for comfort and daily wear."
+},
+{
+name:"TRAVEL",
+img:"https://m.media-amazon.com/images/I/71QKQ9mwV7L._SL1500_.jpg",
+desc:"Travel accessories making journeys organized easy and safe."
+}
+];
+
+const products = {
+FASHION:[
+{
+title:"H1 Hoodie",
+img:"https://m.media-amazon.com/images/I/61B0+qQriPL._UL1500_.jpg",
+desc:"Comfortable cotton hoodie designed for everyday wear offering breathable fabric modern fit durable stitching stylish design suitable for casual outings travel daily use and long lasting comfort experience.",
+price:"₹899",
+rating:"4.3⭐",
+link:"https://amzn.to/"
+},
+{
+title:"H2 Hoodie",
+img:"https://m.media-amazon.com/images/I/61B0+qQriPL._UL1500_.jpg",
+desc:"Premium hoodie featuring soft fabric comfortable design perfect for winter casual style lightweight warmth stylish appearance daily wear friendly and easy maintenance long lasting material quality.",
+price:"₹999",
+rating:"4.4⭐",
+link:"https://amzn.to/"
+}
+]
+};
+
+/* ---------- NAVIGATION ---------- */
+
+let currentCategory="";
 
 function openStore(){
-document.getElementById("stores").classList.remove("active");
-document.getElementById("categories").classList.add("active");
+document.getElementById("storeLayer").classList.remove("active");
+document.getElementById("categoryLayer").classList.add("active");
+loadCategories();
 }
 
-function openCategory(){
-document.getElementById("categories").classList.remove("active");
-document.getElementById("products").classList.add("active");
+function goHome(){
+document.getElementById("categoryLayer").classList.remove("active");
+document.getElementById("productLayer").classList.remove("active");
+document.getElementById("storeLayer").classList.add("active");
 }
 
-function goStores(){
-document.getElementById("categories").classList.remove("active");
-document.getElementById("stores").classList.add("active");
+function backToCategory(){
+document.getElementById("productLayer").classList.remove("active");
+document.getElementById("categoryLayer").classList.add("active");
 }
 
-function goCategories(){
-document.getElementById("products").classList.remove("active");
-document.getElementById("categories").classList.add("active");
+/* ---------- CATEGORY LOAD ---------- */
+
+function loadCategories(){
+const grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+
+categories.forEach(cat=>{
+grid.innerHTML+=`
+<div class="card" onclick="openCategory('${cat.name}')">
+<img src="${cat.img}">
+<div class="title">${cat.name}</div>
+<div class="desc">${cat.desc}</div>
+</div>`;
+});
+}
+
+/* ---------- OPEN CATEGORY ---------- */
+
+function openCategory(name){
+currentCategory=name;
+document.getElementById("categoryLayer").classList.remove("active");
+document.getElementById("productLayer").classList.add("active");
+loadProducts();
+}
+
+/* ---------- PRODUCT LOAD ---------- */
+
+function loadProducts(){
+const grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+(products[currentCategory]||[]).forEach(p=>{
+grid.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<div class="title">${p.title}</div>
+<div class="desc">${p.desc}</div>
+<div class="price">${p.price}</div>
+<div class="rating">${p.rating}</div>
+<a class="buy" href="${p.link}" target="_blank">Buy Now</a>
+</div>`;
+});
+}
+
+/* ---------- SEARCH ---------- */
+
+function searchCategory(){
+let v=document.getElementById("categorySearch").value.toLowerCase();
+document.querySelectorAll("#categoryGrid .card").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+});
+}
+
+function searchProduct(){
+let v=document.getElementById("productSearch").value.toLowerCase();
+document.querySelectorAll("#productGrid .card").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+});
 }
 
 </script>
