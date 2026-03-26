@@ -8,41 +8,40 @@
 
 <style>
 
-/* ---------- GLOBAL ---------- */
-
+/* ---------- GENERAL ---------- */
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#f4f4f4;
+font-family:Arial;
+background:linear-gradient(135deg,#6C5CE7,#00B894);
+color:#222;
 }
 
 .hidden{display:none}
 
-/* ---------- LAYER 1 : STORES ---------- */
+/* ---------- STORE PAGE ---------- */
 
-#stores{
+.store-page{
 height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-gap:40px;
-background:linear-gradient(135deg,#ff7a18,#ffb347);
-color:white;
+gap:60px;
 }
 
-.store-btn{
-width:80%;
-max-width:300px;
-padding:25px;
-text-align:center;
-font-size:22px;
-border-radius:15px;
+.store{
 background:white;
-color:#333;
+padding:30px 60px;
+border-radius:15px;
+font-size:22px;
 font-weight:bold;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
 cursor:pointer;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+transition:.3s;
+}
+
+.store:hover{
+transform:scale(1.05);
 }
 
 /* ---------- HEADER ---------- */
@@ -52,71 +51,60 @@ position:sticky;
 top:0;
 background:white;
 padding:12px;
-display:flex;
-align-items:center;
-gap:10px;
-z-index:1000;
-box-shadow:0 2px 5px rgba(0,0,0,0.1);
+font-weight:bold;
+box-shadow:0 2px 10px rgba(0,0,0,.1);
+z-index:100;
 }
 
 .back{
-font-size:20px;
 cursor:pointer;
-font-weight:bold;
+color:#6C5CE7;
 }
 
-/* ---------- GRID (Pinterest Style) ---------- */
+/* ---------- GRID ---------- */
 
 .grid{
-column-count:2;
-column-gap:0;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
 }
 
+/* ---------- CARD ---------- */
+
 .card{
-break-inside:avoid;
 background:white;
-margin:0;
-padding:0;
+overflow:hidden;
 }
 
 .card img{
 width:100%;
-display:block;
+height:180px;
+object-fit:cover;
 }
 
 .info{
 padding:10px;
 }
 
-.title{
-font-weight:bold;
-font-size:15px;
-}
+.title{font-weight:bold}
 
 .desc{
-font-size:12px;
+font-size:13px;
 color:#555;
 margin:6px 0;
 }
 
-.price{
-color:#ff5722;
-font-weight:bold;
-}
-
-.rating{
-font-size:13px;
-}
+.price{color:#00B894;font-weight:bold}
+.rating{color:#f39c12}
 
 .buy{
 display:block;
-margin-top:8px;
-background:#111;
-color:white;
 text-align:center;
+background:#FF6B00;
+color:white;
 padding:8px;
-border-radius:6px;
+margin-top:8px;
 text-decoration:none;
+border-radius:6px;
 }
 
 </style>
@@ -124,33 +112,33 @@ text-decoration:none;
 
 <body>
 
-<!-- ================= LAYER 1 ================= -->
+<!-- ================= STORES ================= -->
 
-<div id="stores">
-<div class="store-btn" onclick="openStore('india')">🇮🇳 India Store</div>
-<div class="store-btn" onclick="openStore('us')">🇺🇸 US Store</div>
+<div id="stores" class="store-page">
+<div class="store" onclick="openStore('india')">🇮🇳 INDIA STORE</div>
+<div class="store" onclick="openStore('us')">🇺🇸 US STORE</div>
 </div>
 
-<!-- ================= LAYER 2 ================= -->
+<!-- ================= CATEGORIES ================= -->
 
 <div id="categories" class="hidden">
 
 <div class="header">
-<span class="back" onclick="goHome()">←</span>
-<b id="storeTitle"></b>
+<span class="back" onclick="goHome()">⬅ Back</span>
+<span id="storeTitle"></span>
 </div>
 
 <div id="categoryGrid" class="grid"></div>
 
 </div>
 
-<!-- ================= LAYER 3 ================= -->
+<!-- ================= PRODUCTS ================= -->
 
 <div id="products" class="hidden">
 
 <div class="header">
-<span class="back" onclick="backToCategories()">←</span>
-<b id="categoryTitle"></b>
+<span class="back" onclick="backToCategories()">⬅ Back</span>
+<span id="categoryTitle"></span>
 </div>
 
 <div id="productGrid" class="grid"></div>
@@ -159,7 +147,7 @@ text-decoration:none;
 
 <script>
 
-/* ---------- DATA ---------- */
+/* ================= DATA ================= */
 
 const data = {
 
@@ -167,44 +155,21 @@ india:{
 Tech:[
 {
 name:"JBL Bluetooth Speaker",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
 price:"₹2799",
 rating:"4⭐",
-link:"#",
-desc:"Powerful portable Bluetooth speaker delivering deep bass, clear vocals, long battery life, durable design, outdoor-ready performance, wireless connectivity, and immersive audio experience anywhere."
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
+link:"https://amzn.to/40OZeuH",
+desc:"Portable Bluetooth speaker delivering deep bass, clear sound, long battery life, durable build quality and reliable wireless connectivity for everyday entertainment."
 }
 ],
-
 Travel:[
 {
 name:"6 Pack Travel Bags",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
 price:"₹799",
 rating:"4.3⭐",
-link:"#",
-desc:"Organize luggage efficiently using lightweight packing cubes designed for travel convenience, wrinkle reduction, better storage visibility, space saving, and easier suitcase management."
-}
-],
-
-Home:[
-{
-name:"10 Pack Photo Frames",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
-price:"₹999",
-rating:"4.6⭐",
-link:"#",
-desc:"Elegant wall photo frame collection enhances home décor beautifully while protecting memories, offering modern styling, durable construction, easy mounting, and versatile layout options."
-}
-],
-
-Fashion:[
-{
-name:"Men Hoodie",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37be5e34-5bb5-4705-a06d-fd2a00a108dc.jpg",
-price:"₹899",
-rating:"4.1⭐",
-link:"#",
-desc:"Comfortable everyday hoodie crafted from soft breathable fabric providing warmth, casual styling, relaxed fit, durable stitching, and modern fashion appeal suitable for daily wear."
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
+link:"https://amzn.to/47iPnky",
+desc:"Organize luggage efficiently using lightweight packing cubes designed for travel convenience, space saving storage and easy suitcase organization during trips."
 }
 ]
 },
@@ -213,67 +178,46 @@ us:{
 Tech:[
 {
 name:"JBL Bluetooth Speaker",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
 price:"$97",
 rating:"4.7⭐",
-link:"#",
-desc:"Premium wireless speaker with rich bass performance, crisp sound clarity, waterproof build, extended battery life, and seamless Bluetooth connectivity for music lovers everywhere."
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
+link:"https://amzn.to/3PvtdW7",
+desc:"High quality wireless speaker offering immersive sound, powerful bass, durable build and seamless Bluetooth connection suitable for indoor and outdoor listening."
 }
 ],
-
 Travel:[
 {
 name:"6 Pack Travel Bags",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg",
 price:"$27",
 rating:"4.8⭐",
-link:"#",
-desc:"Smart packing organizers designed for efficient suitcase arrangement, reducing clutter, maximizing space usage, improving accessibility, and simplifying travel packing experiences."
-}
-],
-
-Home:[
-{
-name:"10 Pack Photo Frames",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
-price:"$19",
-rating:"4.6⭐",
-link:"#",
-desc:"Stylish gallery wall frame set perfect for displaying memories with durable materials, modern aesthetic appeal, versatile mounting options, and long-lasting decorative quality."
-}
-],
-
-Fashion:[
-{
-name:"3 Pack Hoodies",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84666b61-2360-42e9-b4d3-283f8e2f4292.jpg",
-price:"$35",
-rating:"4.3⭐",
-link:"#",
-desc:"Comfort-focused hoodie bundle offering soft materials, casual design, versatile styling options, everyday usability, breathable comfort, and reliable warmth for all seasons."
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg",
+link:"https://amzn.to/4uRA649",
+desc:"Durable travel organizers help separate clothes, maximize luggage space and keep belongings neatly arranged for stress free travel packing."
 }
 ]
 }
 
 };
 
-/* ---------- NAVIGATION ---------- */
-
 let currentStore="";
 let currentCategory="";
 
+/* ================= STORE OPEN ================= */
+
 function openStore(store){
+
 currentStore=store;
+
 document.getElementById("stores").classList.add("hidden");
 document.getElementById("categories").classList.remove("hidden");
 
 document.getElementById("storeTitle").innerText =
-store === "india" ? "🇮🇳 India Store" : "🇺🇸 US Store";
+store==="india" ? "🇮🇳 India Store" : "🇺🇸 US Store";
 
 loadCategories();
 }
 
-/* ---------- LOAD CATEGORIES ---------- */
+/* ================= LOAD CATEGORIES ================= */
 
 function loadCategories(){
 
@@ -289,9 +233,7 @@ card.innerHTML=`
 <img src="${data[currentStore][cat][0].img}">
 <div class="info">
 <div class="title">${cat}</div>
-<div class="desc">
-Best trending ${cat.toLowerCase()} products carefully selected for quality and value.
-</div>
+<div class="desc">Top quality trending products selected carefully for shoppers.</div>
 </div>
 `;
 
@@ -302,7 +244,7 @@ grid.appendChild(card);
 });
 }
 
-/* ---------- OPEN CATEGORY ---------- */
+/* ================= OPEN CATEGORY ================= */
 
 function openCategory(category){
 
@@ -316,7 +258,7 @@ document.getElementById("categoryTitle").innerText=category;
 loadProducts();
 }
 
-/* ---------- LOAD PRODUCTS ---------- */
+/* ================= LOAD PRODUCTS ================= */
 
 function loadProducts(){
 
@@ -344,7 +286,7 @@ grid.appendChild(card);
 });
 }
 
-/* ---------- BACK BUTTONS ---------- */
+/* ================= NAVIGATION ================= */
 
 function goHome(){
 document.getElementById("categories").classList.add("hidden");
