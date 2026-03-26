@@ -264,3 +264,99 @@ let currentCategory="";
 
 function openStore(store){
 currentStore=store;
+document.getElementById("stores").classList.add("hidden");
+document.getElementById("categories").classList.remove("hidden");
+
+document.getElementById("storeTitle").innerText =
+store === "india" ? "🇮🇳 India Store" : "🇺🇸 US Store";
+
+loadCategories();
+}
+
+/* ---------- LOAD CATEGORIES ---------- */
+
+function loadCategories(){
+
+const grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+
+Object.keys(data[currentStore]).forEach(cat=>{
+
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<img src="${data[currentStore][cat][0].img}">
+<div class="info">
+<div class="title">${cat}</div>
+<div class="desc">
+Best trending ${cat.toLowerCase()} products carefully selected for quality and value.
+</div>
+</div>
+`;
+
+card.onclick=()=>openCategory(cat);
+
+grid.appendChild(card);
+
+});
+}
+
+/* ---------- OPEN CATEGORY ---------- */
+
+function openCategory(category){
+
+currentCategory=category;
+
+document.getElementById("categories").classList.add("hidden");
+document.getElementById("products").classList.remove("hidden");
+
+document.getElementById("categoryTitle").innerText=category;
+
+loadProducts();
+}
+
+/* ---------- LOAD PRODUCTS ---------- */
+
+function loadProducts(){
+
+const grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+data[currentStore][currentCategory].forEach(p=>{
+
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<img src="${p.img}">
+<div class="info">
+<div class="title">${p.name}</div>
+<div class="desc">${p.desc}</div>
+<div class="price">${p.price}</div>
+<div class="rating">${p.rating}</div>
+<a class="buy" href="${p.link}" target="_blank">Buy Now</a>
+</div>
+`;
+
+grid.appendChild(card);
+
+});
+}
+
+/* ---------- BACK BUTTONS ---------- */
+
+function goHome(){
+document.getElementById("categories").classList.add("hidden");
+document.getElementById("stores").classList.remove("hidden");
+}
+
+function backToCategories(){
+document.getElementById("products").classList.add("hidden");
+document.getElementById("categories").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
