@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Affiliate Store</title>
 
 <style>
 
-/* ---------- GENERAL ---------- */
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#6C5CE7,#00B894);
-color:#222;
+background:#fafafa;
 }
 
-.hidden{display:none}
+/* ===== COMMON PAGE ===== */
+.page{
+display:none;
+width:100%;
+min-height:100vh;
+}
 
-/* ---------- STORE PAGE ---------- */
+.active{
+display:block;
+}
 
-.store-page{
+/* ===== STORE PAGE ===== */
+.store-container{
 height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-gap:60px;
+gap:80px;
 }
 
 .store{
-background:white;
-padding:30px 60px;
-border-radius:15px;
-font-size:22px;
-font-weight:bold;
+font-size:28px;
 cursor:pointer;
-box-shadow:0 5px 20px rgba(0,0,0,.2);
+text-align:center;
 transition:.3s;
 }
 
@@ -44,67 +44,56 @@ transition:.3s;
 transform:scale(1.05);
 }
 
-/* ---------- HEADER ---------- */
-
-.header{
-position:sticky;
-top:0;
-background:white;
-padding:12px;
-font-weight:bold;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
-z-index:100;
-}
-
-.back{
-cursor:pointer;
-color:#6C5CE7;
-}
-
-/* ---------- GRID ---------- */
-
+/* ===== GRID (Pinterest style) ===== */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+grid-template-columns:repeat(2,1fr);
+gap:0;
 }
 
-/* ---------- CARD ---------- */
-
 .card{
-background:white;
-overflow:hidden;
+position:relative;
+cursor:pointer;
 }
 
 .card img{
 width:100%;
-height:180px;
-object-fit:cover;
+display:block;
 }
 
-.info{
-padding:10px;
+.title{
+position:absolute;
+top:10px;
+left:10px;
+font-weight:bold;
+background:rgba(255,255,255,.8);
+padding:4px 6px;
 }
 
-.title{font-weight:bold}
-
-.desc{
-font-size:13px;
-color:#555;
-margin:6px 0;
+/* ===== PRODUCT TEXT ===== */
+.product-info{
+padding:8px;
+font-size:14px;
 }
-
-.price{color:#00B894;font-weight:bold}
-.rating{color:#f39c12}
 
 .buy{
-display:block;
-text-align:center;
-background:#FF6B00;
+background:#ff4d4d;
 color:white;
-padding:8px;
-margin-top:8px;
-text-decoration:none;
-border-radius:6px;
+padding:6px;
+text-align:center;
+margin-top:6px;
+}
+
+/* ===== BACK BUTTON ===== */
+.back{
+position:fixed;
+top:10px;
+left:10px;
+background:black;
+color:white;
+padding:8px 12px;
+z-index:10;
+cursor:pointer;
 }
 
 </style>
@@ -112,190 +101,123 @@ border-radius:6px;
 
 <body>
 
-<!-- ================= STORES ================= -->
+<!-- ================= STORE PAGE ================= -->
+<div id="stores" class="page active">
+<div class="store-container">
 
-<div id="stores" class="store-page">
-<div class="store" onclick="openStore('india')">🇮🇳 INDIA STORE</div>
-<div class="store" onclick="openStore('us')">🇺🇸 US STORE</div>
+<div class="store" onclick="openStore('IND')">
+IND STORE 🇮🇳
 </div>
 
-<!-- ================= CATEGORIES ================= -->
-
-<div id="categories" class="hidden">
-
-<div class="header">
-<span class="back" onclick="goHome()">⬅ Back</span>
-<span id="storeTitle"></span>
+<div class="store" onclick="openStore('US')">
+US STORE 🇺🇸
 </div>
 
-<div id="categoryGrid" class="grid"></div>
-
+</div>
 </div>
 
-<!-- ================= PRODUCTS ================= -->
+<!-- ================= CATEGORY PAGE ================= -->
+<div id="categories" class="page">
 
-<div id="products" class="hidden">
+<div class="back" onclick="goStores()">⬅ Back</div>
 
-<div class="header">
-<span class="back" onclick="backToCategories()">⬅ Back</span>
-<span id="categoryTitle"></span>
+<div class="grid">
+
+<div class="card" onclick="openCategory('tech')">
+<img src="https://picsum.photos/500/600?1">
+<div class="title">TECH</div>
 </div>
 
-<div id="productGrid" class="grid"></div>
+<div class="card" onclick="openCategory('kitchen')">
+<img src="https://picsum.photos/500/600?2">
+<div class="title">KITCHEN</div>
+</div>
 
+<div class="card" onclick="openCategory('fashion')">
+<img src="https://picsum.photos/500/600?3">
+<div class="title">FASHION</div>
+</div>
+
+<div class="card" onclick="openCategory('travel')">
+<img src="https://picsum.photos/500/600?4">
+<div class="title">TRAVEL</div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= PRODUCTS PAGE ================= -->
+<div id="products" class="page">
+
+<div class="back" onclick="goCategories()">⬅ Back</div>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://picsum.photos/500/600?5">
+<div class="product-info">
+<b>H1 Hoodie</b><br>
+₹899 ⭐4.3<br>
+Comfortable stylish hoodie perfect for daily wear and casual outings with premium fabric quality and modern fit design suitable for all seasons.<br>
+<div class="buy">BUY NOW</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/500/600?6">
+<div class="product-info">
+<b>H2 Hoodie</b><br>
+₹999 ⭐4.5<br>
+Trendy lightweight hoodie offering soft texture breathable material and excellent durability making it ideal for travel workouts and everyday lifestyle usage.<br>
+<div class="buy">BUY NOW</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/500/600?7">
+<div class="product-info">
+<b>H3 Hoodie</b><br>
+₹799 ⭐4.2<br>
+Modern casual hoodie crafted for comfort and style featuring strong stitching relaxed fit and versatile look matching jeans joggers and sneakers easily.<br>
+<div class="buy">BUY NOW</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/500/600?8">
+<div class="product-info">
+<b>H4 Hoodie</b><br>
+₹899 ⭐4.4<br>
+Premium everyday hoodie designed with soft inner lining warm fabric and stylish minimal aesthetics perfect for college office travel and street fashion lovers.<br>
+<div class="buy">BUY NOW</div>
+</div>
+</div>
+
+</div>
 </div>
 
 <script>
 
-/* ================= DATA ================= */
+/* ===== PAGE SWITCHING ===== */
 
-const data = {
-
-india:{
-Tech:[
-{
-name:"JBL Bluetooth Speaker",
-price:"₹2799",
-rating:"4⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
-link:"https://amzn.to/40OZeuH",
-desc:"Portable Bluetooth speaker delivering deep bass, clear sound, long battery life, durable build quality and reliable wireless connectivity for everyday entertainment."
-}
-],
-Travel:[
-{
-name:"6 Pack Travel Bags",
-price:"₹799",
-rating:"4.3⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
-link:"https://amzn.to/47iPnky",
-desc:"Organize luggage efficiently using lightweight packing cubes designed for travel convenience, space saving storage and easy suitcase organization during trips."
-}
-]
-},
-
-us:{
-Tech:[
-{
-name:"JBL Bluetooth Speaker",
-price:"$97",
-rating:"4.7⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
-link:"https://amzn.to/3PvtdW7",
-desc:"High quality wireless speaker offering immersive sound, powerful bass, durable build and seamless Bluetooth connection suitable for indoor and outdoor listening."
-}
-],
-Travel:[
-{
-name:"6 Pack Travel Bags",
-price:"$27",
-rating:"4.8⭐",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg",
-link:"https://amzn.to/4uRA649",
-desc:"Durable travel organizers help separate clothes, maximize luggage space and keep belongings neatly arranged for stress free travel packing."
-}
-]
+function openStore(){
+document.getElementById("stores").classList.remove("active");
+document.getElementById("categories").classList.add("active");
 }
 
-};
-
-let currentStore="";
-let currentCategory="";
-
-/* ================= STORE OPEN ================= */
-
-function openStore(store){
-
-currentStore=store;
-
-document.getElementById("stores").classList.add("hidden");
-document.getElementById("categories").classList.remove("hidden");
-
-document.getElementById("storeTitle").innerText =
-store==="india" ? "🇮🇳 India Store" : "🇺🇸 US Store";
-
-loadCategories();
+function openCategory(){
+document.getElementById("categories").classList.remove("active");
+document.getElementById("products").classList.add("active");
 }
 
-/* ================= LOAD CATEGORIES ================= */
-
-function loadCategories(){
-
-const grid=document.getElementById("categoryGrid");
-grid.innerHTML="";
-
-Object.keys(data[currentStore]).forEach(cat=>{
-
-const card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<img src="${data[currentStore][cat][0].img}">
-<div class="info">
-<div class="title">${cat}</div>
-<div class="desc">Top quality trending products selected carefully for shoppers.</div>
-</div>
-`;
-
-card.onclick=()=>openCategory(cat);
-
-grid.appendChild(card);
-
-});
+function goStores(){
+document.getElementById("categories").classList.remove("active");
+document.getElementById("stores").classList.add("active");
 }
 
-/* ================= OPEN CATEGORY ================= */
-
-function openCategory(category){
-
-currentCategory=category;
-
-document.getElementById("categories").classList.add("hidden");
-document.getElementById("products").classList.remove("hidden");
-
-document.getElementById("categoryTitle").innerText=category;
-
-loadProducts();
-}
-
-/* ================= LOAD PRODUCTS ================= */
-
-function loadProducts(){
-
-const grid=document.getElementById("productGrid");
-grid.innerHTML="";
-
-data[currentStore][currentCategory].forEach(p=>{
-
-const card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<img src="${p.img}">
-<div class="info">
-<div class="title">${p.name}</div>
-<div class="desc">${p.desc}</div>
-<div class="price">${p.price}</div>
-<div class="rating">${p.rating}</div>
-<a class="buy" href="${p.link}" target="_blank">Buy Now</a>
-</div>
-`;
-
-grid.appendChild(card);
-
-});
-}
-
-/* ================= NAVIGATION ================= */
-
-function goHome(){
-document.getElementById("categories").classList.add("hidden");
-document.getElementById("stores").classList.remove("hidden");
-}
-
-function backToCategories(){
-document.getElementById("products").classList.add("hidden");
-document.getElementById("categories").classList.remove("hidden");
+function goCategories(){
+document.getElementById("products").classList.remove("active");
+document.getElementById("categories").classList.add("active");
 }
 
 </script>
