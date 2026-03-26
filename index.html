@@ -1,80 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Affiliate Store</title>
+
 <style>
-  /* Base Styles */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 16px;
-    background-color: #fff;
-  }
 
-  /* Header / Back Button */
-  .page-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    font-style: italic;
-  }
-  .back-btn {
-    cursor: pointer;
-    font-size: 24px;
-    margin-right: 15px;
-    display: none; /* Hidden by default on categories page */
-    background: none;
-    border: none;
-    padding: 0;
-  }
+/* ---------- GLOBAL ---------- */
 
-  /* Grid Layout - The core of the 2-column design */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
-    gap: 16px;
-  }
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f4f4f4;
+}
 
-  /* Responsive for desktop: 4 columns */
-  @media (min-width: 768px) {
-    .grid-container {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
+.hidden{display:none}
 
-  /* Card Styling */
-  .card {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-  }
+/* ---------- LAYER 1 : STORES ---------- */
 
-  .card-image-wrapper {
-    background-color: #f8f8f8; /* Light gray background for product shots */
-    border-radius: 12px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    aspect-ratio: 1 / 1; /* Keeps images perfectly square */
-    margin-bottom: 8px;
-  }
+#stores{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:40px;
+background:linear-gradient(135deg,#ff7a18,#ffb347);
+color:white;
+}
 
-  .card img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
+.store-btn{
+width:80%;
+max-width:300px;
+padding:25px;
+text-align:center;
+font-size:22px;
+border-radius:15px;
+background:white;
+color:#333;
+font-weight:bold;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+cursor:pointer;
+}
 
-  /* Text Styling to match your screenshot */
-  .card-title {
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0 0 4px 0;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Truncates text after 2 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+/* ---------- HEADER ---------- */
+
+.header{
+position:sticky;
+top:0;
+background:white;
+padding:12px;
+display:flex;
+align-items:center;
+gap:10px;
+z-index:1000;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.back{
+font-size:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* ---------- GRID (Pinterest Style) ---------- */
+
+.grid{
+column-count:2;
+column-gap:0;
+}
+
+.card{
+break-inside:avoid;
+background:white;
+margin:0;
+padding:0;
+}
+
+.card img{
+width:100%;
+display:block;
+}
+
+.info{
+padding:10px;
+}
+
+.title{
+font-weight:bold;
+font-size:15px;
+}
+
+.desc{
+font-size:12px;
+color:#555;
+margin:6px 0;
+}
+
+.price{
+color:#ff5722;
+font-weight:bold;
+}
+
+.rating{
+font-size:13px;
+}
+
+.buy{
+display:block;
+margin-top:8px;
+background:#111;
+color:white;
+text-align:center;
+padding:8px;
+border-radius:6px;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= LAYER 1 ================= -->
+
+<div id="stores">
+<div class="store-btn" onclick="openStore('india')">🇮🇳 India Store</div>
+<div class="store-btn" onclick="openStore('us')">🇺🇸 US Store</div>
+</div>
+
+<!-- ================= LAYER 2 ================= -->
+
+<div id="categories" class="hidden">
+
+<div class="header">
+<span class="back" onclick="goHome()">←</span>
+<b id="storeTitle"></b>
+</div>
+
+<div id="categoryGrid" class="grid"></div>
+
+</div>
+
+<!-- ================= LAYER 3 ================= -->
+
+<div id="products" class="hidden">
+
+<div class="header">
+<span class="back" onclick="backToCategories()">←</span>
+<b id="categoryTitle"></b>
+</div>
+
+<div id="productGrid" class="grid"></div>
+
+</div>
+
+<script>
+
+/* ---------- DATA ---------- */
+
+const data = {
+
+india:{
+Tech:[
+{
+name:"JBL Bluetooth Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
+price:"₹2799",
+rating:"4⭐",
+link:"#",
+desc:"Powerful portable Bluetooth speaker delivering deep bass, clear vocals, long battery life, durable design, outdoor-ready performance, wireless connectivity, and immersive audio experience anywhere."
+}
+],
+
+Travel:[
+{
+name:"6 Pack Travel Bags",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
+price:"₹799",
+rating:"4.3⭐",
+link:"#",
+desc:"Organize luggage efficiently using lightweight packing cubes designed for travel convenience, wrinkle reduction, better storage visibility, space saving, and easier suitcase management."
+}
+],
+
+Home:[
+{
+name:"10 Pack Photo Frames",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
+price:"₹999",
+rating:"4.6⭐",
+link:"#",
+desc:"Elegant wall photo frame collection enhances home décor beautifully while protecting memories, offering modern styling, durable construction, easy mounting, and versatile layout options."
+}
+],
+
+Fashion:[
+{
+name:"Men Hoodie",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37be5e34-5bb5-4705-a06d-fd2a00a108dc.jpg",
+price:"₹899",
+rating:"4.1⭐",
+link:"#",
+desc:"Comfortable everyday hoodie crafted from soft breathable fabric providing warmth, casual styling, relaxed fit, durable stitching, and modern fashion appeal suitable for daily wear."
+}
+]
+},
+
+us:{
+Tech:[
+{
+name:"JBL Bluetooth Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
+price:"$97",
+rating:"4.7⭐",
+link:"#",
+desc:"Premium wireless speaker with rich bass performance, crisp sound clarity, waterproof build, extended battery life, and seamless Bluetooth connectivity for music lovers everywhere."
+}
+],
+
+Travel:[
+{
+name:"6 Pack Travel Bags",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg",
+price:"$27",
+rating:"4.8⭐",
+link:"#",
+desc:"Smart packing organizers designed for efficient suitcase arrangement, reducing clutter, maximizing space usage, improving accessibility, and simplifying travel packing experiences."
+}
+],
+
+Home:[
+{
+name:"10 Pack Photo Frames",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/706d2b1a-7ae1-453c-bb90-c6b77dd7ad75.webp",
+price:"$19",
+rating:"4.6⭐",
+link:"#",
+desc:"Stylish gallery wall frame set perfect for displaying memories with durable materials, modern aesthetic appeal, versatile mounting options, and long-lasting decorative quality."
+}
+],
+
+Fashion:[
+{
+name:"3 Pack Hoodies",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84666b61-2360-42e9-b4d3-283f8e2f4292.jpg",
+price:"$35",
+rating:"4.3⭐",
+link:"#",
+desc:"Comfort-focused hoodie bundle offering soft materials, casual design, versatile styling options, everyday usability, breathable comfort, and reliable warmth for all seasons."
+}
+]
+}
+
+};
+
+/* ---------- NAVIGATION ---------- */
+
+let currentStore="";
+let currentCategory="";
+
+function openStore(store){
+currentStore=store;
