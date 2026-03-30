@@ -4,27 +4,385 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smart Affiliate Store</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body{margin:0;font-family:Segoe UI;background:#f2f3f7}
+
+/* LAYERS */
+.layer{
+display:none;
+position:absolute;
+top:0;
+left:0;
+width:100%;
+min-height:100vh;
+background:#f2f3f7;
+}
+.active{display:block}
+
+/* STORE */
+#storeLayer{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:linear-gradient(135deg,#6C5CE7,#00B894);
+}
+.storeCard{
+background:#fff;
+padding:25px;
+margin:12px;
+border-radius:18px;
+font-weight:bold;
+cursor:pointer;
+width:230px;
+text-align:center;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+gap:10px;
+padding:14px;
+background:#00b894;
+color:#fff;
+align-items:center;
+font-weight:bold;
+}
+.back{cursor:pointer;font-size:22px}
+
+/* GRID */
+.grid{
+padding:12px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.card{
+background:#fff;
+border-radius:14px;
+overflow:hidden;
+position:relative;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.card img{width:100%}
+
+.info{padding:10px}
+.price{color:#d63031;font-weight:bold}
+
+/* LINK ICON */
+.linkBtn{
+position:absolute;
+top:8px;
+right:8px;
+background:#fff;
+width:32px;
+height:32px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+box-shadow:0 2px 6px rgba(0,0,0,.3);
+font-size:16px;
+}
+
+/* BUY BUTTON */
+.buy{
+display:block;
+text-align:center;
+background:#00b894;
+color:#fff;
+padding:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* ADMIN */
+#adminBtn{
+position:fixed;
+bottom:15px;
+right:15px;
+background:#000;
+color:#fff;
+padding:10px 14px;
+border-radius:20px;
+cursor:pointer;
+z-index:999;
+}
+
+#adminPanel{
+position:fixed;
+bottom:70px;
+right:15px;
+background:#fff;
+padding:15px;
+width:260px;
+border-radius:12px;
+display:none;
+box-shadow:0 6px 20px rgba(0,0,0,.25);
+}
+
+input,select{width:100%;margin:5px 0;padding:7px}
+button{margin-top:6px;padding:7px;width:100%}
+</style>
 </head>
 
 <body>
 
+<!-- STORE -->
 <div id="storeLayer" class="layer active">
-    <div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
-    <div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
+<div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
+<div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
 </div>
 
+<!-- CATEGORY -->
 <div id="categoryLayer" class="layer">
-<div class="topbar purple">
-<span class="back" onclick="goHome()">⬅</span>
-<h3>Categories</h3>
+<div class="topbar">
+<span class="back" onclick="goHome()">⬅</span> Categories
 </div>
-
 <div id="categoryGrid" class="grid"></div>
 </div>
 
-<div id="toast">Link Copied 🔗</div>
+<!-- PRODUCT -->
+<div id="productLayer" class="layer">
+<div class="topbar">
+<span class="back" onclick="backToCategories()">⬅</span> Products
+</div>
+<div id="productGrid" class="grid"></div>
+</div>
 
-<script src="script.js"></script>
+<!-- ADMIN -->
+<div id="adminBtn" onclick="toggleAdmin()">ADMIN</div>
+
+<div id="adminPanel">
+<h4>Add Category</h4>
+<input id="newCat" placeholder="Category name">
+<input id="catImg" placeholder="Image URL">
+<button onclick="addCategory()">Add</button>
+
+<hr>
+
+<h4>Add Product</h4>
+<select id="catSelect"></select>
+<input id="pName" placeholder="Product name">
+<input id="pImg" placeholder="Image URL">
+<input id="pPrice" placeholder="Price">
+<input id="pLink" placeholder="Affiliate link">
+<button onclick="addProduct()">Add</button>
+</div>
+
+<script>
+
+/* ---------------- DATA ---------------- */
+
+let data={
+IND:{
+Tech:[
+{name:"JBL Speaker",
+img:"https://picsum.photos/300?1",
+price:"₹2799",
+link:"https://amzn.to/40OZeuH"}
+]
+},
+US:{}
+};
+
+let currentStore="";
+let currentCategory="";
+
+
+/* ---------------- LAYER CONTROL ---------------- */
+
+function showLayer(id){
+document.querySelectorAll(".layer")
+.forEach(l=>l.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+window.scrollTo(0,0);
+}
+
+
+/* ---------------- NAVIGATION ---------------- */
+
+function openStore(store){
+currentStore=store;
+currentCategory="";
+renderCategories();
+showLayer("categoryLayer");
+updateURL();
+}
+
+function openCategory(cat){
+currentCategory=cat;
+renderProducts();
+showLayer("productLayer");
+updateURL();
+}
+
+function goHome(){
+currentStore="";
+currentCategory="";
+showLayer("storeLayer");
+history.replaceState({},'',location.pathname);
+}
+
+function backToCategories(){
+showLayer("categoryLayer");
+updateURL();
+}
+
+
+/* ---------------- LINK GENERATOR ---------------- */
+
+function updateURL(){
+
+let url=location.pathname;
+
+if(currentStore)
+url+=`?store=${currentStore}`;
+
+if(currentCategory)
+url+=`&cat=${currentCategory}`;
+
+history.replaceState({},'',url);
+}
+
+function copyLink(link,e){
+e.stopPropagation();
+navigator.clipboard.writeText(link);
+alert("Link Copied ✅");
+}
+
+
+/* ---------------- RENDER CATEGORY ---------------- */
+
+function renderCategories(){
+
+const grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+catSelect.innerHTML="";
+
+Object.keys(data[currentStore]).forEach(cat=>{
+
+const catURL=
+location.origin+
+location.pathname+
+`?store=${currentStore}&cat=${cat}`;
+
+grid.innerHTML+=`
+<div class="card" onclick="openCategory('${cat}')">
+
+<div class="linkBtn"
+onclick="copyLink('${catURL}',event)"
+style="font-size:13px;width:26px;height:26px;">🔗</div>
+
+<img src="${data[currentStore][cat][0].img}">
+<div class="info">${cat}</div>
+
+</div>`;
+
+catSelect.innerHTML+=`<option>${cat}</option>`;
+});
+}
+
+
+/* ---------------- RENDER PRODUCTS ---------------- */
+
+function renderProducts(){
+
+const grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+data[currentStore][currentCategory].forEach(p=>{
+
+grid.innerHTML+=`
+<div class="card">
+
+<div class="linkBtn"
+onclick="copyLink('${p.link}',event)"
+style="font-size:13px;width:26px;height:26px;">🔗</div>
+
+<img src="${p.img}">
+<div class="info">
+<div>${p.name}</div>
+<div class="price">${p.price}</div>
+</div>
+
+<a class="buy" href="${p.link}" target="_blank">
+Buy Now
+</a>
+
+</div>`;
+});
+}
+
+
+/* ---------------- ADMIN ---------------- */
+
+function toggleAdmin(){
+const p=document.getElementById("adminPanel");
+p.style.display=p.style.display==="block"?"none":"block";
+}
+
+function addCategory(){
+const name=newCat.value.trim();
+if(!name)return;
+
+data[currentStore][name]=[
+{name:name,img:catImg.value,price:"",link:"#"}
+];
+
+renderCategories();
+}
+
+function addProduct(){
+
+data[currentStore][catSelect.value].push({
+name:pName.value,
+img:pImg.value,
+price:pPrice.value,
+link:pLink.value
+});
+
+renderProducts();
+}
+
+
+/* ---------------- ⭐ DEEP LINK FIX (MAIN SOLUTION) ---------------- */
+
+function handleDeepLink(){
+
+const params=new URLSearchParams(window.location.search);
+
+const store=params.get("store");
+const cat=params.get("cat");
+
+if(store && data[store]){
+
+currentStore=store;
+
+if(cat && data[store][cat]){
+currentCategory=cat;
+renderProducts();
+showLayer("productLayer");
+}
+else{
+renderCategories();
+showLayer("categoryLayer");
+}
+
+}else{
+showLayer("storeLayer");
+}
+
+}
+
+window.onload=handleDeepLink;
+
+</script>
 </body>
 </html>
