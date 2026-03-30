@@ -1,115 +1,68 @@
-let categories = JSON.parse(localStorage.getItem("categories")) || [];
-let products = JSON.parse(localStorage.getItem("products")) || [];
+// ===== SAFE ADMIN + LINK SYSTEM =====
 
-let currentCategory=null;
+// storage
+let storeData = JSON.parse(localStorage.getItem("storeData")) || {
+  categories: [],
+  products: []
+};
 
-const storePage=document.getElementById("storePage");
-const categoryPage=document.getElementById("categoryPage");
-const productPage=document.getElementById("productPage");
-const title=document.getElementById("pageTitle");
-
-function save(){
-localStorage.setItem("categories",JSON.stringify(categories));
-localStorage.setItem("products",JSON.stringify(products));
+function saveData(){
+  localStorage.setItem("storeData", JSON.stringify(storeData));
 }
 
-function showPage(page){
-storePage.classList.add("hidden");
-categoryPage.classList.add("hidden");
-productPage.classList.add("hidden");
-page.classList.remove("hidden");
+// ---------- LINK COPY ----------
+function copyLink(url,e){
+  if(e) e.stopPropagation();
+
+  const finalLink = url || window.location.href;
+
+  navigator.clipboard.writeText(finalLink)
+  .then(()=>alert("Link copied ✅"))
+  .catch(()=>alert("Copy failed"));
 }
 
-function renderCategories(){
-title.innerText="Categories";
-showPage(storePage);
-
-storePage.innerHTML="";
-
-categories.forEach((c,i)=>{
-storePage.innerHTML+=`
-<div class="card">
-<div class="linkIcon" onclick="copyLink('?category=${i}')">🔗</div>
-<img src="${c.img}">
-<h3 onclick="openCategory(${i})">${c.name}</h3>
-</div>`;
-});
-}
-
-function openCategory(i){
-currentCategory=i;
-title.innerText=categories[i].name;
-showPage(categoryPage);
-
-categoryPage.innerHTML="";
-
-products
-.filter(p=>p.category==i)
-.forEach((p,index)=>{
-categoryPage.innerHTML+=`
-<div class="card">
-<div class="linkIcon" onclick="copyLink('?product=${index}')">🔗</div>
-<img src="${p.img}">
-<h3>${p.name}</h3>
-<h3 style="color:red">₹${p.price}</h3>
-<a class="buy" href="${p.link}" target="_blank">Buy Now</a>
-<button onclick="editProduct(${index})">Edit</button>
-<button onclick="deleteProduct(${index})">Delete</button>
-</div>`;
-});
-}
-
-function goBack(){
-renderCategories();
-}
-
-function copyLink(param){
-let url=location.origin+location.pathname+param;
-navigator.clipboard.writeText(url);
-alert("Link Copied");
-}
-
+// ---------- ADMIN PANEL ----------
 function toggleAdmin(){
-document.getElementById("adminPanel").classList.toggle("hidden");
+  const panel=document.getElementById("adminPanel");
+  panel.style.display =
+    panel.style.display==="block"?"none":"block";
 }
 
-function addCategory(){
-let name=document.getElementById("catName").value;
-let img=document.getElementById("catImg").value;
+// ---------- CATEGORY ----------
+function addCategory(name,img){
+  if(!name || !img) return alert("Enter details");
 
-categories.push({name,img});
-save();
-renderCategories();
+  storeData.categories.push({name,img});
+  saveData();
+
+  alert("Category added ✅");
 }
 
-function addProduct(){
-let name=document.getElementById("prodName").value;
-let price=document.getElementById("prodPrice").value;
-let img=document.getElementById("prodImg").value;
-let link=document.getElementById("prodLink").value;
+// ---------- PRODUCT ----------
+function addProduct(name,price,img,link,category){
+  if(!name||!price||!img||!link) return alert("Fill all");
 
-products.push({
-name,price,img,link,
-category:currentCategory
-});
+  storeData.products.push({
+    name,price,img,link,category
+  });
 
-save();
-openCategory(currentCategory);
+  saveData();
+  alert("Product added ✅");
 }
 
-function deleteProduct(i){
-products.splice(i,1);
-save();
-openCategory(currentCategory);
+// ---------- DELETE ----------
+function deleteProduct(index){
+  storeData.products.splice(index,1);
+  saveData();
+  location.reload();
 }
 
-function editProduct(i){
-let newName=prompt("New name");
-if(newName){
-products[i].name=newName;
-save();
-openCategory(currentCategory);
-}
-}
+// ---------- EDIT ----------
+function editProduct(index){
+  let newName=prompt("New product name");
+  if(!newName) return;
 
-renderCategories();
+  storeData.products[index].name=newName;
+  saveData();
+  location.reload();
+}
