@@ -4,49 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Store</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-<h2 id="pageTitle">Categories</h2>
+<button id="backBtn" onclick="goBack()">←</button>
+<h2 id="pageTitle">Stores</h2>
 </header>
 
-<div id="categoryPage" class="grid"></div>
-<div id="productPage" class="grid" style="display:none;"></div>
+<div id="storePage" class="page"></div>
+<div id="categoryPage" class="page hidden"></div>
+<div id="productPage" class="page hidden"></div>
 
-<button id="adminBtn" onclick="openAdmin()">ADMIN</button>
+<button id="adminBtn" onclick="toggleAdmin()">ADMIN</button>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel">
+<div id="adminPanel" class="hidden admin">
+<h3>Admin Panel</h3>
 
-<h3>Category</h3>
-
-<select id="categorySelect"></select>
-<input id="newCategory" placeholder="New Category Name">
-<input id="categoryImage" placeholder="Category Image URL">
-
+<h4>Add Category</h4>
+<input id="catName" placeholder="Category Name">
+<input id="catImg" placeholder="Category Image URL">
 <button onclick="addCategory()">Add Category</button>
-<button onclick="updateCategory()">Edit Category</button>
-<button onclick="deleteCategory()">Delete Category</button>
 
-<hr>
-
-<h3>Product</h3>
-
-<select id="productCategory"></select>
-<input id="productName" placeholder="Product Name">
-<input id="productPrice" placeholder="Price">
-<input id="productImage" placeholder="Image URL">
-<input id="productLink" placeholder="Affiliate Link">
-
+<h4>Add Product</h4>
+<input id="prodName" placeholder="Product Name">
+<input id="prodPrice" placeholder="Price">
+<input id="prodImg" placeholder="Image URL">
+<input id="prodLink" placeholder="Affiliate Link">
 <button onclick="addProduct()">Add Product</button>
-<button onclick="updateProduct()">Edit Product</button>
-<button onclick="deleteProduct()">Delete Product</button>
-
-<br><br>
-<button onclick="closeAdmin()">Close</button>
 
 </div>
 
