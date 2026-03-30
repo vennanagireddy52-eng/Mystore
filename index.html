@@ -3,41 +3,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Store</title>
+<title>Smart Affiliate Store</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body{margin:0;font-family:Arial;background:#f0f2f5}
+.layer{display:none;min-height:100vh}
+.active{display:block}
+
+#storeLayer{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:linear-gradient(135deg,#6C5CE7,#00B894);
+}
+
+.storeCard{
+background:white;
+padding:25px;
+margin:15px;
+border-radius:15px;
+font-weight:bold;
+cursor:pointer;
+width:240px;
+text-align:center;
+}
+
+.topbar{
+padding:15px;
+color:white;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.back{cursor:pointer;font-size:22px}
+
+.grid{
+column-count:2;
+column-gap:10px;
+padding:15px;
+}
+
+.card{
+background:white;
+margin-bottom:12px;
+border-radius:12px;
+overflow:hidden;
+position:relative;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+break-inside:avoid;
+}
+
+.card img{width:100%}
+
+.info{padding:10px}
+
+.buy{
+display:block;
+background:#00b894;
+color:white;
+text-align:center;
+padding:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.linkBtn{
+position:absolute;
+top:8px;
+right:8px;
+background:white;
+border-radius:50%;
+width:30px;
+height:30px;
+border:none;
+cursor:pointer;
+box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+
+#toast{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#333;
+color:white;
+padding:8px 20px;
+border-radius:20px;
+display:none;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-<button id="backBtn" onclick="goBack()">←</button>
-<h2 id="pageTitle">Stores</h2>
-</header>
+<div id="toast">Link Copied 🔗</div>
 
-<div id="storePage" class="page"></div>
-<div id="categoryPage" class="page hidden"></div>
-<div id="productPage" class="page hidden"></div>
-
-<button id="adminBtn" onclick="toggleAdmin()">ADMIN</button>
-
-<div id="adminPanel" class="hidden admin">
-<h3>Admin Panel</h3>
-
-<h4>Add Category</h4>
-<input id="catName" placeholder="Category Name">
-<input id="catImg" placeholder="Category Image URL">
-<button onclick="addCategory()">Add Category</button>
-
-<h4>Add Product</h4>
-<input id="prodName" placeholder="Product Name">
-<input id="prodPrice" placeholder="Price">
-<input id="prodImg" placeholder="Image URL">
-<input id="prodLink" placeholder="Affiliate Link">
-<button onclick="addProduct()">Add Product</button>
-
+<!-- STORE -->
+<div id="storeLayer" class="layer active">
+<div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
+<div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
 </div>
 
-<script src="script.js"></script>
+<!-- CATEGORY -->
+<div id="categoryLayer" class="layer">
+<div class="topbar" style="background:#6C5CE7">
+<span class="back" onclick="goHome()">⬅</span>
+<h3>Categories</h3>
+</div>
+<div id="categoryGrid" class="grid"></div>
+</div>
+
+<!-- PRODUCTS -->
+<div id="productLayer" class="layer">
+<div class="topbar" style="background:#00B894">
+<span class="back" onclick="backCategory()">⬅</span>
+<h3>Products</h3>
+</div>
+<div id="productGrid" class="grid"></div>
+</div>
+
+<script>
+
+const data={
+IND:{
+Tech:[
+{name:"JBL Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
+price:"₹2799",
+link:"https://amzn.to/40OZeuH"}
+],
+Travel:[
+{name:"Travel Bags",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
+price:"₹799",
+link:"https://amzn.to/47iPnky"}
+]
+},
+US:{
+Tech:[
+{name:"JBL Speaker",
+img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
+price:"$97",
+link:"https://amzn.to/3PvtdW7"}
+]
+}
+};
+
+let currentStore="";
+let currentCategory="";
+
+function show(layer){
+document.querySelectorAll('.layer')
+.forEach(l=>l.classList.remove('active'));
+document.getElementById(layer).classList.add('active');
+}
+
+function openStore(store){
+currentStore=store;
+show("categoryLayer");
+renderCategories();
+}
+
+function openCategory(cat){
+currentCategory=cat;
+show("productLayer");
+renderProducts();
+}
+
+function goHome(){
+show("storeLayer");
+}
+
+function backCategory(){
+show("categoryLayer");
+}
+
+function copyLink(link,e){
+e.stopPropagation();
+navigator.clipboard.writeText(link);
+const t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+}
+
+function renderCategories(){
+const grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+
+Object.keys(data[currentStore]).forEach(cat=>{
+
+const url=location.origin+location.pathname+
+`?store=${currentStore}&cat=${cat}`;
+
+grid.innerHTML+=`
+<div class="card" onclick="openCategory('${cat}')">
+<button class="linkBtn"
+onclick="copyLink('${url}',event)">🔗</button>
+<img src="${data[currentStore][cat][0].img}">
+<div class="info"><b>${cat}</b></div>
+</div>`;
+});
+}
+
+function renderProducts(){
+const grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+data[currentStore][currentCategory].forEach(p=>{
+
+grid.innerHTML+=`
+<div class="card">
+<button class="linkBtn"
+onclick="copyLink('${p.link}',event)">🔗</button>
+
+<img src="${p.img}">
+<div class="info">
+<b>${p.name}</b><br>
+${p.price}
+</div>
+
+<a class="buy" href="${p.link}" target="_blank">
+Buy Now
+</a>
+</div>`;
+});
+}
+
+</script>
 </body>
 </html>
