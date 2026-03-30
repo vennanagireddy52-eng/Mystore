@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affiliate Store - Products</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Products</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>All Products</h1>
+<div class="topbar green">
+<span class="back" onclick="history.back()">⬅</span>
+<h3>Products</h3>
+</div>
 
-<!-- Products Container -->
-<div id="products-container"></div>
+<div id="productGrid" class="grid"></div>
 
-<!-- Include JS -->
-<script type="module" src="script.js"></script>
+<div id="toast">Link Copied 🔗</div>
+
+<script src="script.js"></script>
 </body>
 </html>
