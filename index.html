@@ -3,17 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Affiliate Store + Admin</title>
+<title>Smart Affiliate Store | Admin Pro</title>
 <style>
 /* ---------- GLOBAL ---------- */
-body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
-.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 80px; }
+body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; }
+.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 100px; }
 .active { display:block; }
 
 /* ---------- STORE PAGE ---------- */
 #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); min-height: 100vh;}
 .storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; transition:0.3s; }
-.storeCard:hover { transform:scale(1.05); }
 
 /* ---------- TOPBAR ---------- */
 .topbar { padding:15px; display:flex; gap:10px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
@@ -23,63 +22,76 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
-.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; }
-.card img { width:100%; display:block; min-height: 100px; background: #eee; }
+.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+.card img { width:100%; display:block; background: #eee; min-height: 80px; }
 .info { padding:10px; }
 .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
-.linkText { font-size:11px; color:#0984e3; word-break:break-word; margin-bottom:4px; }
 .price { font-weight: bold; color: #2d3436; font-size: 14px; }
 
-/* ---------- BUTTONS ---------- */
-.buy { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:13px; font-weight:bold; margin-top:5px; }
+/* ---------- ACTION BUTTONS ---------- */
+.buy { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:13px; font-weight:bold; }
 .share-btn { position:absolute; top:8px; right:8px; background:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:5; }
-.del-btn { position:absolute; top:8px; left:8px; background:#ff7675; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; z-index:5; font-size: 10px;}
+.del-btn-mini { position:absolute; top:8px; left:8px; background:#ff7675; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; z-index:5; font-size: 12px;}
 
 /* ---------- ADMIN PANEL ---------- */
-#adminBtn { position: fixed; bottom: 20px; right: 20px; background: #2d3436; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 2000; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-#adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 80%; background: white; z-index: 1500; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+#adminBtn { position: fixed; bottom: 20px; right: 20px; background: #2d3436; color: white; border: none; border-radius: 50%; width: 55px; height: 55px; cursor: pointer; z-index: 2000; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+#adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 85%; background: white; z-index: 1500; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
 #adminPanel.active { display: flex; }
-.admin-sec { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-.admin-sec h3 { margin-top: 0; color: #6C5CE7; }
-input, select, button.action-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-button.action-btn { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-button.cancel-btn { background: #eee; color: #333; border: none; }
+
+.admin-section { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; }
+.admin-section h3 { margin: 0 0 10px 0; font-size: 16px; color: #6C5CE7; text-transform: uppercase; }
+
+input, select, .btn-main { width: 100%; padding: 12px; margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
+.btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
+.btn-delete { background: #ff7675; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+
+/* Category List in Admin */
+.admin-list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px; border-radius: 6px; margin-bottom: 5px; border: 1px solid #eee; font-size: 13px; }
 
 /* ---------- TOAST ---------- */
-#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:8px 20px; border-radius:20px; display:none; z-index:2001; font-size:13px; }
+#toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:2500; font-size:13px; }
 </style>
 </head>
 <body>
 
-<div id="toast">Action Successful!</div>
+<div id="toast">Saved!</div>
 <button id="adminBtn" onclick="toggleAdmin()">⚙️</button>
 
 <div id="adminPanel">
-    <div style="display:flex; justify-content: space-between; align-items: center;">
-        <h2>Admin Control</h2>
-        <button onclick="toggleAdmin()" style="border:none; background:none; font-size:24px;">✕</button>
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
+        <h2 style="margin:0">Store Manager</h2>
+        <button onclick="toggleAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
 
-    <div class="admin-sec">
-        <h3>Manage Categories</h3>
-        <input type="text" id="newCatName" placeholder="Category Name (e.g. Fashion)">
-        <input type="text" id="newCatImg" placeholder="Category Image URL">
-        <button class="action-btn" onclick="addCategory()">Add/Update Category</button>
-    </div>
-
-    <div class="admin-sec">
-        <h3>Manage Products</h3>
-        <select id="prodCatSelect">
-            <option value="">Select Category</option>
+    <div class="admin-section">
+        <h3>1. Select Store to Edit</h3>
+        <select id="adminStoreSelect" onchange="syncAdminView()">
+            <option value="IND">🇮🇳 India Store</option>
+            <option value="US">🇺🇸 US Store</option>
         </select>
-        <input type="text" id="newProdName" placeholder="Product Name">
-        <input type="text" id="newProdPrice" placeholder="Price (e.g. ₹999)">
-        <input type="text" id="newProdLink" placeholder="Affiliate Link">
-        <input type="text" id="newProdImg" placeholder="Product Image URL">
-        <button class="action-btn" onclick="addProduct()" style="background:#00B894;">Add Product</button>
     </div>
-    
-    <button class="action-btn cancel-btn" onclick="resetData()">Reset to Factory Data</button>
+
+    <div class="admin-section">
+        <h3>2. Categories</h3>
+        <div id="adminCategoryList" style="margin-bottom:15px;"></div>
+        
+        <p style="font-size:12px; margin-bottom:5px;"><b>Add/Edit Category:</b></p>
+        <input type="text" id="catName" placeholder="Category Name">
+        <input type="text" id="catImg" placeholder="Category Image URL">
+        <button class="btn-main" onclick="saveCategory()">Save Category</button>
+    </div>
+
+    <div class="admin-section">
+        <h3>3. Products</h3>
+        <select id="prodCatSelect"><option value="">Choose Category</option></select>
+        <input type="text" id="pName" placeholder="Product Name">
+        <input type="text" id="pPrice" placeholder="Price (e.g. $20)">
+        <input type="text" id="pImg" placeholder="Image URL">
+        <input type="text" id="pLink" placeholder="Affiliate Link">
+        <button class="btn-main" onclick="addProduct()" style="background:#00B894;">Add Product</button>
+    </div>
+
+    <button onclick="resetToDefault()" style="background:none; border:none; color:red; cursor:pointer; font-size:12px; width:100%; text-align:center; margin-top:20px;">Reset to Factory Settings</button>
 </div>
 
 <div id="storeLayer" class="layer active">
@@ -90,7 +102,7 @@ button.cancel-btn { background: #eee; color: #333; border: none; }
 <div id="categoryLayer" class="layer">
     <div class="topbar">
         <span class="back" onclick="goHome()">⬅</span>
-        <input class="search" id="categorySearch" placeholder="Search category..." oninput="renderCategories()">
+        <input class="search" id="catSearch" placeholder="Search categories..." oninput="renderCategories()">
     </div>
     <div id="categoryGrid" class="grid"></div>
 </div>
@@ -98,148 +110,159 @@ button.cancel-btn { background: #eee; color: #333; border: none; }
 <div id="productLayer" class="layer">
     <div class="topbar product">
         <span class="back" onclick="backToCategories()">⬅</span>
-        <input class="search" id="productSearch" placeholder="Search product..." oninput="renderProducts()">
+        <input class="search" id="prodSearch" placeholder="Search products..." oninput="renderProducts()">
     </div>
     <div id="productGrid" class="grid"></div>
 </div>
 
+<div id="toast">Action Successful!</div>
+
 <script>
-// ---------- DATA CORE ----------
+// ---------- DATA INIT ----------
 const defaultData = {
-    IND: {
-        Tech: [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}],
-        Travel: [{name:"Travel Bags", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg", price:"₹799", link:"https://amzn.to/47iPnky"}]
-    },
-    US: {
-        Tech: [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}],
-        Travel: [{name:"Packing Cubes", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg", price:"$27", link:"https://amzn.to/4uRA649"}]
-    }
+    IND: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
+    US: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
 };
 
-let data = JSON.parse(localStorage.getItem('storeData')) || defaultData;
-let currentStore = "";
-let currentCategory = "";
+let data = JSON.parse(localStorage.getItem('smartStoreData')) || defaultData;
+let curStore = "";
+let curCat = "";
 
-function saveData() {
-    localStorage.setItem('storeData', JSON.stringify(data));
-}
+function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
 // ---------- NAVIGATION ----------
-function showLayer(id){document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active');}
-function openStore(store){currentStore=store; updateAdminDropdown(); renderCategories(); showLayer('categoryLayer');}
-function openCategory(cat){currentCategory=cat; renderProducts(); showLayer('productLayer');}
-function goHome(){currentStore=""; currentCategory=""; showLayer('storeLayer');}
-function backToCategories(){currentCategory=""; renderCategories(); showLayer('categoryLayer');}
-
-// ---------- UTILS ----------
-function showToast(msg){ 
-    let t=document.getElementById('toast'); t.innerText=msg; t.style.display='block'; 
-    setTimeout(()=>t.style.display='none',2000);
+function showLayer(id){ 
+    document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); 
+    document.getElementById(id).classList.add('active'); 
 }
-
-function copyLink(url,event){
-    event.stopPropagation(); navigator.clipboard.writeText(url); showToast("Link Copied! 🔗"); return false;
-}
-
-function toggleAdmin() {
-    document.getElementById('adminPanel').classList.toggle('active');
-    updateAdminDropdown();
-}
+function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); syncAdminView(); }
+function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
+function goHome(){ curStore=""; curCat=""; showLayer('storeLayer'); }
+function backToCategories(){ curCat=""; renderCategories(); showLayer('categoryLayer'); }
 
 // ---------- ADMIN LOGIC ----------
-function updateAdminDropdown() {
-    const select = document.getElementById('prodCatSelect');
-    select.innerHTML = '<option value="">Select Category</option>';
-    if(!currentStore) return;
-    Object.keys(data[currentStore]).forEach(cat => {
-        select.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
+function toggleAdmin() { 
+    const p = document.getElementById('adminPanel');
+    p.classList.toggle('active');
+    if(p.classList.contains('active')) syncAdminView();
 }
 
-function addCategory() {
-    const name = document.getElementById('newCatName').value;
-    const img = document.getElementById('newCatImg').value || "https://via.placeholder.com/150";
-    if(!currentStore || !name) return alert("Select a Store first and enter Name");
-    
-    if(!data[currentStore][name]) data[currentStore][name] = [];
-    // Categories use the first product's image in your logic, so we'll add a dummy if empty
-    if(data[currentStore][name].length === 0) {
-        data[currentStore][name].push({name: "Sample Product", img: img, price: "0", link: "#"});
-    } else {
-        data[currentStore][name][0].img = img;
+function syncAdminView() {
+    const s = document.getElementById('adminStoreSelect').value;
+    // Update Category List in Admin
+    const list = document.getElementById('adminCategoryList');
+    list.innerHTML = "";
+    Object.keys(data[s]).forEach(cat => {
+        list.innerHTML += `
+        <div class="admin-list-item">
+            <span>${cat}</span>
+            <div>
+                <button onclick="editCatPrompt('${s}','${cat}')" style="border:none; background:#6C5CE7; color:white; padding:3px 8px; border-radius:4px;">Edit</button>
+                <button onclick="deleteCategory('${s}','${cat}')" class="btn-delete">🗑️</button>
+            </div>
+        </div>`;
+    });
+
+    // Update Product Dropdown
+    const sel = document.getElementById('prodCatSelect');
+    sel.innerHTML = '<option value="">Choose Category</option>';
+    Object.keys(data[s]).forEach(cat => { sel.innerHTML += `<option value="${cat}">${cat}</option>`; });
+}
+
+function saveCategory() {
+    const s = document.getElementById('adminStoreSelect').value;
+    const name = document.getElementById('catName').value.trim();
+    const img = document.getElementById('catImg').value.trim();
+    if(!name) return;
+
+    if(!data[s][name]) data[s][name] = [];
+    if(img) {
+        // If an image is provided, we ensure at least one placeholder product exists to hold that image
+        if(data[s][name].length === 0) {
+            data[s][name].push({name: "Sample", img: img, price: "-", link: "#"});
+        } else {
+            data[s][name][0].img = img;
+        }
     }
-    
-    saveData(); renderCategories(); updateAdminDropdown();
+    save(); syncAdminView(); renderCategories();
+    document.getElementById('catName').value = "";
+    document.getElementById('catImg').value = "";
     showToast("Category Updated!");
 }
 
+function editCatPrompt(s, oldName) {
+    const newName = prompt("Enter new name for " + oldName, oldName);
+    if(newName && newName !== oldName) {
+        data[s][newName] = data[s][oldName];
+        delete data[s][oldName];
+        save(); syncAdminView(); renderCategories();
+    }
+}
+
+function deleteCategory(s, cat) {
+    if(confirm(`Delete "${cat}" and all its products?`)) {
+        delete data[s][cat];
+        save(); syncAdminView(); renderCategories();
+    }
+}
+
 function addProduct() {
+    const s = document.getElementById('adminStoreSelect').value;
     const cat = document.getElementById('prodCatSelect').value;
-    const name = document.getElementById('newProdName').value;
-    const price = document.getElementById('newProdPrice').value;
-    const link = document.getElementById('newProdLink').value;
-    const img = document.getElementById('newProdImg').value;
+    const name = document.getElementById('pName').value;
+    const price = document.getElementById('pPrice').value;
+    const img = document.getElementById('pImg').value;
+    const link = document.getElementById('pLink').value;
 
-    if(!cat || !name || !link) return alert("Fill all fields");
+    if(!cat || !name || !link) return alert("Select category and enter name/link");
 
-    data[currentStore][cat].push({name, img, price, link});
-    saveData();
-    if(currentCategory === cat) renderProducts();
+    data[s][cat].push({name, price, img, link});
+    save();
+    if(curCat === cat) renderProducts();
     showToast("Product Added!");
 }
 
-function deleteProduct(index, event) {
-    event.stopPropagation();
-    if(confirm("Delete this product?")) {
-        data[currentStore][currentCategory].splice(index, 1);
-        saveData();
-        renderProducts();
+function deleteProduct(idx) {
+    if(confirm("Delete product?")) {
+        data[curStore][curCat].splice(idx, 1);
+        save(); renderProducts();
     }
 }
 
-function resetData() {
-    if(confirm("Reset all changes?")) {
-        localStorage.removeItem('storeData');
-        location.reload();
-    }
-}
-
-// ---------- RENDER ----------
-function renderCategories(){
-    const grid=document.getElementById('categoryGrid'); grid.innerHTML='';
-    const search = document.getElementById('categorySearch').value.toLowerCase();
+// ---------- RENDERING ----------
+function renderCategories() {
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = "";
+    const query = document.getElementById('catSearch').value.toLowerCase();
     
-    Object.keys(data[currentStore]).forEach(cat=>{
-        if(!cat.toLowerCase().includes(search)) return;
-        const url=`${window.location.origin}${window.location.pathname}?store=${currentStore}&cat=${cat}`;
-        const displayImg = data[currentStore][cat][0]?.img || "";
-        grid.innerHTML+=`
+    Object.keys(data[curStore]).forEach(cat => {
+        if(!cat.toLowerCase().includes(query)) return;
+        const firstImg = data[curStore][cat][0]?.img || "https://via.placeholder.com/150";
+        grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
-            <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
-            <img src="${displayImg}">
+            <button class="del-btn-mini" onclick="event.stopPropagation(); deleteCategory(curStore,'${cat}')">🗑️</button>
+            <img src="${firstImg}">
             <div class="info">
                 <div class="title">${cat}</div>
-                <div class="linkText">${url}</div>
+                <div style="font-size:11px; color:#636e72;">${data[curStore][cat].length} Items</div>
             </div>
         </div>`;
     });
 }
 
-function renderProducts(){
-    const grid=document.getElementById('productGrid'); grid.innerHTML='';
-    const search = document.getElementById('productSearch').value.toLowerCase();
+function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = "";
+    const query = document.getElementById('prodSearch').value.toLowerCase();
 
-    data[currentStore][currentCategory].forEach((p, index)=>{
-        if(!p.name.toLowerCase().includes(search)) return;
-        const url=p.link;
-        grid.innerHTML+=`
+    data[curStore][curCat].forEach((p, i) => {
+        if(!p.name.toLowerCase().includes(query)) return;
+        grid.innerHTML += `
         <div class="card">
-            <button class="del-btn" onclick="deleteProduct(${index}, event)">🗑️</button>
-            <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
+            <button class="del-btn-mini" onclick="deleteProduct(${i})">🗑️</button>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
-                <div class="linkText">${url}</div>
                 <div class="price">${p.price}</div>
             </div>
             <a class="buy" href="${p.link}" target="_blank">Buy Now</a>
@@ -247,17 +270,15 @@ function renderProducts(){
     });
 }
 
-// ---------- LOAD ----------
-window.onload=function(){
-    const params=new URLSearchParams(window.location.search);
-    const s=params.get('store'); const c=params.get('cat');
-    if(s && data[s]){
-        currentStore=s;
-        if(c && data[s][c]){currentCategory=c; renderProducts(); showLayer('productLayer');}
-        else{renderCategories(); showLayer('categoryLayer');}
-    } else { showLayer('storeLayer'); }
-};
-</script>
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg; t.style.display = "block";
+    setTimeout(() => t.style.display="none", 2000);
+}
 
+function resetToDefault() {
+    if(confirm("Erase all changes?")) { localStorage.clear(); location.reload(); }
+}
+</script>
 </body>
 </html>
