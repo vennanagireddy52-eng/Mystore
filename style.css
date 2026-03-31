@@ -1,64 +1,41 @@
 body{
 margin:0;
 font-family:Arial;
-background:#f0f2f5;
+background:#f2f2f2;
 }
 
-.layer{display:none;min-height:100vh}
-.active{display:block}
-
-#storeLayer{
+header{
+background:#6C5CE7;
+color:white;
+padding:15px;
 display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:linear-gradient(135deg,#6C5CE7,#00B894);
+justify-content:space-between;
 }
+
+.page{display:none;padding:15px;}
+.page.active{display:block;}
 
 .storeCard{
 background:white;
-padding:25px;
-margin:15px;
-border-radius:15px;
-font-weight:bold;
-cursor:pointer;
-width:240px;
+padding:30px;
+margin:20px;
 text-align:center;
-}
-
-.topbar{
-padding:15px;
-color:white;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.purple{background:#6C5CE7}
-.green{background:#00B894}
-
-.back{cursor:pointer;font-size:22px}
-
-.grid{
-column-count:2;
-column-gap:10px;
-padding:15px;
+border-radius:12px;
+cursor:pointer;
+font-size:20px;
 }
 
 .card{
 background:white;
-margin-bottom:12px;
+margin:10px;
 border-radius:12px;
 overflow:hidden;
 position:relative;
-box-shadow:0 4px 10px rgba(0,0,0,.1);
-break-inside:avoid;
 }
 
-.card img{width:100%}
+.card img{width:100%;}
 
-.info{padding:10px}
+.info{padding:10px;}
 
 .buy{
 display:block;
@@ -67,29 +44,22 @@ color:white;
 text-align:center;
 padding:10px;
 text-decoration:none;
-font-weight:bold;
 }
 
-.linkBtn{
+.linkIcon{
 position:absolute;
 top:8px;
 right:8px;
 background:white;
 border-radius:50%;
-width:30px;
-height:30px;
-border:none;
+padding:5px;
 cursor:pointer;
 }
 
-#toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#333;
-color:white;
-padding:8px 20px;
-border-radius:20px;
+.admin{
 display:none;
+background:white;
+padding:15px;
+margin:15px;
+border-radius:10px;
 }
