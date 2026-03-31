@@ -6,86 +6,132 @@
 <title>Smart Affiliate Store</title>
 
 <style>
-body{margin:0;font-family:Segoe UI;background:#f0f2f5}
 
-/* ===== LAYERS (FIX STICKY STORE) ===== */
-.layer{display:none;height:100vh}
-.layer.active{display:block}
+/* ---------- GLOBAL ---------- */
+body{
+margin:0;
+font-family:Segoe UI;
+background:#f0f2f5;
+}
 
-/* ===== STORE PAGE ===== */
+/* FIX STICKY ISSUE */
+.layer{
+display:none;
+min-height:100vh;
+}
+
+.layer.active{
+display:block;
+}
+
+/* ---------- STORE ---------- */
 #storeLayer{
 display:flex;
-flex-direction:column;
 justify-content:center;
 align-items:center;
+height:100vh;
 background:linear-gradient(135deg,#6C5CE7,#00B894);
+flex-direction:column;
 }
 
 .storeCard{
-background:#fff;
+background:white;
 padding:25px;
 margin:15px;
-border-radius:15px;
-font-weight:bold;
+border-radius:20px;
 cursor:pointer;
+font-weight:bold;
 }
 
-/* ===== TOPBAR ===== */
+/* ---------- TOPBAR ---------- */
 .topbar{
-background:#00b894;
-color:#fff;
 padding:15px;
-display:flex;
-gap:10px;
-align-items:center;
+background:#00B894;
+color:white;
+font-weight:bold;
 }
 
-.back{cursor:pointer;font-size:20px}
+/* ---------- GRID ---------- */
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+padding:15px;
+}
 
-/* ===== GRID ===== */
-.grid{column-count:2;padding:10px}
 .card{
-background:#fff;
-margin:8px;
+background:white;
 border-radius:12px;
 overflow:hidden;
 position:relative;
+box-shadow:0 3px 8px rgba(0,0,0,.1);
 }
 
-.card img{width:100%}
+.card img{
+width:100%;
+display:block;
+}
 
-.info{padding:8px}
-.price{color:#d63031;font-weight:bold}
+.info{
+padding:10px;
+}
 
-/* ===== LINK BUTTON ===== */
+.buy{
+display:block;
+background:#00b894;
+color:white;
+text-align:center;
+padding:10px;
+text-decoration:none;
+}
+
+/* LINK ICON */
 .linkBtn{
 position:absolute;
 top:6px;
 right:6px;
-background:#fff;
+background:white;
 border:none;
 border-radius:50%;
+width:28px;
+height:28px;
 cursor:pointer;
+font-size:14px;
 }
 
-/* ===== ADMIN BUTTON ===== */
+/* ADMIN BUTTON */
 #adminBtn{
 position:fixed;
 bottom:20px;
 right:20px;
-background:#000;
-color:#fff;
+background:black;
+color:white;
 border:none;
 padding:12px 18px;
 border-radius:25px;
+cursor:pointer;
 z-index:9999;
+}
+
+input{
+display:block;
+margin:6px 0;
+padding:8px;
+width:100%;
+}
+
+button{
+margin-top:5px;
+padding:8px;
 cursor:pointer;
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- ADMIN BUTTON -->
 <button id="adminBtn" onclick="openAdmin()">⚙ Admin</button>
 
 <!-- STORE -->
@@ -96,182 +142,161 @@ cursor:pointer;
 
 <!-- CATEGORY -->
 <div id="categoryLayer" class="layer">
-<div class="topbar">
-<span class="back" onclick="goHome()">⬅</span> Categories
-</div>
+<div class="topbar">⬅ Categories</div>
 <div id="categoryGrid" class="grid"></div>
 </div>
 
-<!-- PRODUCT -->
+<!-- PRODUCTS -->
 <div id="productLayer" class="layer">
-<div class="topbar">
-<span class="back" onclick="backCategory()">⬅</span> Products
-</div>
+<div class="topbar">⬅ Products</div>
 <div id="productGrid" class="grid"></div>
 </div>
 
-<!-- ADMIN -->
+<!-- ADMIN PANEL -->
 <div id="adminLayer" class="layer">
-<div class="topbar">
-<span class="back" onclick="goHome()">⬅</span> Admin Panel
-</div>
+<div class="topbar">Admin Panel</div>
 
 <div style="padding:15px">
 
 <h3>Add Category</h3>
-<input id="catName" placeholder="Category Name"><br><br>
-<input id="catImg" placeholder="Image URL"><br><br>
-<button onclick="addCategory()">Add</button>
+<input id="catStore" placeholder="Store (IND/US)">
+<input id="catName" placeholder="Category Name">
+<input id="catImg" placeholder="Category Image URL">
+<button onclick="addCategory()">Add Category</button>
 
 <hr>
 
 <h3>Add Product</h3>
-<input id="prodCat" placeholder="Category"><br><br>
-<input id="prodName" placeholder="Product Name"><br><br>
-<input id="prodImg" placeholder="Image URL"><br><br>
-<input id="prodPrice" placeholder="Price"><br><br>
-<input id="prodLink" placeholder="Affiliate Link"><br><br>
-<button onclick="addProduct()">Add</button>
+<input id="prodStore" placeholder="Store">
+<input id="prodCat" placeholder="Category">
+<input id="prodName" placeholder="Product Name">
+<input id="prodImg" placeholder="Image URL">
+<input id="prodPrice" placeholder="Price">
+<input id="prodLink" placeholder="Affiliate Link">
+<button onclick="addProduct()">Add Product</button>
 
 </div>
 </div>
 
 <script>
 
-/* ===== DATA ===== */
+/* ---------- DATA ---------- */
 let data={
-IND:{
-Tech:[
-{name:"JBL Speaker",img:"https://via.placeholder.com/300",price:"₹2799",link:"https://amazon.in"}
-]
-},
+IND:{},
 US:{}
 };
 
 let currentStore="";
 let currentCategory="";
 
-/* ===== PAGE SWITCH ===== */
+/* ---------- LAYER CONTROL (FIXES STICKY) ---------- */
 function showLayer(id){
 document.querySelectorAll('.layer')
 .forEach(l=>l.classList.remove('active'));
+
 document.getElementById(id).classList.add('active');
 }
 
-/* ===== STORE ===== */
+/* ---------- STORE ---------- */
 function openStore(store){
 currentStore=store;
 renderCategories();
 showLayer("categoryLayer");
 }
 
-function goHome(){
-showLayer("storeLayer");
-}
-
-/* ===== CATEGORY ===== */
-function renderCategories(){
-let grid=document.getElementById("categoryGrid");
-grid.innerHTML="";
-
-Object.keys(data[currentStore]).forEach(cat=>{
-let link=location.origin+location.pathname+
-`?store=${currentStore}&cat=${cat}`;
-
-grid.innerHTML+=`
-<div class="card" onclick="openCategory('${cat}')">
-<button class="linkBtn"
-onclick="copyLink('${link}',event)">🔗</button>
-<img src="${data[currentStore][cat][0]?.img}">
-<div class="info">${cat}</div>
-</div>`;
-});
-}
-
+/* ---------- CATEGORY ---------- */
 function openCategory(cat){
 currentCategory=cat;
 renderProducts();
 showLayer("productLayer");
 }
 
-function backCategory(){
-showLayer("categoryLayer");
-}
-
-/* ===== PRODUCTS ===== */
-function renderProducts(){
-let grid=document.getElementById("productGrid");
-grid.innerHTML="";
-
-data[currentStore][currentCategory].forEach((p,i)=>{
-
-grid.innerHTML+=`
-<div class="card">
-<button class="linkBtn"
-onclick="copyLink('${p.link}',event)">🔗</button>
-
-<img src="${p.img}">
-<div class="info">
-${p.name}<br>
-<span class="price">${p.price}</span><br>
-
-<a href="${p.link}" target="_blank">Buy</a><br><br>
-
-<button onclick="editProduct(${i})">Edit</button>
-<button onclick="deleteProduct(${i})">Delete</button>
-</div>
-</div>`;
-});
-}
-
-/* ===== ADMIN ===== */
+/* ---------- ADMIN ---------- */
 function openAdmin(){
 showLayer("adminLayer");
 }
 
+/* ---------- ADD CATEGORY ---------- */
 function addCategory(){
-let name=document.getElementById("catName").value;
-let img=document.getElementById("catImg").value;
+let s=catStore.value;
+let n=catName.value;
+let i=catImg.value;
 
-if(!data[currentStore])data[currentStore]={};
-data[currentStore][name]=[
-{name:name,img:img,price:"",link:""}
-];
+if(!data[s]) data[s]={};
+
+data[s][n]=[];
 
 renderCategories();
 alert("Category Added");
 }
 
+/* ---------- ADD PRODUCT ---------- */
 function addProduct(){
-let cat=document.getElementById("prodCat").value;
 
-data[currentStore][cat].push({
+let s=prodStore.value;
+let c=prodCat.value;
+
+data[s][c].push({
 name:prodName.value,
 img:prodImg.value,
 price:prodPrice.value,
 link:prodLink.value
 });
 
+renderProducts();
 alert("Product Added");
 }
 
-function editProduct(i){
-let p=data[currentStore][currentCategory][i];
-p.name=prompt("Edit name",p.name);
-p.price=prompt("Edit price",p.price);
-renderProducts();
+/* ---------- RENDER CATEGORY ---------- */
+function renderCategories(){
+
+let grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+
+Object.keys(data[currentStore]).forEach(cat=>{
+
+let link=location.origin+location.pathname+
+`?store=${currentStore}&cat=${cat}`;
+
+grid.innerHTML+=`
+<div class="card" onclick="openCategory('${cat}')">
+
+<button class="linkBtn"
+onclick="event.stopPropagation();
+navigator.clipboard.writeText('${link}')">🔗</button>
+
+<img src="${data[currentStore][cat][0]?.img || ''}">
+<div class="info">${cat}</div>
+</div>`;
+});
 }
 
-function deleteProduct(i){
-data[currentStore][currentCategory].splice(i,1);
-renderProducts();
-}
+/* ---------- RENDER PRODUCTS ---------- */
+function renderProducts(){
 
-/* ===== COPY LINK ===== */
-function copyLink(link,e){
-e.stopPropagation();
-navigator.clipboard.writeText(link);
-alert("Link Copied ✅");
+let grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+data[currentStore][currentCategory].forEach(p=>{
+
+grid.innerHTML+=`
+<div class="card">
+
+<button class="linkBtn"
+onclick="navigator.clipboard.writeText('${p.link}')">🔗</button>
+
+<img src="${p.img}">
+<div class="info">
+${p.name}<br>
+<b>${p.price}</b>
+</div>
+
+<a class="buy" href="${p.link}" target="_blank">
+Buy Now
+</a>
+
+</div>`;
+});
 }
 
 </script>
