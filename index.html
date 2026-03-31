@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Affiliate Store | Admin Pro</title>
+<title>Pro Affiliate Store</title>
 <style>
 /* ---------- GLOBAL ---------- */
 body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; }
@@ -12,7 +13,7 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 
 /* ---------- STORE PAGE ---------- */
 #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); min-height: 100vh;}
-.storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; transition:0.3s; }
+.storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; }
 
 /* ---------- TOPBAR ---------- */
 .topbar { padding:15px; display:flex; gap:10px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
@@ -22,76 +23,76 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
-.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer;}
 .card img { width:100%; display:block; background: #eee; min-height: 80px; }
 .info { padding:10px; }
 .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
 .price { font-weight: bold; color: #2d3436; font-size: 14px; }
 
-/* ---------- ACTION BUTTONS ---------- */
+/* ---------- BUTTONS ---------- */
 .buy { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:13px; font-weight:bold; }
-.share-btn { position:absolute; top:8px; right:8px; background:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:5; }
-.del-btn-mini { position:absolute; top:8px; left:8px; background:#ff7675; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; z-index:5; font-size: 12px;}
+.share-btn { position:absolute; top:8px; right:8px; background:rgba(255,255,255,0.9); border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:5; display:flex; align-items:center; justify-content:center; font-size:14px;}
 
 /* ---------- ADMIN PANEL ---------- */
 #adminBtn { position: fixed; bottom: 20px; right: 20px; background: #2d3436; color: white; border: none; border-radius: 50%; width: 55px; height: 55px; cursor: pointer; z-index: 2000; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-#adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 85%; background: white; z-index: 1500; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+#adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 90%; background: white; z-index: 1500; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
 #adminPanel.active { display: flex; }
 
 .admin-section { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; }
-.admin-section h3 { margin: 0 0 10px 0; font-size: 16px; color: #6C5CE7; text-transform: uppercase; }
+.admin-section h3 { margin: 0 0 10px 0; font-size: 15px; color: #6C5CE7; }
 
-input, select, .btn-main { width: 100%; padding: 12px; margin: 5px 0 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
-.btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-.btn-delete { background: #ff7675; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-size: 13px; }
+.btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; margin-top:10px;}
+.admin-item-row { background: white; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee; }
+.row-controls { display: flex; gap: 5px; margin-top: 5px; }
+.btn-sm { flex: 1; padding: 5px; font-size: 11px; border: none; border-radius: 4px; cursor: pointer; }
+.btn-edit { background: #0984e3; color: white; }
+.btn-del { background: #ff7675; color: white; }
 
-/* Category List in Admin */
-.admin-list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px; border-radius: 6px; margin-bottom: 5px; border: 1px solid #eee; font-size: 13px; }
-
-/* ---------- TOAST ---------- */
-#toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:2500; font-size:13px; }
+#toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:2500; font-size:13px; }
 </style>
 </head>
 <body>
 
-<div id="toast">Saved!</div>
+<div id="toast">Link Copied!</div>
 <button id="adminBtn" onclick="toggleAdmin()">⚙️</button>
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
-        <h2 style="margin:0">Store Manager</h2>
+        <h2 style="margin:0">Store Admin</h2>
         <button onclick="toggleAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
 
     <div class="admin-section">
-        <h3>1. Select Store to Edit</h3>
-        <select id="adminStoreSelect" onchange="syncAdminView()">
+        <h3>1. Select Store</h3>
+        <select id="adminStoreSelect" onchange="refreshAdminLists()">
             <option value="IND">🇮🇳 India Store</option>
             <option value="US">🇺🇸 US Store</option>
         </select>
     </div>
 
     <div class="admin-section">
-        <h3>2. Categories</h3>
-        <div id="adminCategoryList" style="margin-bottom:15px;"></div>
-        
-        <p style="font-size:12px; margin-bottom:5px;"><b>Add/Edit Category:</b></p>
-        <input type="text" id="catName" placeholder="Category Name">
-        <input type="text" id="catImg" placeholder="Category Image URL">
-        <button class="btn-main" onclick="saveCategory()">Save Category</button>
+        <h3>2. Manage Categories</h3>
+        <div id="adminCatList"></div>
+        <hr>
+        <p><b>Add New Category:</b></p>
+        <input type="text" id="newCatName" placeholder="Category Name">
+        <input type="text" id="newCatImg" placeholder="Image URL">
+        <button class="btn-main" onclick="addCategory()">Add Category</button>
     </div>
 
     <div class="admin-section">
-        <h3>3. Products</h3>
-        <select id="prodCatSelect"><option value="">Choose Category</option></select>
-        <input type="text" id="pName" placeholder="Product Name">
-        <input type="text" id="pPrice" placeholder="Price (e.g. $20)">
+        <h3>3. Manage Products</h3>
+        <select id="adminProdCatSelect" onchange="refreshAdminLists()"><option value="">Select Category</option></select>
+        <div id="adminProdList"></div>
+        <hr>
+        <p><b>Add New Product:</b></p>
+        <input type="text" id="pName" placeholder="Name">
+        <input type="text" id="pPrice" placeholder="Price">
         <input type="text" id="pImg" placeholder="Image URL">
         <input type="text" id="pLink" placeholder="Affiliate Link">
         <button class="btn-main" onclick="addProduct()" style="background:#00B894;">Add Product</button>
     </div>
-
-    <button onclick="resetToDefault()" style="background:none; border:none; color:red; cursor:pointer; font-size:12px; width:100%; text-align:center; margin-top:20px;">Reset to Factory Settings</button>
 </div>
 
 <div id="storeLayer" class="layer active">
@@ -115,10 +116,7 @@ input, select, .btn-main { width: 100%; padding: 12px; margin: 5px 0 10px 0; bor
     <div id="productGrid" class="grid"></div>
 </div>
 
-<div id="toast">Action Successful!</div>
-
 <script>
-// ---------- DATA INIT ----------
 const defaultData = {
     IND: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
     US: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
@@ -130,136 +128,138 @@ let curCat = "";
 
 function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
-// ---------- NAVIGATION ----------
-function showLayer(id){ 
-    document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); 
-    document.getElementById(id).classList.add('active'); 
-}
-function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); syncAdminView(); }
-function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
+// --- NAV ---
+function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); refreshAdminLists();}
+function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); refreshAdminLists();}
 function goHome(){ curStore=""; curCat=""; showLayer('storeLayer'); }
 function backToCategories(){ curCat=""; renderCategories(); showLayer('categoryLayer'); }
 
-// ---------- ADMIN LOGIC ----------
-function toggleAdmin() { 
-    const p = document.getElementById('adminPanel');
-    p.classList.toggle('active');
-    if(p.classList.contains('active')) syncAdminView();
-}
+// --- ADMIN ---
+function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('active'); refreshAdminLists(); }
 
-function syncAdminView() {
+function refreshAdminLists() {
     const s = document.getElementById('adminStoreSelect').value;
-    // Update Category List in Admin
-    const list = document.getElementById('adminCategoryList');
-    list.innerHTML = "";
+    const catSel = document.getElementById('adminProdCatSelect');
+    
+    // Categories List
+    const cList = document.getElementById('adminCatList');
+    cList.innerHTML = "";
     Object.keys(data[s]).forEach(cat => {
-        list.innerHTML += `
-        <div class="admin-list-item">
-            <span>${cat}</span>
-            <div>
-                <button onclick="editCatPrompt('${s}','${cat}')" style="border:none; background:#6C5CE7; color:white; padding:3px 8px; border-radius:4px;">Edit</button>
-                <button onclick="deleteCategory('${s}','${cat}')" class="btn-delete">🗑️</button>
+        const firstImg = data[s][cat][0]?.img || "";
+        cList.innerHTML += `
+        <div class="admin-item-row">
+            <b>${cat}</b>
+            <input type="text" value="${firstImg}" placeholder="Image URL" onchange="updateCatImg('${s}','${cat}',this.value)">
+            <div class="row-controls">
+                <button class="btn-sm btn-edit" onclick="renameCat('${s}','${cat}')">Rename</button>
+                <button class="btn-sm btn-del" onclick="deleteCat('${s}','${cat}')">Delete</button>
             </div>
         </div>`;
     });
 
-    // Update Product Dropdown
-    const sel = document.getElementById('prodCatSelect');
-    sel.innerHTML = '<option value="">Choose Category</option>';
-    Object.keys(data[s]).forEach(cat => { sel.innerHTML += `<option value="${cat}">${cat}</option>`; });
-}
+    // Update Category Dropdown for products
+    const prevVal = catSel.value;
+    catSel.innerHTML = '<option value="">Select Category</option>';
+    Object.keys(data[s]).forEach(cat => { catSel.innerHTML += `<option value="${cat}">${cat}</option>`; });
+    catSel.value = prevVal;
 
-function saveCategory() {
-    const s = document.getElementById('adminStoreSelect').value;
-    const name = document.getElementById('catName').value.trim();
-    const img = document.getElementById('catImg').value.trim();
-    if(!name) return;
-
-    if(!data[s][name]) data[s][name] = [];
-    if(img) {
-        // If an image is provided, we ensure at least one placeholder product exists to hold that image
-        if(data[s][name].length === 0) {
-            data[s][name].push({name: "Sample", img: img, price: "-", link: "#"});
-        } else {
-            data[s][name][0].img = img;
-        }
+    // Products List
+    const pList = document.getElementById('adminProdList');
+    pList.innerHTML = "";
+    const selectedCat = catSel.value;
+    if(selectedCat && data[s][selectedCat]) {
+        data[s][selectedCat].forEach((p, i) => {
+            pList.innerHTML += `
+            <div class="admin-item-row">
+                <input type="text" value="${p.name}" onchange="updateProd('${s}','${selectedCat}',${i},'name',this.value)" placeholder="Name">
+                <input type="text" value="${p.img}" onchange="updateProd('${s}','${selectedCat}',${i},'img',this.value)" placeholder="Img URL">
+                <input type="text" value="${p.link}" onchange="updateProd('${s}','${selectedCat}',${i},'link',this.value)" placeholder="Link">
+                <div class="row-controls">
+                    <button class="btn-sm btn-del" onclick="deleteProd('${s}','${selectedCat}',${i})">Delete Product</button>
+                </div>
+            </div>`;
+        });
     }
-    save(); syncAdminView(); renderCategories();
-    document.getElementById('catName').value = "";
-    document.getElementById('catImg').value = "";
-    showToast("Category Updated!");
 }
 
-function editCatPrompt(s, oldName) {
-    const newName = prompt("Enter new name for " + oldName, oldName);
+// --- ADMIN ACTIONS ---
+function addCategory() {
+    const s = document.getElementById('adminStoreSelect').value;
+    const name = document.getElementById('newCatName').value.trim();
+    const img = document.getElementById('newCatImg').value.trim();
+    if(!name) return;
+    data[s][name] = [{name:"Sample", price:"-", img: img || "https://via.placeholder.com/150", link:"#"}];
+    save(); refreshAdminLists(); renderCategories();
+}
+
+function updateCatImg(s, cat, url) {
+    if(data[s][cat].length > 0) data[s][cat][0].img = url;
+    save(); renderCategories();
+}
+
+function renameCat(s, oldName) {
+    const newName = prompt("New Name:", oldName);
     if(newName && newName !== oldName) {
         data[s][newName] = data[s][oldName];
         delete data[s][oldName];
-        save(); syncAdminView(); renderCategories();
+        save(); refreshAdminLists(); renderCategories();
     }
 }
 
-function deleteCategory(s, cat) {
-    if(confirm(`Delete "${cat}" and all its products?`)) {
+function deleteCat(s, cat) {
+    if(confirm("Delete entire category?")) {
         delete data[s][cat];
-        save(); syncAdminView(); renderCategories();
+        save(); refreshAdminLists(); renderCategories();
     }
 }
 
 function addProduct() {
     const s = document.getElementById('adminStoreSelect').value;
-    const cat = document.getElementById('prodCatSelect').value;
+    const cat = document.getElementById('adminProdCatSelect').value;
     const name = document.getElementById('pName').value;
     const price = document.getElementById('pPrice').value;
     const img = document.getElementById('pImg').value;
     const link = document.getElementById('pLink').value;
-
-    if(!cat || !name || !link) return alert("Select category and enter name/link");
-
+    if(!cat || !name) return alert("Select category & name");
     data[s][cat].push({name, price, img, link});
-    save();
-    if(curCat === cat) renderProducts();
-    showToast("Product Added!");
+    save(); refreshAdminLists(); renderProducts();
 }
 
-function deleteProduct(idx) {
-    if(confirm("Delete product?")) {
-        data[curStore][curCat].splice(idx, 1);
-        save(); renderProducts();
-    }
+function updateProd(s, cat, i, key, val) {
+    data[s][cat][i][key] = val;
+    save(); renderProducts();
 }
 
-// ---------- RENDERING ----------
+function deleteProd(s, cat, i) {
+    data[s][cat].splice(i, 1);
+    save(); refreshAdminLists(); renderProducts();
+}
+
+// --- RENDER FRONT ---
 function renderCategories() {
-    const grid = document.getElementById('categoryGrid');
-    grid.innerHTML = "";
-    const query = document.getElementById('catSearch').value.toLowerCase();
-    
+    const grid = document.getElementById('categoryGrid'); grid.innerHTML = "";
+    const q = document.getElementById('catSearch').value.toLowerCase();
     Object.keys(data[curStore]).forEach(cat => {
-        if(!cat.toLowerCase().includes(query)) return;
-        const firstImg = data[curStore][cat][0]?.img || "https://via.placeholder.com/150";
+        if(!cat.toLowerCase().includes(q)) return;
+        const url = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${cat}`;
         grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
-            <button class="del-btn-mini" onclick="event.stopPropagation(); deleteCategory(curStore,'${cat}')">🗑️</button>
-            <img src="${firstImg}">
-            <div class="info">
-                <div class="title">${cat}</div>
-                <div style="font-size:11px; color:#636e72;">${data[curStore][cat].length} Items</div>
-            </div>
+            <button class="share-btn" onclick="copyLink('${url}', event)">🔗</button>
+            <img src="${data[curStore][cat][0]?.img || ''}">
+            <div class="info"><div class="title">${cat}</div></div>
         </div>`;
     });
 }
 
 function renderProducts() {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = "";
-    const query = document.getElementById('prodSearch').value.toLowerCase();
-
+    const grid = document.getElementById('productGrid'); grid.innerHTML = "";
+    const q = document.getElementById('prodSearch').value.toLowerCase();
     data[curStore][curCat].forEach((p, i) => {
-        if(!p.name.toLowerCase().includes(query)) return;
+        if(!p.name.toLowerCase().includes(q)) return;
         grid.innerHTML += `
         <div class="card">
-            <button class="del-btn-mini" onclick="deleteProduct(${i})">🗑️</button>
+            <button class="share-btn" onclick="copyLink('${p.link}', event)">🔗</button>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
@@ -270,14 +270,12 @@ function renderProducts() {
     });
 }
 
-function showToast(msg) {
+function copyLink(url, e) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(url);
     const t = document.getElementById('toast');
-    t.innerText = msg; t.style.display = "block";
-    setTimeout(() => t.style.display="none", 2000);
-}
-
-function resetToDefault() {
-    if(confirm("Erase all changes?")) { localStorage.clear(); location.reload(); }
+    t.style.display = "block";
+    setTimeout(() => t.style.display = "none", 2000);
 }
 </script>
 </body>
