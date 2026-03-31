@@ -2,47 +2,314 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Smart Affiliate Store</title>
-<link rel="stylesheet" href="style.css">
+<title>Multi Store App</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+}
+
+/* ---------- LAYERS ---------- */
+.layer{display:none;}
+.active{display:block;}
+
+/* ---------- STORE PAGE ---------- */
+#stores{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:40px;
+}
+
+.store{
+padding:25px 60px;
+background:white;
+border-radius:12px;
+cursor:pointer;
+font-size:22px;
+box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+
+/* ---------- STICKY HEADER ---------- */
+.header{
+position:sticky;
+top:0;
+background:white;
+z-index:1000;
+padding:10px;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.search{
+flex:1;
+padding:10px;
+font-size:16px;
+}
+
+/* ---------- PINTEREST GRID ---------- */
+.grid{
+column-count:2;
+column-gap:0;
+}
+
+.card{
+background:white;
+display:inline-block;
+width:100%;
+margin:0;
+break-inside:avoid;
+}
+
+.card img{
+width:100%;
+}
+
+.content{
+padding:10px;
+}
+
+.buy{
+background:black;
+color:white;
+padding:10px;
+text-align:center;
+cursor:pointer;
+margin-top:10px;
+}
+
+/* highlight */
+.highlight{
+outline:4px solid orange;
+}
+
+/* back button */
+.back{
+cursor:pointer;
+font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-<h2>Smart Affiliate Store</h2>
-<button id="adminBtn" onclick="toggleAdmin()">ADMIN</button>
-</header>
-
-<!-- STORE PAGE -->
-<div id="storePage" class="page active">
-<div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
-<div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
+<!-- ================= STORE LAYER ================= -->
+<div id="stores" class="layer active">
+<div class="store" onclick="openStore('India Store')">India Store</div>
+<div class="store" onclick="openStore('US Store')">US Store</div>
 </div>
 
-<!-- CATEGORY PAGE -->
-<div id="categoryPage" class="page">
-<button onclick="goHome()">⬅ Back</button>
-<div id="categoryGrid"></div>
+<!-- ================= CATEGORY LAYER ================= -->
+<div id="categories" class="layer">
+
+<div class="header">
+<span class="back" onclick="goBack(1)">⬅ Back</span>
+<b id="storeTitle"></b>
+<input class="search" placeholder="Search categories..." onkeyup="searchCategory(this.value)">
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel" class="admin">
-<h3>Admin Panel</h3>
-
-<input id="catName" placeholder="Category name">
-<input id="catImg" placeholder="Category image URL">
-<button onclick="addCategory()">Add Category</button>
-
-<hr>
-
-<input id="prodName" placeholder="Product name">
-<input id="prodImg" placeholder="Product image URL">
-<input id="prodPrice" placeholder="Price">
-<input id="prodLink" placeholder="Affiliate link">
-<button onclick="addProduct()">Add Product</button>
+<div id="categoryGrid" class="grid"></div>
 
 </div>
 
-<script src="script.js"></script>
+<!-- ================= PRODUCT LAYER ================= -->
+<div id="products" class="layer">
+
+<div class="header">
+<span class="back" onclick="goBack(2)">⬅ Back</span>
+<b id="categoryTitle"></b>
+<input class="search" placeholder="Search products..." onkeyup="searchProduct(this.value)">
+</div>
+
+<div id="productGrid" class="grid"></div>
+
+</div>
+
+<script>
+
+/* ================= DATA ================= */
+
+const data={
+"India Store":{
+"Electronics":[
+{
+name:"Smart Phone",
+price:"₹20,000",
+rating:"4.5⭐",
+img:"https://picsum.photos/400?1",
+desc:"Powerful smartphone designed for everyday performance with smooth multitasking, vibrant display, long battery life, reliable camera quality, secure system updates, durable build, and seamless connectivity experience for modern users.",
+day:"today"
+},
+{
+name:"Yesterday Phone",
+price:"₹18,000",
+rating:"4.3⭐",
+img:"https://picsum.photos/400?2",
+desc:"Previous day featured product offering dependable performance, attractive design, efficient battery management, optimized software stability, clear photography capabilities, and excellent value suited for users seeking reliable technology solutions.",
+day:"yesterday"
+}
+]
+},
+
+"US Store":{
+"Fashion":[
+{
+name:"Jacket",
+price:"$80",
+rating:"4.6⭐",
+img:"https://picsum.photos/400?3",
+desc:"Premium stylish jacket crafted using comfortable fabric delivering warmth, durability, fashionable appearance, versatile styling options, breathable material construction, and modern tailoring suitable for casual and semi‑formal everyday wear.",
+day:"today"
+}
+]
+}
+};
+
+let currentStore="";
+let currentCategory="";
+
+/* ================= NAVIGATION ================= */
+
+function showLayer(id){
+document.querySelectorAll(".layer")
+.forEach(l=>l.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function openStore(store){
+currentStore=store;
+document.getElementById("storeTitle").innerText=store;
+renderCategories();
+showLayer("categories");
+}
+
+function openCategory(cat){
+currentCategory=cat;
+document.getElementById("categoryTitle").innerText=cat;
+renderProducts();
+showLayer("products");
+updateURL("category",cat);
+}
+
+function goBack(layer){
+if(layer===1) showLayer("stores");
+if(layer===2) showLayer("categories");
+}
+
+/* ================= CATEGORY ================= */
+
+function renderCategories(){
+let grid=document.getElementById("categoryGrid");
+grid.innerHTML="";
+
+Object.keys(data[currentStore]).forEach(cat=>{
+
+let card=document.createElement("div");
+card.className="card";
+card.id="cat-"+cat;
+
+card.innerHTML=`
+<img src="https://picsum.photos/400?random=${Math.random()}">
+<div class="content">
+<h3>${cat}</h3>
+<p>
+Explore premium curated selections crafted for modern shoppers,
+combining quality, affordability, innovation, style, reliability,
+and everyday usability.
+</p>
+<div class="buy" onclick="shareLink('category','${cat}')">Share</div>
+</div>
+`;
+
+card.onclick=()=>openCategory(cat);
+
+grid.appendChild(card);
+});
+}
+
+/* ================= PRODUCTS ================= */
+
+function renderProducts(){
+let grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+data[currentStore][currentCategory]
+.forEach(p=>{
+
+let card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<img src="${p.img}">
+<div class="content">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<b>${p.price}</b> | ${p.rating}
+<div class="buy">Buy Now</div>
+<div class="buy" onclick="shareLink('product','${p.name}')">Share</div>
+</div>
+`;
+
+grid.appendChild(card);
+});
+}
+
+/* ================= SEARCH ================= */
+
+function searchCategory(v){
+document.querySelectorAll("#categoryGrid .card")
+.forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v.toLowerCase())
+?"block":"none";
+});
+}
+
+function searchProduct(v){
+document.querySelectorAll("#productGrid .card")
+.forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(v.toLowerCase())
+?"block":"none";
+});
+}
+
+/* ================= SHARE LINKS ================= */
+
+function shareLink(type,name){
+let url=location.origin+location.pathname+
+`?store=${currentStore}&${type}=${name}`;
+navigator.clipboard.writeText(url);
+alert("Link copied!");
+}
+
+function updateURL(type,name){
+history.pushState({},'',`?store=${currentStore}&${type}=${name}`);
+}
+
+/* ================= DEEP LINK LOAD ================= */
+
+window.onload=()=>{
+const params=new URLSearchParams(location.search);
+let store=params.get("store");
+let category=params.get("category");
+
+if(store && data[store]){
+openStore(store);
+
+if(category){
+setTimeout(()=>{
+openCategory(category);
+document.getElementById("cat-"+category)?.classList.add("highlight");
+},200);
+}
+}
+};
+
+</script>
 </body>
 </html>
