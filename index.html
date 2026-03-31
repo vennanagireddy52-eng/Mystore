@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Affiliate Store</title>
+<title>Smart Affiliate Store + Admin</title>
 <style>
 /* ---------- GLOBAL ---------- */
 body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
-.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; }
+.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 80px; }
 .active { display:block; }
 
 /* ---------- STORE PAGE ---------- */
-#storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); }
+#storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); min-height: 100vh;}
 .storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; transition:0.3s; }
 .storeCard:hover { transform:scale(1.05); }
 
@@ -24,30 +24,69 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
 .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; }
-.card img { width:100%; display:block; }
+.card img { width:100%; display:block; min-height: 100px; background: #eee; }
 .info { padding:10px; }
 .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
 .linkText { font-size:11px; color:#0984e3; word-break:break-word; margin-bottom:4px; }
+.price { font-weight: bold; color: #2d3436; font-size: 14px; }
 
 /* ---------- BUTTONS ---------- */
 .buy { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:13px; font-weight:bold; margin-top:5px; }
 .share-btn { position:absolute; top:8px; right:8px; background:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:5; }
+.del-btn { position:absolute; top:8px; left:8px; background:#ff7675; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; z-index:5; font-size: 10px;}
+
+/* ---------- ADMIN PANEL ---------- */
+#adminBtn { position: fixed; bottom: 20px; right: 20px; background: #2d3436; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; z-index: 2000; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+#adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 80%; background: white; z-index: 1500; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+#adminPanel.active { display: flex; }
+.admin-sec { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+.admin-sec h3 { margin-top: 0; color: #6C5CE7; }
+input, select, button.action-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+button.action-btn { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
+button.cancel-btn { background: #eee; color: #333; border: none; }
 
 /* ---------- TOAST ---------- */
-#toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:8px 20px; border-radius:20px; display:none; z-index:1000; font-size:13px; }
+#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:8px 20px; border-radius:20px; display:none; z-index:2001; font-size:13px; }
 </style>
 </head>
 <body>
 
-<div id="toast">Link Copied! 🔗</div>
+<div id="toast">Action Successful!</div>
+<button id="adminBtn" onclick="toggleAdmin()">⚙️</button>
 
-<!-- STORE LAYER -->
+<div id="adminPanel">
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+        <h2>Admin Control</h2>
+        <button onclick="toggleAdmin()" style="border:none; background:none; font-size:24px;">✕</button>
+    </div>
+
+    <div class="admin-sec">
+        <h3>Manage Categories</h3>
+        <input type="text" id="newCatName" placeholder="Category Name (e.g. Fashion)">
+        <input type="text" id="newCatImg" placeholder="Category Image URL">
+        <button class="action-btn" onclick="addCategory()">Add/Update Category</button>
+    </div>
+
+    <div class="admin-sec">
+        <h3>Manage Products</h3>
+        <select id="prodCatSelect">
+            <option value="">Select Category</option>
+        </select>
+        <input type="text" id="newProdName" placeholder="Product Name">
+        <input type="text" id="newProdPrice" placeholder="Price (e.g. ₹999)">
+        <input type="text" id="newProdLink" placeholder="Affiliate Link">
+        <input type="text" id="newProdImg" placeholder="Product Image URL">
+        <button class="action-btn" onclick="addProduct()" style="background:#00B894;">Add Product</button>
+    </div>
+    
+    <button class="action-btn cancel-btn" onclick="resetData()">Reset to Factory Data</button>
+</div>
+
 <div id="storeLayer" class="layer active">
     <div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
     <div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
 </div>
 
-<!-- CATEGORY LAYER -->
 <div id="categoryLayer" class="layer">
     <div class="topbar">
         <span class="back" onclick="goHome()">⬅</span>
@@ -56,7 +95,6 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
     <div id="categoryGrid" class="grid"></div>
 </div>
 
-<!-- PRODUCT LAYER -->
 <div id="productLayer" class="layer">
     <div class="topbar product">
         <span class="back" onclick="backToCategories()">⬅</span>
@@ -66,8 +104,8 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
 </div>
 
 <script>
-// ---------- DATA ----------
-const data = {
+// ---------- DATA CORE ----------
+const defaultData = {
     IND: {
         Tech: [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}],
         Travel: [{name:"Travel Bags", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg", price:"₹799", link:"https://amzn.to/47iPnky"}]
@@ -78,28 +116,107 @@ const data = {
     }
 };
 
+let data = JSON.parse(localStorage.getItem('storeData')) || defaultData;
 let currentStore = "";
 let currentCategory = "";
 
+function saveData() {
+    localStorage.setItem('storeData', JSON.stringify(data));
+}
+
 // ---------- NAVIGATION ----------
 function showLayer(id){document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active');}
-function openStore(store){currentStore=store; renderCategories(); showLayer('categoryLayer');}
+function openStore(store){currentStore=store; updateAdminDropdown(); renderCategories(); showLayer('categoryLayer');}
 function openCategory(cat){currentCategory=cat; renderProducts(); showLayer('productLayer');}
 function goHome(){currentStore=""; currentCategory=""; showLayer('storeLayer');}
 function backToCategories(){currentCategory=""; renderCategories(); showLayer('categoryLayer');}
 
-// ---------- LINK BUTTON ----------
-function copyLink(url,event){event.stopPropagation(); navigator.clipboard.writeText(url); let t=document.getElementById('toast'); t.style.display='block'; setTimeout(()=>t.style.display='none',2000); return false;}
+// ---------- UTILS ----------
+function showToast(msg){ 
+    let t=document.getElementById('toast'); t.innerText=msg; t.style.display='block'; 
+    setTimeout(()=>t.style.display='none',2000);
+}
+
+function copyLink(url,event){
+    event.stopPropagation(); navigator.clipboard.writeText(url); showToast("Link Copied! 🔗"); return false;
+}
+
+function toggleAdmin() {
+    document.getElementById('adminPanel').classList.toggle('active');
+    updateAdminDropdown();
+}
+
+// ---------- ADMIN LOGIC ----------
+function updateAdminDropdown() {
+    const select = document.getElementById('prodCatSelect');
+    select.innerHTML = '<option value="">Select Category</option>';
+    if(!currentStore) return;
+    Object.keys(data[currentStore]).forEach(cat => {
+        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+}
+
+function addCategory() {
+    const name = document.getElementById('newCatName').value;
+    const img = document.getElementById('newCatImg').value || "https://via.placeholder.com/150";
+    if(!currentStore || !name) return alert("Select a Store first and enter Name");
+    
+    if(!data[currentStore][name]) data[currentStore][name] = [];
+    // Categories use the first product's image in your logic, so we'll add a dummy if empty
+    if(data[currentStore][name].length === 0) {
+        data[currentStore][name].push({name: "Sample Product", img: img, price: "0", link: "#"});
+    } else {
+        data[currentStore][name][0].img = img;
+    }
+    
+    saveData(); renderCategories(); updateAdminDropdown();
+    showToast("Category Updated!");
+}
+
+function addProduct() {
+    const cat = document.getElementById('prodCatSelect').value;
+    const name = document.getElementById('newProdName').value;
+    const price = document.getElementById('newProdPrice').value;
+    const link = document.getElementById('newProdLink').value;
+    const img = document.getElementById('newProdImg').value;
+
+    if(!cat || !name || !link) return alert("Fill all fields");
+
+    data[currentStore][cat].push({name, img, price, link});
+    saveData();
+    if(currentCategory === cat) renderProducts();
+    showToast("Product Added!");
+}
+
+function deleteProduct(index, event) {
+    event.stopPropagation();
+    if(confirm("Delete this product?")) {
+        data[currentStore][currentCategory].splice(index, 1);
+        saveData();
+        renderProducts();
+    }
+}
+
+function resetData() {
+    if(confirm("Reset all changes?")) {
+        localStorage.removeItem('storeData');
+        location.reload();
+    }
+}
 
 // ---------- RENDER ----------
 function renderCategories(){
     const grid=document.getElementById('categoryGrid'); grid.innerHTML='';
+    const search = document.getElementById('categorySearch').value.toLowerCase();
+    
     Object.keys(data[currentStore]).forEach(cat=>{
+        if(!cat.toLowerCase().includes(search)) return;
         const url=`${window.location.origin}${window.location.pathname}?store=${currentStore}&cat=${cat}`;
+        const displayImg = data[currentStore][cat][0]?.img || "";
         grid.innerHTML+=`
         <div class="card" onclick="openCategory('${cat}')">
             <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
-            <img src="${data[currentStore][cat][0].img}">
+            <img src="${displayImg}">
             <div class="info">
                 <div class="title">${cat}</div>
                 <div class="linkText">${url}</div>
@@ -110,10 +227,14 @@ function renderCategories(){
 
 function renderProducts(){
     const grid=document.getElementById('productGrid'); grid.innerHTML='';
-    data[currentStore][currentCategory].forEach(p=>{
+    const search = document.getElementById('productSearch').value.toLowerCase();
+
+    data[currentStore][currentCategory].forEach((p, index)=>{
+        if(!p.name.toLowerCase().includes(search)) return;
         const url=p.link;
         grid.innerHTML+=`
         <div class="card">
+            <button class="del-btn" onclick="deleteProduct(${index}, event)">🗑️</button>
             <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
             <img src="${p.img}">
             <div class="info">
@@ -126,7 +247,7 @@ function renderProducts(){
     });
 }
 
-// ---------- DEEP LINK ON LOAD ----------
+// ---------- LOAD ----------
 window.onload=function(){
     const params=new URLSearchParams(window.location.search);
     const s=params.get('store'); const c=params.get('cat');
