@@ -7,10 +7,12 @@
 
 <style>
 body{margin:0;font-family:Segoe UI;background:#f0f2f5}
-.layer{display:none;min-height:100vh}
-.active{display:block}
 
-/* STORE PAGE */
+/* LAYERS */
+.layer{display:none;min-height:100vh}
+.layer.active{display:block}
+
+/* STORE */
 #storeLayer{
 display:flex;
 flex-direction:column;
@@ -21,7 +23,7 @@ background:linear-gradient(135deg,#6C5CE7,#00B894);
 }
 
 .storeCard{
-background:#fff;
+background:white;
 padding:25px;
 margin:15px;
 border-radius:20px;
@@ -36,8 +38,8 @@ text-align:center;
 position:fixed;
 bottom:20px;
 right:20px;
-background:#000;
-color:#fff;
+background:black;
+color:white;
 padding:12px 16px;
 border-radius:30px;
 cursor:pointer;
@@ -49,10 +51,9 @@ z-index:999;
 padding:15px;
 color:white;
 display:flex;
-align-items:center;
 gap:10px;
+align-items:center;
 }
-
 .purple{background:#6C5CE7}
 .green{background:#00B894}
 
@@ -72,6 +73,7 @@ box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 
 .card img{width:100%}
+
 .info{padding:10px;font-weight:bold}
 
 .buy{
@@ -88,11 +90,10 @@ text-decoration:none;
 position:absolute;
 top:8px;
 right:8px;
-width:28px;
-height:28px;
-border-radius:50%;
 border:none;
 background:white;
+border-radius:50%;
+width:28px;height:28px;
 cursor:pointer;
 box-shadow:0 2px 5px rgba(0,0,0,.3);
 }
@@ -114,8 +115,6 @@ display:none;
 <body>
 
 <div id="toast">Link Copied 🔗</div>
-
-<!-- ADMIN BUTTON -->
 <div class="adminBtn" onclick="openAdmin()">ADMIN</div>
 
 <!-- STORE -->
@@ -142,7 +141,7 @@ display:none;
 <div id="productGrid" class="grid"></div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div id="adminLayer" class="layer">
 <div class="topbar" style="background:black">
 <span class="back" onclick="goHome()">⬅</span>
@@ -151,18 +150,21 @@ display:none;
 
 <div style="padding:20px">
 
-<h3>Add Category</h3>
-<input id="catName" placeholder="Category Name"><br><br>
-<button onclick="addCategory()">Add Category</button>
+<h3>Category</h3>
+<input id="catName" placeholder="Category name">
+<button onclick="addCategory()">Add</button>
+<button onclick="deleteCategory()">Delete</button>
 
 <hr>
 
-<h3>Add Product</h3>
-<input id="prodName" placeholder="Product Name"><br>
+<h3>Product</h3>
+<input id="prodName" placeholder="Name"><br>
 <input id="prodImg" placeholder="Image URL"><br>
 <input id="prodPrice" placeholder="Price"><br>
 <input id="prodLink" placeholder="Affiliate Link"><br><br>
-<button onclick="addProduct()">Add Product</button>
+
+<button onclick="addProduct()">Add</button>
+<button onclick="deleteProduct()">Delete Last</button>
 
 </div>
 </div>
@@ -176,7 +178,7 @@ US:{Tech:[]}
 let currentStore="";
 let currentCategory="";
 
-/* ===== LAYER SWITCH (FIX STICKY ISSUE) ===== */
+/* FIX STICKY */
 function showLayer(id){
 document.querySelectorAll(".layer")
 .forEach(l=>l.classList.remove("active"));
@@ -190,39 +192,78 @@ function openStore(store){
 currentStore=store;
 showLayer("categoryLayer");
 renderCategories();
+updateURL();
 }
 
 function openCategory(cat){
 currentCategory=cat;
 showLayer("productLayer");
 renderProducts();
+updateURL();
 }
 
-function goHome(){showLayer("storeLayer")}
-function backToCategories(){showLayer("categoryLayer")}
-function openAdmin(){showLayer("adminLayer")}
+function goHome(){
+currentStore="";
+currentCategory="";
+showLayer("storeLayer");
+history.pushState({},'',location.pathname);
+}
 
-/* TOAST */
+function backToCategories(){
+showLayer("categoryLayer");
+}
+
+function openAdmin(){
+showLayer("adminLayer");
+}
+
+/* URL GENERATOR */
+function updateURL(){
+let url=`?store=${currentStore}`;
+if(currentCategory) url+=`&cat=${currentCategory}`;
+history.pushState({},'',url);
+}
+
+/* DEEP LINK FIX */
+window.onload=function(){
+const params=new URLSearchParams(location.search);
+const s=params.get("store");
+const c=params.get("cat");
+
+if(s && data[s]){
+currentStore=s;
+
+if(c && data[s][c]){
+currentCategory=c;
+showLayer("productLayer");
+renderProducts();
+}else{
+showLayer("categoryLayer");
+renderCategories();
+}
+}
+};
+
+/* LINK COPY */
+function copyLink(link,e){
+e.stopPropagation();
+navigator.clipboard.writeText(link);
+toast();
+}
+
 function toast(){
 const t=document.getElementById("toast");
 t.style.display="block";
 setTimeout(()=>t.style.display="none",1500);
 }
 
-/* COPY LINK */
-function copyLink(link,e){
-if(e)e.stopPropagation();
-navigator.clipboard.writeText(link);
-toast();
-}
-
-/* CATEGORY RENDER */
+/* RENDER */
 function renderCategories(){
 const grid=document.getElementById("categoryGrid");
 grid.innerHTML="";
 
 Object.keys(data[currentStore]).forEach(cat=>{
-const link=`${location.origin}?store=${currentStore}&cat=${cat}`;
+const link=`${location.origin}${location.pathname}?store=${currentStore}&cat=${cat}`;
 
 grid.innerHTML+=`
 <div class="card" onclick="openCategory('${cat}')">
@@ -234,7 +275,6 @@ onclick="copyLink('${link}',event)">🔗</button>
 });
 }
 
-/* PRODUCT RENDER */
 function renderProducts(){
 const grid=document.getElementById("productGrid");
 grid.innerHTML="";
@@ -246,17 +286,22 @@ grid.innerHTML+=`
 onclick="copyLink('${p.link}',event)">🔗</button>
 <img src="${p.img}">
 <div class="info">${p.name}<br>${p.price}</div>
-<a class="buy" href="${p.link}" target="_blank">Buy Now</a>
+<a class="buy" href="${p.link}" target="_blank">Buy</a>
 </div>`;
 });
 }
 
-/* ADMIN ACTIONS */
+/* ADMIN */
 function addCategory(){
-const name=document.getElementById("catName").value;
-if(!name)return;
-data[currentStore][name]=[];
-alert("Category Added");
+const n=catName.value;
+if(!n)return;
+data[currentStore][n]=[];
+renderCategories();
+}
+
+function deleteCategory(){
+delete data[currentStore][currentCategory];
+renderCategories();
 }
 
 function addProduct(){
@@ -266,7 +311,12 @@ img:prodImg.value,
 price:prodPrice.value,
 link:prodLink.value
 });
-alert("Product Added");
+renderProducts();
+}
+
+function deleteProduct(){
+data[currentStore][currentCategory].pop();
+renderProducts();
 }
 </script>
 
