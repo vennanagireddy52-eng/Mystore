@@ -2,303 +2,47 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smart Affiliate Store</title>
-
-<style>
-
-/* ---------- GLOBAL ---------- */
-body{
-margin:0;
-font-family:Segoe UI;
-background:#f0f2f5;
-}
-
-/* FIX STICKY ISSUE */
-.layer{
-display:none;
-min-height:100vh;
-}
-
-.layer.active{
-display:block;
-}
-
-/* ---------- STORE ---------- */
-#storeLayer{
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:linear-gradient(135deg,#6C5CE7,#00B894);
-flex-direction:column;
-}
-
-.storeCard{
-background:white;
-padding:25px;
-margin:15px;
-border-radius:20px;
-cursor:pointer;
-font-weight:bold;
-}
-
-/* ---------- TOPBAR ---------- */
-.topbar{
-padding:15px;
-background:#00B894;
-color:white;
-font-weight:bold;
-}
-
-/* ---------- GRID ---------- */
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-padding:15px;
-}
-
-.card{
-background:white;
-border-radius:12px;
-overflow:hidden;
-position:relative;
-box-shadow:0 3px 8px rgba(0,0,0,.1);
-}
-
-.card img{
-width:100%;
-display:block;
-}
-
-.info{
-padding:10px;
-}
-
-.buy{
-display:block;
-background:#00b894;
-color:white;
-text-align:center;
-padding:10px;
-text-decoration:none;
-}
-
-/* LINK ICON */
-.linkBtn{
-position:absolute;
-top:6px;
-right:6px;
-background:white;
-border:none;
-border-radius:50%;
-width:28px;
-height:28px;
-cursor:pointer;
-font-size:14px;
-}
-
-/* ADMIN BUTTON */
-#adminBtn{
-position:fixed;
-bottom:20px;
-right:20px;
-background:black;
-color:white;
-border:none;
-padding:12px 18px;
-border-radius:25px;
-cursor:pointer;
-z-index:9999;
-}
-
-input{
-display:block;
-margin:6px 0;
-padding:8px;
-width:100%;
-}
-
-button{
-margin-top:5px;
-padding:8px;
-cursor:pointer;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- ADMIN BUTTON -->
-<button id="adminBtn" onclick="openAdmin()">⚙ Admin</button>
+<header>
+<h2>Smart Affiliate Store</h2>
+<button id="adminBtn" onclick="toggleAdmin()">ADMIN</button>
+</header>
 
-<!-- STORE -->
-<div id="storeLayer" class="layer active">
+<!-- STORE PAGE -->
+<div id="storePage" class="page active">
 <div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
 <div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
 </div>
 
-<!-- CATEGORY -->
-<div id="categoryLayer" class="layer">
-<div class="topbar">⬅ Categories</div>
-<div id="categoryGrid" class="grid"></div>
-</div>
-
-<!-- PRODUCTS -->
-<div id="productLayer" class="layer">
-<div class="topbar">⬅ Products</div>
-<div id="productGrid" class="grid"></div>
+<!-- CATEGORY PAGE -->
+<div id="categoryPage" class="page">
+<button onclick="goHome()">⬅ Back</button>
+<div id="categoryGrid"></div>
 </div>
 
 <!-- ADMIN PANEL -->
-<div id="adminLayer" class="layer">
-<div class="topbar">Admin Panel</div>
+<div id="adminPanel" class="admin">
+<h3>Admin Panel</h3>
 
-<div style="padding:15px">
-
-<h3>Add Category</h3>
-<input id="catStore" placeholder="Store (IND/US)">
-<input id="catName" placeholder="Category Name">
-<input id="catImg" placeholder="Category Image URL">
+<input id="catName" placeholder="Category name">
+<input id="catImg" placeholder="Category image URL">
 <button onclick="addCategory()">Add Category</button>
 
 <hr>
 
-<h3>Add Product</h3>
-<input id="prodStore" placeholder="Store">
-<input id="prodCat" placeholder="Category">
-<input id="prodName" placeholder="Product Name">
-<input id="prodImg" placeholder="Image URL">
+<input id="prodName" placeholder="Product name">
+<input id="prodImg" placeholder="Product image URL">
 <input id="prodPrice" placeholder="Price">
-<input id="prodLink" placeholder="Affiliate Link">
+<input id="prodLink" placeholder="Affiliate link">
 <button onclick="addProduct()">Add Product</button>
 
 </div>
-</div>
 
-<script>
-
-/* ---------- DATA ---------- */
-let data={
-IND:{},
-US:{}
-};
-
-let currentStore="";
-let currentCategory="";
-
-/* ---------- LAYER CONTROL (FIXES STICKY) ---------- */
-function showLayer(id){
-document.querySelectorAll('.layer')
-.forEach(l=>l.classList.remove('active'));
-
-document.getElementById(id).classList.add('active');
-}
-
-/* ---------- STORE ---------- */
-function openStore(store){
-currentStore=store;
-renderCategories();
-showLayer("categoryLayer");
-}
-
-/* ---------- CATEGORY ---------- */
-function openCategory(cat){
-currentCategory=cat;
-renderProducts();
-showLayer("productLayer");
-}
-
-/* ---------- ADMIN ---------- */
-function openAdmin(){
-showLayer("adminLayer");
-}
-
-/* ---------- ADD CATEGORY ---------- */
-function addCategory(){
-let s=catStore.value;
-let n=catName.value;
-let i=catImg.value;
-
-if(!data[s]) data[s]={};
-
-data[s][n]=[];
-
-renderCategories();
-alert("Category Added");
-}
-
-/* ---------- ADD PRODUCT ---------- */
-function addProduct(){
-
-let s=prodStore.value;
-let c=prodCat.value;
-
-data[s][c].push({
-name:prodName.value,
-img:prodImg.value,
-price:prodPrice.value,
-link:prodLink.value
-});
-
-renderProducts();
-alert("Product Added");
-}
-
-/* ---------- RENDER CATEGORY ---------- */
-function renderCategories(){
-
-let grid=document.getElementById("categoryGrid");
-grid.innerHTML="";
-
-Object.keys(data[currentStore]).forEach(cat=>{
-
-let link=location.origin+location.pathname+
-`?store=${currentStore}&cat=${cat}`;
-
-grid.innerHTML+=`
-<div class="card" onclick="openCategory('${cat}')">
-
-<button class="linkBtn"
-onclick="event.stopPropagation();
-navigator.clipboard.writeText('${link}')">🔗</button>
-
-<img src="${data[currentStore][cat][0]?.img || ''}">
-<div class="info">${cat}</div>
-</div>`;
-});
-}
-
-/* ---------- RENDER PRODUCTS ---------- */
-function renderProducts(){
-
-let grid=document.getElementById("productGrid");
-grid.innerHTML="";
-
-data[currentStore][currentCategory].forEach(p=>{
-
-grid.innerHTML+=`
-<div class="card">
-
-<button class="linkBtn"
-onclick="navigator.clipboard.writeText('${p.link}')">🔗</button>
-
-<img src="${p.img}">
-<div class="info">
-${p.name}<br>
-<b>${p.price}</b>
-</div>
-
-<a class="buy" href="${p.link}" target="_blank">
-Buy Now
-</a>
-
-</div>`;
-});
-}
-
-</script>
+<script src="script.js"></script>
 </body>
 </html>
