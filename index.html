@@ -23,25 +23,25 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
 .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; transition: 0.3s; border: 2px solid transparent; }
+.card.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.5); }
 .card img { width:100%; display:block; background: #eee; min-height: 80px; }
 .info { padding:10px; }
-.title { font-weight:bold; font-size:14px; margin-bottom:4px; }
-.price { font-weight: bold; color: #2d3436; font-size: 13px; }
+.title { font-weight:bold; font-size:14px; margin-bottom:4px; color: #2d3436; }
+.desc { font-size: 11px; color: #636e72; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.price { font-weight: bold; color: #00b894; font-size: 13px; }
 
-/* Shared Product Highlight */
-.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.5); }
-
-/* ---------- LINK SYMBOL (STORE LINK) ---------- */
+/* ---------- LINK SYMBOL ---------- */
 .link-symbol { position:absolute; top:8px; right:8px; background:white; color: #6C5CE7; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 15; cursor: pointer; }
 
-/* ---------- BUY NOW (AFFILIATE LINK) ---------- */
+/* ---------- BUY BUTTON ---------- */
 .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:12px; font-weight:bold; }
 
 /* ---------- ADMIN PANEL ---------- */
 #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 90%; background: white; z-index: 2000; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
 #adminPanel.active { display: flex; }
 .admin-section { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; }
-input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+input, textarea, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; }
+textarea { height: 60px; resize: none; }
 .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
 
 #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size:12px; font-weight: bold; }
@@ -56,6 +56,7 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
         <h2 style="margin:0">Admin Console</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
+    
     <div class="admin-section">
         <h3>1. Select Store</h3>
         <select id="adminStoreSelect" onchange="refreshAdminLists()">
@@ -63,22 +64,25 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
             <option value="US">🇺🇸 US Store</option>
         </select>
     </div>
+
     <div class="admin-section">
         <h3>2. Categories</h3>
         <div id="adminCatList"></div>
-        <input type="text" id="newCatName" placeholder="Cat Name">
-        <input type="text" id="newCatImg" placeholder="Image URL">
+        <input type="text" id="newCatName" placeholder="New Category Name">
+        <input type="text" id="newCatImg" placeholder="Category Image URL">
         <button class="btn-main" onclick="addCategory()">Create Category</button>
     </div>
+
     <div class="admin-section">
-        <h3>3. Products</h3>
-        <select id="adminProdCatSelect" onchange="refreshAdminLists()"><option value="">Select Category</option></select>
-        <div id="adminProdList"></div>
-        <input type="text" id="pName" placeholder="Name">
-        <input type="text" id="pPrice" placeholder="Price">
-        <input type="text" id="pImg" placeholder="Image URL">
-        <input type="text" id="pLink" placeholder="Affiliate Link">
+        <h3>3. Add Product</h3>
+        <select id="adminProdCatSelect"><option value="">Select Category</option></select>
+        <input type="text" id="pName" placeholder="Product Name">
+        <textarea id="pDesc" placeholder="Product Description (Short)"></textarea>
+        <input type="text" id="pPrice" placeholder="Price (e.g. ₹2,999)">
+        <input type="text" id="pImg" placeholder="Product Image URL">
+        <input type="text" id="pLink" placeholder="Affiliate/Amazon Link">
         <button class="btn-main" onclick="addProduct()" style="background:#00B894;">Add Product</button>
+        <div id="adminProdList" style="margin-top:15px;"></div>
     </div>
 </div>
 
@@ -88,12 +92,12 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
 </div>
 
 <div id="categoryLayer" class="layer">
-    <div class="topbar"><span class="back" onclick="goHome()">⬅</span><input class="search" id="catSearch" placeholder="Search categories..." oninput="renderCategories()"></div>
+    <div class="topbar"><span class="back" onclick="goHome()">⬅</span><input class="search" id="catSearch" placeholder="Search..." oninput="renderCategories()"></div>
     <div id="categoryGrid" class="grid"></div>
 </div>
 
 <div id="productLayer" class="layer">
-    <div class="topbar product"><span class="back" onclick="backToCategories()">⬅</span><input class="search" id="prodSearch" placeholder="Search products..." oninput="renderProducts()"></div>
+    <div class="topbar product"><span class="back" onclick="backToCategories()">⬅</span><input class="search" id="prodSearch" placeholder="Search..." oninput="renderProducts()"></div>
     <div id="productGrid" class="grid"></div>
 </div>
 
@@ -103,8 +107,8 @@ let clickCount = 0;
 let clickTimer = null;
 
 const defaultData = {
-    IND: { "Tech": [{id: "jbl123", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
-    US: { "Tech": [{id: "jbl456", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
+    IND: { "Tech": [{id: "p1", name:"JBL Speaker", desc:"Waterproof portable Bluetooth speaker with powerful sound.", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
+    US: { "Tech": [{id: "p2", name:"JBL Speaker", desc:"Best-in-class wireless speaker for outdoor parties.", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
 };
 
 let data = JSON.parse(localStorage.getItem('smartStoreData')) || defaultData;
@@ -113,7 +117,6 @@ let curCat = "";
 
 function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
-// --- CLIPBOARD ---
 function copyStoreLink(text, e) {
     if(e) e.stopPropagation();
     navigator.clipboard.writeText(text).then(() => {
@@ -130,24 +133,23 @@ function handleSecretClick(store) {
         clickTimer = setTimeout(() => { if (clickCount < 3) openStore(store); clickCount = 0; }, 400);
     } else if (clickCount === 3) {
         clearTimeout(clickTimer); clickCount = 0;
-        if (prompt("Admin Password:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
+        if (prompt("Admin Key:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
         else { openStore(store); }
     }
 }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
-// --- NAV ---
+// --- NAVIGATION ---
 function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); }
 function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
 function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function goHome(){ curStore=""; curCat=""; showLayer('storeLayer'); }
 function backToCategories(){ curCat=""; renderCategories(); showLayer('categoryLayer'); }
 
-// --- FRONT END ---
+// --- RENDERING ---
 function renderCategories() {
     const grid = document.getElementById('categoryGrid'); grid.innerHTML = "";
     Object.keys(data[curStore]).forEach(cat => {
-        // Link to this category on YOUR site
         const siteLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(cat)}`;
         grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
@@ -161,27 +163,22 @@ function renderCategories() {
 function renderProducts(highlightId = null) {
     const grid = document.getElementById('productGrid'); grid.innerHTML = "";
     data[curStore][curCat].forEach((p) => {
-        // Link to this specific product on YOUR site (This is what you put on Pinterest)
         const siteLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        const isSelected = p.id == highlightId;
-
+        const isHighlight = p.id == highlightId;
         grid.innerHTML += `
-        <div class="card ${isSelected ? 'highlight' : ''}" id="p-${p.id}">
+        <div class="card ${isHighlight ? 'highlight' : ''}" id="p-${p.id}">
             <button class="link-symbol" onclick="copyStoreLink('${siteLink}', event)">🔗</button>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
+                <div class="desc">${p.desc || ''}</div>
                 <div class="price">${p.price}</div>
             </div>
             <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
         </div>`;
     });
-    
     if(highlightId) {
-        setTimeout(() => {
-            const el = document.getElementById(`p-${highlightId}`);
-            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 500);
+        setTimeout(() => { document.getElementById(`p-${highlightId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500);
     }
 }
 
@@ -192,7 +189,7 @@ function refreshAdminLists() {
     const cList = document.getElementById('adminCatList');
     cList.innerHTML = "";
     Object.keys(data[s]).forEach(cat => {
-        cList.innerHTML += `<div style="padding:5px; border-bottom:1px solid #ddd;">${cat} <button onclick="deleteCat('${s}','${cat}')" style="float:right">Del</button></div>`;
+        cList.innerHTML += `<div style="padding:5px; border-bottom:1px solid #ddd; font-size:12px;">${cat} <button onclick="deleteCat('${s}','${cat}')" style="float:right">Del</button></div>`;
     });
     catSel.innerHTML = '<option value="">Select Category</option>';
     Object.keys(data[s]).forEach(cat => { catSel.innerHTML += `<option value="${cat}">${cat}</option>`; });
@@ -202,7 +199,7 @@ function addCategory() {
     const s = document.getElementById('adminStoreSelect').value;
     const n = document.getElementById('newCatName').value;
     if(!n) return;
-    data[s][n] = [{id: "c"+Date.now(), name:"Sample", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
+    data[s][n] = [{id: "p"+Date.now(), name:"Sample", desc:"Sample Description", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
     save(); refreshAdminLists(); renderCategories();
 }
 
@@ -213,32 +210,24 @@ function addProduct() {
     data[s][c].push({
         id: "p"+Date.now(), 
         name:document.getElementById('pName').value, 
+        desc:document.getElementById('pDesc').value, 
         price:document.getElementById('pPrice').value, 
         img:document.getElementById('pImg').value, 
         link:document.getElementById('pLink').value
     });
     save(); renderProducts();
+    alert("Product Added!");
 }
 
 function deleteCat(s, c) { if(confirm("Delete?")) { delete data[s][c]; save(); refreshAdminLists(); renderCategories(); } }
 
-// --- DEEP LINK ON LOAD ---
 window.onload = () => {
     const params = new URLSearchParams(window.location.search);
-    const s = params.get('store'); 
-    const c = params.get('cat');
-    const pId = params.get('prod');
-
+    const s = params.get('store'); const c = params.get('cat'); const pId = params.get('prod');
     if(s && data[s]) { 
         curStore = s; 
-        if(c && data[s][c]){ 
-            curCat = c; 
-            renderProducts(pId); 
-            showLayer('productLayer'); 
-        } else { 
-            renderCategories(); 
-            showLayer('categoryLayer'); 
-        }
+        if(c && data[s][c]){ curCat = c; renderProducts(pId); showLayer('productLayer'); } 
+        else { renderCategories(); showLayer('categoryLayer'); }
     }
 };
 </script>
