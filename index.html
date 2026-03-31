@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Affiliate Store</title>
+<title>Pro Affiliate Store</title>
 <style>
 /* ---------- GLOBAL ---------- */
 body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; user-select: none; scroll-behavior: smooth; }
@@ -22,17 +22,19 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
-.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; border: 2px solid transparent; transition: 0.3s;}
-.card.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.4); }
+.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; transition: 0.3s; border: 2px solid transparent; }
 .card img { width:100%; display:block; background: #eee; min-height: 80px; }
 .info { padding:10px; }
 .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
 .price { font-weight: bold; color: #2d3436; font-size: 13px; }
 
-/* ---------- MINI LINK BUTTON ---------- */
-.mini-link { position:absolute; top:8px; right:8px; background:white; color: #6C5CE7; border: none; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 15; cursor: pointer; }
+/* Shared Product Highlight */
+.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.5); }
 
-/* ---------- BUY BUTTON ---------- */
+/* ---------- LINK SYMBOL (STORE LINK) ---------- */
+.link-symbol { position:absolute; top:8px; right:8px; background:white; color: #6C5CE7; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 15; cursor: pointer; }
+
+/* ---------- BUY NOW (AFFILIATE LINK) ---------- */
 .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:12px; font-weight:bold; }
 
 /* ---------- ADMIN PANEL ---------- */
@@ -42,20 +44,20 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
 .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
 
-#toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size:12px; }
+#toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size:12px; font-weight: bold; }
 </style>
 </head>
 <body>
 
-<div id="toast">Link Copied!</div>
+<div id="toast">Store Link Copied!</div>
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
-        <h2 style="margin:0">Owner Settings</h2>
+        <h2 style="margin:0">Admin Console</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-section">
-        <h3>1. Store</h3>
+        <h3>1. Select Store</h3>
         <select id="adminStoreSelect" onchange="refreshAdminLists()">
             <option value="IND">🇮🇳 India Store</option>
             <option value="US">🇺🇸 US Store</option>
@@ -64,7 +66,7 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
     <div class="admin-section">
         <h3>2. Categories</h3>
         <div id="adminCatList"></div>
-        <input type="text" id="newCatName" placeholder="Category Name">
+        <input type="text" id="newCatName" placeholder="Cat Name">
         <input type="text" id="newCatImg" placeholder="Image URL">
         <button class="btn-main" onclick="addCategory()">Create Category</button>
     </div>
@@ -86,18 +88,12 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
 </div>
 
 <div id="categoryLayer" class="layer">
-    <div class="topbar">
-        <span class="back" onclick="goHome()">⬅</span>
-        <input class="search" id="catSearch" placeholder="Search categories..." oninput="renderCategories()">
-    </div>
+    <div class="topbar"><span class="back" onclick="goHome()">⬅</span><input class="search" id="catSearch" placeholder="Search categories..." oninput="renderCategories()"></div>
     <div id="categoryGrid" class="grid"></div>
 </div>
 
 <div id="productLayer" class="layer">
-    <div class="topbar product">
-        <span class="back" onclick="backToCategories()">⬅</span>
-        <input class="search" id="prodSearch" placeholder="Search products..." oninput="renderProducts()">
-    </div>
+    <div class="topbar product"><span class="back" onclick="backToCategories()">⬅</span><input class="search" id="prodSearch" placeholder="Search products..." oninput="renderProducts()"></div>
     <div id="productGrid" class="grid"></div>
 </div>
 
@@ -106,10 +102,9 @@ const ADMIN_PASS = "1234";
 let clickCount = 0;
 let clickTimer = null;
 
-// Use timestamps as IDs for easy deep linking
 const defaultData = {
-    IND: { "Tech": [{id: "101", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
-    US: { "Tech": [{id: "201", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
+    IND: { "Tech": [{id: "jbl123", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
+    US: { "Tech": [{id: "jbl456", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
 };
 
 let data = JSON.parse(localStorage.getItem('smartStoreData')) || defaultData;
@@ -119,7 +114,7 @@ let curCat = "";
 function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
 // --- CLIPBOARD ---
-function copyLink(text, e) {
+function copyStoreLink(text, e) {
     if(e) e.stopPropagation();
     navigator.clipboard.writeText(text).then(() => {
         const t = document.getElementById('toast');
@@ -128,34 +123,35 @@ function copyLink(text, e) {
     });
 }
 
-// --- ADMIN ---
+// --- ADMIN TRIGGER ---
 function handleSecretClick(store) {
     clickCount++;
     if (clickCount === 1) {
         clickTimer = setTimeout(() => { if (clickCount < 3) openStore(store); clickCount = 0; }, 400);
     } else if (clickCount === 3) {
         clearTimeout(clickTimer); clickCount = 0;
-        if (prompt("Admin Key:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
+        if (prompt("Admin Password:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
         else { openStore(store); }
     }
 }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 // --- NAV ---
-function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); }
 function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
-function goHome(){ curStore=""; curCat=""; window.history.replaceState({}, '', window.location.pathname); showLayer('storeLayer'); }
+function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function goHome(){ curStore=""; curCat=""; showLayer('storeLayer'); }
 function backToCategories(){ curCat=""; renderCategories(); showLayer('categoryLayer'); }
 
-// --- RENDER FRONT END ---
+// --- FRONT END ---
 function renderCategories() {
     const grid = document.getElementById('categoryGrid'); grid.innerHTML = "";
     Object.keys(data[curStore]).forEach(cat => {
-        const shareLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(cat)}`;
+        // Link to this category on YOUR site
+        const siteLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(cat)}`;
         grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
-            <button class="mini-link" onclick="copyLink('${shareLink}', event)">🔗</button>
+            <button class="link-symbol" onclick="copyStoreLink('${siteLink}', event)">🔗</button>
             <img src="${data[curStore][cat][0]?.img || ''}">
             <div class="info"><div class="title">${cat}</div></div>
         </div>`;
@@ -165,13 +161,13 @@ function renderCategories() {
 function renderProducts(highlightId = null) {
     const grid = document.getElementById('productGrid'); grid.innerHTML = "";
     data[curStore][curCat].forEach((p) => {
-        // Product Deep Link (points to YOUR store, not the affiliate link)
-        const shareLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        const isHighlight = p.id == highlightId;
-        
+        // Link to this specific product on YOUR site (This is what you put on Pinterest)
+        const siteLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
+        const isSelected = p.id == highlightId;
+
         grid.innerHTML += `
-        <div class="card ${isHighlight ? 'highlight' : ''}" id="p-${p.id}">
-            <button class="mini-link" onclick="copyLink('${shareLink}', event)">🔗</button>
+        <div class="card ${isSelected ? 'highlight' : ''}" id="p-${p.id}">
+            <button class="link-symbol" onclick="copyStoreLink('${siteLink}', event)">🔗</button>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
@@ -185,7 +181,7 @@ function renderProducts(highlightId = null) {
         setTimeout(() => {
             const el = document.getElementById(`p-${highlightId}`);
             if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 300);
+        }, 500);
     }
 }
 
@@ -206,7 +202,7 @@ function addCategory() {
     const s = document.getElementById('adminStoreSelect').value;
     const n = document.getElementById('newCatName').value;
     if(!n) return;
-    data[s][n] = [{id: Date.now(), name:"Sample", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
+    data[s][n] = [{id: "c"+Date.now(), name:"Sample", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
     save(); refreshAdminLists(); renderCategories();
 }
 
@@ -215,7 +211,7 @@ function addProduct() {
     const c = document.getElementById('adminProdCatSelect').value;
     if(!c) return;
     data[s][c].push({
-        id: Date.now(), 
+        id: "p"+Date.now(), 
         name:document.getElementById('pName').value, 
         price:document.getElementById('pPrice').value, 
         img:document.getElementById('pImg').value, 
@@ -224,20 +220,20 @@ function addProduct() {
     save(); renderProducts();
 }
 
-function deleteCat(s, c) { if(confirm("Delete Category?")) { delete data[s][c]; save(); refreshAdminLists(); renderCategories(); } }
+function deleteCat(s, c) { if(confirm("Delete?")) { delete data[s][c]; save(); refreshAdminLists(); renderCategories(); } }
 
-// --- DEEP LINK LOADING ---
+// --- DEEP LINK ON LOAD ---
 window.onload = () => {
-    const p = new URLSearchParams(window.location.search);
-    const s = p.get('store'); 
-    const c = p.get('cat');
-    const prodId = p.get('prod');
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get('store'); 
+    const c = params.get('cat');
+    const pId = params.get('prod');
 
     if(s && data[s]) { 
         curStore = s; 
         if(c && data[s][c]){ 
             curCat = c; 
-            renderProducts(prodId); 
+            renderProducts(pId); 
             showLayer('productLayer'); 
         } else { 
             renderCategories(); 
@@ -248,4 +244,5 @@ window.onload = () => {
 </script>
 </body>
 </html>
+
 
