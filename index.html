@@ -1,337 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Mobile Store</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Affiliate Store</title>
 <style>
-
 /* ---------- GLOBAL ---------- */
-body{
-margin:0;
-font-family:Arial;
-background:#f5f5f5;
-}
+body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; }
+.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; }
+.active { display:block; }
 
-.hidden{display:none}
+/* ---------- STORE PAGE ---------- */
+#storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); }
+.storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; transition:0.3s; }
+.storeCard:hover { transform:scale(1.05); }
 
-/* ---------- STICKY HEADER ---------- */
-#topBar{
-position:sticky;
-top:0;
-background:#fff;
-z-index:1000;
-display:flex;
-overflow-x:auto;
-border-bottom:1px solid #ddd;
-}
+/* ---------- TOPBAR ---------- */
+.topbar { padding:15px; display:flex; gap:10px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
+.topbar.product { background:#00B894; }
+.back { font-size:24px; cursor:pointer; }
+.search { flex:1; padding:10px 15px; border-radius:25px; border:none; outline:none; }
 
-.storeTab{
-padding:12px;
-white-space:nowrap;
-cursor:pointer;
-font-weight:bold;
-}
-
-.activeStore{
-background:black;
-color:white;
-}
-
-/* ---------- SEARCH ---------- */
-.search{
-width:100%;
-padding:12px;
-border:none;
-outline:none;
-font-size:16px;
-}
-
-/* ---------- GRID (Pinterest style) ---------- */
-.grid{
-column-count:2;
-column-gap:0;
-}
-
-.card{
-background:white;
-display:inline-block;
-width:100%;
-margin:0;
-break-inside:avoid;
-}
-
-.card img{
-width:100%;
-display:block;
-}
-
-/* ---------- TEXT ---------- */
-.title{
-font-weight:bold;
-padding:6px;
-}
-
-.desc20{
-padding:0 6px 6px;
-font-size:13px;
-color:#555;
-}
-
-.desc100{
-padding:0 6px;
-font-size:13px;
-color:#444;
-}
-
-.price{
-padding:6px;
-font-weight:bold;
-color:green;
-}
-
-.rating{
-padding:0 6px 6px;
-color:orange;
-}
+/* ---------- GRID & CARDS ---------- */
+.grid { column-count:2; column-gap:10px; padding:15px; }
+.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; }
+.card img { width:100%; display:block; }
+.info { padding:10px; }
+.title { font-weight:bold; font-size:14px; margin-bottom:4px; }
+.linkText { font-size:11px; color:#0984e3; word-break:break-word; margin-bottom:4px; }
 
 /* ---------- BUTTONS ---------- */
-.btn{
-margin:6px;
-padding:10px;
-background:black;
-color:white;
-text-align:center;
-cursor:pointer;
-}
+.buy { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:13px; font-weight:bold; margin-top:5px; }
+.share-btn { position:absolute; top:8px; right:8px; background:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:5; }
 
-.back{
-padding:10px;
-background:#eee;
-cursor:pointer;
-text-align:center;
-}
-
-/* ---------- LAYER 1 STORES ---------- */
-#stores{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-gap:40px;
-}
-
-.storeBox{
-font-size:24px;
-padding:20px 40px;
-background:black;
-color:white;
-cursor:pointer;
-}
-
+/* ---------- TOAST ---------- */
+#toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:8px 20px; border-radius:20px; display:none; z-index:1000; font-size:13px; }
 </style>
 </head>
-
 <body>
 
-<!-- ---------- LAYER 1 ---------- -->
-<div id="stores">
-<div class="storeBox" onclick="openStore('India')">India Store</div>
-<div class="storeBox" onclick="openStore('US')">US Store</div>
+<div id="toast">Link Copied! 🔗</div>
+
+<!-- STORE LAYER -->
+<div id="storeLayer" class="layer active">
+    <div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
+    <div class="storeCard" onclick="openStore('US')">🇺🇸 US STORE</div>
 </div>
 
-<!-- ---------- LAYER 2 ---------- -->
-<div id="categoriesLayer" class="hidden">
-
-<div id="topBar"></div>
-
-<input class="search" placeholder="Search categories..."
-oninput="searchCategories(this.value)">
-
-<div class="back" onclick="backToStores()">⬅ Back</div>
-
-<div id="categories" class="grid"></div>
-
+<!-- CATEGORY LAYER -->
+<div id="categoryLayer" class="layer">
+    <div class="topbar">
+        <span class="back" onclick="goHome()">⬅</span>
+        <input class="search" id="categorySearch" placeholder="Search category..." oninput="renderCategories()">
+    </div>
+    <div id="categoryGrid" class="grid"></div>
 </div>
 
-<!-- ---------- LAYER 3 ---------- -->
-<div id="productsLayer" class="hidden">
-
-<div id="topBar2"></div>
-
-<input class="search" placeholder="Search products..."
-oninput="searchProducts(this.value)">
-
-<div class="back" onclick="backToCategories()">⬅ Back</div>
-
-<div id="products" class="grid"></div>
-
+<!-- PRODUCT LAYER -->
+<div id="productLayer" class="layer">
+    <div class="topbar product">
+        <span class="back" onclick="backToCategories()">⬅</span>
+        <input class="search" id="productSearch" placeholder="Search product..." oninput="renderProducts()">
+    </div>
+    <div id="productGrid" class="grid"></div>
 </div>
 
 <script>
-
-/* ---------- DATA ---------- */
-
-const DATA={
-India:{
-Electronics:[
-{name:"Phone",price:"₹20,000",rating:"★★★★☆",
-img:"https://picsum.photos/300/300?1",
-desc:"High performance smartphone designed for daily productivity, gaming, photography, and smooth multitasking experience suitable for modern users."},
-{name:"Laptop",price:"₹60,000",rating:"★★★★★",
-img:"https://picsum.photos/300/400?2",
-desc:"Powerful lightweight laptop ideal for coding, office work, streaming, and creative tasks delivering reliable speed and long battery life."}
-],
-Fashion:[
-{name:"T‑Shirt",price:"₹800",rating:"★★★★☆",
-img:"https://picsum.photos/300/350?3",
-desc:"Comfortable cotton t‑shirt perfect for casual wear offering breathable fabric, modern fit, durable stitching, and stylish everyday comfort."}
-]
-},
-
-US:{
-Electronics:[
-{name:"Camera",price:"$900",rating:"★★★★★",
-img:"https://picsum.photos/300/380?4",
-desc:"Professional camera providing high resolution photography, fast autofocus, cinematic video capability, and excellent performance in all lighting conditions."}
-]
-}
+// ---------- DATA ----------
+const data = {
+    IND: {
+        Tech: [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}],
+        Travel: [{name:"Travel Bags", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg", price:"₹799", link:"https://amzn.to/47iPnky"}]
+    },
+    US: {
+        Tech: [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}],
+        Travel: [{name:"Packing Cubes", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4c468d90-ae53-4139-90f5-507fc3fb2508.jpg", price:"$27", link:"https://amzn.to/4uRA649"}]
+    }
 };
 
-/* yesterday products auto included */
-const yesterdayProduct={
-name:"Yesterday Special",
-price:"$50",
-rating:"★★★★☆",
-img:"https://picsum.photos/300/330?5",
-desc:"Limited previous day offer product still available for customers who missed earlier deals providing excellent value and premium quality purchase opportunity."
+let currentStore = "";
+let currentCategory = "";
+
+// ---------- NAVIGATION ----------
+function showLayer(id){document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active');}
+function openStore(store){currentStore=store; renderCategories(); showLayer('categoryLayer');}
+function openCategory(cat){currentCategory=cat; renderProducts(); showLayer('productLayer');}
+function goHome(){currentStore=""; currentCategory=""; showLayer('storeLayer');}
+function backToCategories(){currentCategory=""; renderCategories(); showLayer('categoryLayer');}
+
+// ---------- LINK BUTTON ----------
+function copyLink(url,event){event.stopPropagation(); navigator.clipboard.writeText(url); let t=document.getElementById('toast'); t.style.display='block'; setTimeout(()=>t.style.display='none',2000); return false;}
+
+// ---------- RENDER ----------
+function renderCategories(){
+    const grid=document.getElementById('categoryGrid'); grid.innerHTML='';
+    Object.keys(data[currentStore]).forEach(cat=>{
+        const url=`${window.location.origin}${window.location.pathname}?store=${currentStore}&cat=${cat}`;
+        grid.innerHTML+=`
+        <div class="card" onclick="openCategory('${cat}')">
+            <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
+            <img src="${data[currentStore][cat][0].img}">
+            <div class="info">
+                <div class="title">${cat}</div>
+                <div class="linkText">${url}</div>
+            </div>
+        </div>`;
+    });
+}
+
+function renderProducts(){
+    const grid=document.getElementById('productGrid'); grid.innerHTML='';
+    data[currentStore][currentCategory].forEach(p=>{
+        const url=p.link;
+        grid.innerHTML+=`
+        <div class="card">
+            <button class="share-btn" onclick="copyLink('${url}',event)">🔗</button>
+            <img src="${p.img}">
+            <div class="info">
+                <div class="title">${p.name}</div>
+                <div class="linkText">${url}</div>
+                <div class="price">${p.price}</div>
+            </div>
+            <a class="buy" href="${p.link}" target="_blank">Buy Now</a>
+        </div>`;
+    });
+}
+
+// ---------- DEEP LINK ON LOAD ----------
+window.onload=function(){
+    const params=new URLSearchParams(window.location.search);
+    const s=params.get('store'); const c=params.get('cat');
+    if(s && data[s]){
+        currentStore=s;
+        if(c && data[s][c]){currentCategory=c; renderProducts(); showLayer('productLayer');}
+        else{renderCategories(); showLayer('categoryLayer');}
+    } else { showLayer('storeLayer'); }
 };
-
-/* ---------- STATE ---------- */
-let currentStore=null;
-let currentCategory=null;
-
-/* ---------- STORE SWITCHER ---------- */
-function renderStoreTabs(target){
-target.innerHTML="";
-Object.keys(DATA).forEach(store=>{
-let tab=document.createElement("div");
-tab.className="storeTab"+(store===currentStore?" activeStore":"");
-tab.innerText=store;
-tab.onclick=()=>openStore(store);
-target.appendChild(tab);
-});
-}
-
-/* ---------- LAYER 1 → 2 ---------- */
-function openStore(store){
-currentStore=store;
-
-document.getElementById("stores").classList.add("hidden");
-document.getElementById("categoriesLayer").classList.remove("hidden");
-
-renderStoreTabs(topBar);
-showCategories();
-}
-
-/* ---------- CATEGORIES ---------- */
-function showCategories(){
-let container=document.getElementById("categories");
-container.innerHTML="";
-
-Object.keys(DATA[currentStore]).forEach(cat=>{
-
-let card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<img src="https://picsum.photos/300/320?${cat}">
-<div class="title">${cat}</div>
-<div class="desc20">
-Explore curated products carefully selected to match quality standards, trending styles, affordability, and customer satisfaction expectations daily.
-</div>
-<div class="btn" onclick="shareLink('${cat}')">Share</div>
-`;
-
-card.onclick=()=>openCategory(cat);
-container.appendChild(card);
-
-});
-}
-
-/* ---------- LAYER 2 → 3 ---------- */
-function openCategory(cat){
-currentCategory=cat;
-
-document.getElementById("categoriesLayer").classList.add("hidden");
-document.getElementById("productsLayer").classList.remove("hidden");
-
-renderStoreTabs(topBar2);
-showProducts();
-}
-
-/* ---------- PRODUCTS ---------- */
-function showProducts(){
-
-let list=[...DATA[currentStore][currentCategory]];
-list.push(yesterdayProduct);
-
-let container=document.getElementById("products");
-container.innerHTML="";
-
-list.forEach(p=>{
-
-let card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<img src="${p.img}">
-<div class="title">${p.name}</div>
-<div class="price">${p.price}</div>
-<div class="rating">${p.rating}</div>
-<div class="desc100">${p.desc}</div>
-<div class="btn">Buy Now</div>
-<div class="btn" onclick="shareLink('${p.name}')">Share</div>
-`;
-
-container.appendChild(card);
-});
-}
-
-/* ---------- SEARCH ---------- */
-function searchCategories(v){
-document.querySelectorAll("#categories .card")
-.forEach(c=>c.style.display=
-c.innerText.toLowerCase().includes(v.toLowerCase())
-?"block":"none");
-}
-
-function searchProducts(v){
-document.querySelectorAll("#products .card")
-.forEach(c=>c.style.display=
-c.innerText.toLowerCase().includes(v.toLowerCase())
-?"block":"none");
-}
-
-/* ---------- BACK NAV ---------- */
-function backToStores(){
-categoriesLayer.classList.add("hidden");
-stores.classList.remove("hidden");
-}
-
-function backToCategories(){
-productsLayer.classList.add("hidden");
-categoriesLayer.classList.remove("hidden");
-}
-
-/* ---------- SHARE LINK ---------- */
-function shareLink(name){
-const url=location.origin+location.pathname+"#"+name;
-navigator.clipboard.writeText(url);
-alert("Link copied!");
-}
-
 </script>
 
 </body>
