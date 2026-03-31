@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Cloud Store</title>
+    <meta name="referrer" content="no-referrer">
+    <title>Pro Affiliate Store</title>
     <style>
-        /* --- ALL PREVIOUS STYLES REMAIN SAME --- */
         body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; scroll-behavior: smooth; user-select: none; }
         .layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 100px; }
         .active { display:block; }
+        
+        /* STORE SELECT */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); min-height: 100vh; }
         .storeCard { background:white; width:80%; max-width:300px; padding:25px; margin:15px; text-align:center; border-radius:20px; font-size:20px; font-weight:bold; box-shadow:0 10px 20px rgba(0,0,0,0.2); cursor:pointer; }
+        
+        /* TOPBAR */
         .topbar { padding:15px; display:flex; gap:10px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
+        .back-btn { font-size:24px; cursor:pointer; padding: 0 10px; }
+
+        /* GRID */
         .grid { column-count:2; column-gap:10px; padding:15px; }
-        .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; }
-        .card img { width:100%; display:block; background: #eee; min-height: 100px; object-fit: cover; }
+        .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; border: 2px solid transparent; }
+        .card.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.5); }
+        .card img { width:100%; display:block; background: #eee; min-height: 120px; object-fit: contain; }
+        
         .info { padding:10px; }
-        .title { font-weight:bold; font-size:14px; }
+        .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
         .desc { font-size: 11px; color: #636e72; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .price { font-weight: bold; color: #00b894; font-size: 13px; }
+
+        /* SYMBOLS */
         .link-symbol { position:absolute; top:8px; right:8px; background:white; color: #6C5CE7; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 15; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:12px; font-weight:bold; }
 
-        /* --- ADMIN UPDATES --- */
+        /* ADMIN */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 95%; background: white; z-index: 2000; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #eee; }
         input, textarea, select, .btn-main { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
         .btn-del { background: #ff7675 !important; }
-        .btn-edit { background: #00cec9 !important; color: #2d3436 !important; }
         #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size:12px; }
     </style>
 </head>
@@ -39,40 +49,39 @@
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
-        <h2 style="margin:0">Advanced Admin</h2>
+        <h2 style="margin:0">Admin Manager</h2>
         <button onclick="closeAdmin()" style="background:#eee; border-radius:50%; border:none; width:35px; height:35px;">✕</button>
     </div>
 
     <div class="admin-section" style="border: 2px solid #ff9f43;">
-        <button class="btn-main" onclick="copyForGithub()" style="background:#ff9f43;">📋 1. CLICK TO SAVE CHANGES TO GITHUB</button>
+        <button class="btn-main" onclick="copyForGithub()" style="background:#ff9f43;">📋 CLICK TO COPY DATA FOR GITHUB</button>
     </div>
 
     <div class="admin-section">
         <h3>📂 Category Manager</h3>
-        <select id="manageStore" onchange="syncAdminDropdowns()"><option value="IND">🇮🇳 India Store</option><option value="US">🇺🇸 US Store</option></select>
-        <select id="editCatSelect" onchange="loadCatToEdit()"><option value="">-- Edit Existing Category --</option></select>
+        <select id="manageStore" onchange="syncAdminUI()"><option value="IND">India Store</option><option value="US">US Store</option></select>
+        <select id="editCatSelect" onchange="loadCatToEdit()"><option value="">-- New Category --</option></select>
         <input type="text" id="catNameInp" placeholder="Category Name">
-        <input type="text" id="catImgInp" placeholder="Category Image URL (from first product)">
         <div style="display:flex; gap:5px;">
-            <button class="btn-main" onclick="saveCategory()">Update/Add Category</button>
+            <button class="btn-main" onclick="saveCategory()">Save Cat</button>
             <button class="btn-main btn-del" onclick="deleteCategory()">Delete Cat</button>
         </div>
     </div>
 
     <div class="admin-section">
         <h3>🛍️ Product Manager</h3>
-        <select id="prodCatSelect" onchange="syncProductList()"><option value="">Select Category</option></select>
-        <select id="editProdSelect" onchange="loadProdToEdit()"><option value="">-- Edit Existing Product --</option></select>
+        <select id="prodCatSelect" onchange="syncProductList()"><option value="">Select Category First</option></select>
+        <select id="editProdSelect" onchange="loadProdToEdit()"><option value="">-- New Product --</option></select>
         <hr>
         <input type="text" id="pName" placeholder="Product Name">
         <textarea id="pDesc" placeholder="Description"></textarea>
         <input type="text" id="pPrice" placeholder="Price">
         <input type="text" id="pImg" placeholder="Image URL">
         <input type="text" id="pLink" placeholder="Affiliate Link">
-        <select id="moveToCat" style="background:#e1f5fe;"><option value="">Keep in same category</option></select>
+        <select id="moveToCat" style="background:#e3f2fd;"><option value="">Move to Category (Optional)</option></select>
         
         <div style="display:flex; gap:5px;">
-            <button class="btn-main" onclick="saveProduct()">Update/Add Product</button>
+            <button class="btn-main" onclick="saveProduct()" style="background:#00B894;">Save Product</button>
             <button class="btn-main btn-del" onclick="deleteProduct()">Delete Product</button>
         </div>
     </div>
@@ -82,43 +91,49 @@
     <div class="storeCard" onclick="handleSecretClick('IND')">🇮🇳 INDIA STORE</div>
     <div class="storeCard" onclick="handleSecretClick('US')">🇺🇸 US STORE</div>
 </div>
-<div id="categoryLayer" class="layer"><div class="topbar"><span onclick="goHome()">⬅</span></div><div id="categoryGrid" class="grid"></div></div>
-<div id="productLayer" class="layer"><div class="topbar"><span onclick="backToCategories()">⬅</span></div><div id="productGrid" class="grid"></div></div>
+
+<div id="categoryLayer" class="layer">
+    <div class="topbar"><span class="back-btn" onclick="goHome()">⬅</span><span>Categories</span></div>
+    <div id="categoryGrid" class="grid"></div>
+</div>
+
+<div id="productLayer" class="layer">
+    <div class="topbar"><span class="back-btn" onclick="backToCategories()">⬅</span><span id="catTitleText">Products</span></div>
+    <div id="productGrid" class="grid"></div>
+</div>
 
 <script>
-const GITHUB_RAW_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
+const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
 const ADMIN_PASS = "1234";
 
 let data = { IND:{}, US:{} };
-let curStore = "";
-let curCat = "";
-let clickCount = 0;
+let curStore = "", curCat = "", clickCount = 0;
+
+// HELPER: IMAGE PROXY (Fixes broken images)
+function getImg(url) {
+    if(!url) return "https://via.placeholder.com/150?text=No+Image";
+    return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&default=https://via.placeholder.com/150?text=Error`;
+}
 
 async function init() {
     try {
-        const res = await fetch(GITHUB_RAW_URL);
+        const res = await fetch(GITHUB_URL + "?t=" + Date.now());
         data = await res.json();
     } catch (e) {
         data = JSON.parse(localStorage.getItem('smartStoreData')) || { IND:{}, US:{} };
     }
-    syncAdminDropdowns();
-    checkLinks();
+    syncAdminUI(); checkDeepLinks();
 }
 
-// --- SYNC ADMIN UI ---
-function syncAdminDropdowns() {
+// --- ADMIN LOGIC ---
+function syncAdminUI() {
     const s = document.getElementById('manageStore').value;
     const catEdit = document.getElementById('editCatSelect');
     const prodCat = document.getElementById('prodCatSelect');
     const moveCat = document.getElementById('moveToCat');
-
-    let options = '<option value="">-- Select Category --</option>';
-    if(data[s]) {
-        Object.keys(data[s]).forEach(c => options += `<option value="${c}">${c}</option>`);
-    }
-    catEdit.innerHTML = options;
-    prodCat.innerHTML = options;
-    moveCat.innerHTML = options;
+    let opts = '<option value="">-- Select Category --</option>';
+    Object.keys(data[s] || {}).forEach(c => opts += `<option value="${c}">${c}</option>`);
+    catEdit.innerHTML = opts; prodCat.innerHTML = opts; moveCat.innerHTML = opts;
 }
 
 function syncProductList() {
@@ -126,51 +141,29 @@ function syncProductList() {
     const c = document.getElementById('prodCatSelect').value;
     const pSel = document.getElementById('editProdSelect');
     pSel.innerHTML = '<option value="">-- New Product --</option>';
-    if(c && data[s][c]) {
-        data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
-    }
+    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
 }
 
-// --- CATEGORY ACTIONS ---
-function loadCatToEdit() {
-    const s = document.getElementById('manageStore').value;
-    const c = document.getElementById('editCatSelect').value;
-    if(!c) return;
-    document.getElementById('catNameInp').value = c;
-    document.getElementById('catImgInp').value = data[s][c][0]?.img || "";
-}
+function loadCatToEdit() { document.getElementById('catNameInp').value = document.getElementById('editCatSelect').value; }
 
 function saveCategory() {
     const s = document.getElementById('manageStore').value;
-    const oldName = document.getElementById('editCatSelect').value;
-    const newName = document.getElementById('catNameInp').value;
-    if(!newName) return;
-
-    if(oldName && oldName !== newName) {
-        data[s][newName] = data[s][oldName];
-        delete data[s][oldName];
-    } else if(!data[s][newName]) {
-        data[s][newName] = [];
-    }
-    alert("Category Updated Locally!");
-    saveLocal(); syncAdminDropdowns();
+    const old = document.getElementById('editCatSelect').value;
+    const n = document.getElementById('catNameInp').value;
+    if(!n) return;
+    if(old && old !== n) { data[s][n] = data[s][old]; delete data[s][old]; }
+    else if(!data[s][n]) data[s][n] = [];
+    saveLocal(); syncAdminUI(); alert("Local Update Done!");
 }
 
 function deleteCategory() {
-    const s = document.getElementById('manageStore').value;
-    const c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete entire category "${c}"?`)) {
-        delete data[s][c];
-        saveLocal(); syncAdminDropdowns();
-    }
+    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
+    if(c && confirm("Delete Category?")) { delete data[s][c]; saveLocal(); syncAdminUI(); }
 }
 
-// --- PRODUCT ACTIONS ---
 function loadProdToEdit() {
-    const s = document.getElementById('manageStore').value;
-    const c = document.getElementById('prodCatSelect').value;
-    const id = document.getElementById('editProdSelect').value;
-    const p = data[s][c].find(i => i.id === id);
+    const s = document.getElementById('manageStore').value, c = document.getElementById('prodCatSelect').value, id = document.getElementById('editProdSelect').value;
+    const p = data[s][c]?.find(i => i.id === id);
     if(!p) return;
     document.getElementById('pName').value = p.name;
     document.getElementById('pDesc').value = p.desc;
@@ -180,11 +173,11 @@ function loadProdToEdit() {
 }
 
 function saveProduct() {
-    const s = document.getElementById('manageStore').value;
-    const c = document.getElementById('prodCatSelect').value;
-    const targetC = document.getElementById('moveToCat').value || c;
+    const s = document.getElementById('manageStore').value, c = document.getElementById('prodCatSelect').value, move = document.getElementById('moveToCat').value;
     const id = document.getElementById('editProdSelect').value;
-    
+    const target = move || c;
+    if(!target) return alert("Select a Category");
+
     let pObj = {
         id: id || "p" + Date.now(),
         name: document.getElementById('pName').value,
@@ -195,49 +188,59 @@ function saveProduct() {
     };
 
     if(id) {
-        // Edit existing
         const idx = data[s][c].findIndex(i => i.id === id);
-        if(c !== targetC) {
-            data[s][c].splice(idx, 1);
-            data[s][targetC].push(pObj);
-        } else {
-            data[s][c][idx] = pObj;
-        }
-    } else {
-        // New
-        data[s][targetC].push(pObj);
-    }
-    saveLocal(); syncProductList(); alert("Product Saved Locally!");
+        if(c !== target) { data[s][c].splice(idx, 1); data[s][target].push(pObj); }
+        else { data[s][c][idx] = pObj; }
+    } else { data[s][target].push(pObj); }
+    saveLocal(); syncProductList(); alert("Saved Locally!");
 }
 
 function deleteProduct() {
-    const s = document.getElementById('manageStore').value;
-    const c = document.getElementById('prodCatSelect').value;
-    const id = document.getElementById('editProdSelect').value;
-    if(id && confirm("Delete product?")) {
-        data[s][c] = data[s][c].filter(i => i.id !== id);
-        saveLocal(); syncProductList();
-    }
+    const s = document.getElementById('manageStore').value, c = document.getElementById('prodCatSelect').value, id = document.getElementById('editProdSelect').value;
+    if(id && confirm("Delete?")) { data[s][c] = data[s][c].filter(i => i.id !== id); saveLocal(); syncProductList(); }
 }
 
-// --- CORE UTILS ---
+// --- FRONT END ---
+function renderCats() {
+    const g = document.getElementById('categoryGrid'); g.innerHTML = "";
+    Object.keys(data[curStore] || {}).forEach(c => {
+        const l = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${c}`;
+        g.innerHTML += `<div class="card" onclick="openCat('${c}')">
+            <button class="link-symbol" onclick="copyT('${l}',event)">🔗</button>
+            <img src="${getImg(data[curStore][c][0]?.img)}"><div class="info"><b>${c}</b></div></div>`;
+    });
+}
+
+function renderProds(hId = null) {
+    const g = document.getElementById('productGrid'); g.innerHTML = "";
+    document.getElementById('catTitleText').innerText = curCat;
+    (data[curStore][curCat] || []).forEach(p => {
+        const l = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${curCat}&prod=${p.id}`;
+        g.innerHTML += `<div class="card ${p.id==hId?'highlight':''}" id="${p.id}">
+            <button class="link-symbol" onclick="copyT('${l}',event)">🔗</button>
+            <img src="${getImg(p.img)}"><div class="info"><b>${p.name}</b><p class="desc">${p.desc}</p><div class="price">${p.price}</div></div>
+            <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a></div>`;
+    });
+    if(hId) setTimeout(() => document.getElementById(hId)?.scrollIntoView({behavior:'smooth', block:'center'}), 500);
+}
+
+// --- CORE ---
 function saveLocal() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 4)); alert("Data Copied! Paste into GitHub now."); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 4)); alert("COPIED! Paste into GitHub store-data.json now."); }
 function handleSecretClick(s) { clickCount++; setTimeout(() => { if(clickCount>=3){ if(prompt("Pass:")===ADMIN_PASS) document.getElementById('adminPanel').classList.add('active'); } else if(clickCount===1) openStore(s); clickCount=0; }, 400); }
 function openStore(s){ curStore=s; renderCats(); show('categoryLayer'); }
-function renderCats(){ const g=document.getElementById('categoryGrid'); g.innerHTML=""; Object.keys(data[curStore]).forEach(c=>{ const l=`${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${c}`; g.innerHTML+=`<div class="card" onclick="openCat('${c}')"><button class="link-symbol" onclick="copyT('${l}',event)">🔗</button><img src="${data[curStore][c][0]?.img}"><div class="info"><b>${c}</b></div></div>`; }); }
 function openCat(c){ curCat=c; renderProds(); show('productLayer'); }
-function renderProds(){ const g=document.getElementById('productGrid'); g.innerHTML=""; data[curStore][curCat].forEach(p=>{ const l=`${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${curCat}&prod=${p.id}`; g.innerHTML+=`<div class="card" id="${p.id}"><button class="link-symbol" onclick="copyT('${l}',event)">🔗</button><img src="${p.img}"><div class="info"><b>${p.name}</b><p class="desc">${p.desc}</p><div class="price">${p.price}</div></div><a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a></div>`; }); }
-function copyT(t,e){ e.stopPropagation(); navigator.clipboard.writeText(t); document.getElementById('toast').style.display='block'; setTimeout(()=>document.getElementById('toast').style.display='none',2000); }
+function copyT(t,e){ e.stopPropagation(); navigator.clipboard.writeText(t); const ts=document.getElementById('toast'); ts.style.display='block'; setTimeout(()=>ts.style.display='none',2000); }
 function show(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function goHome(){ show('storeLayer'); }
 function backToCategories(){ show('categoryLayer'); }
 function closeAdmin(){ document.getElementById('adminPanel').classList.remove('active'); }
-function checkLinks(){ const p=new URLSearchParams(window.location.search); const s=p.get('store'); if(s && data[s]){ curStore=s; const c=p.get('cat'); if(c && data[s][c]){ curCat=c; renderProds(); show('productLayer'); } else { renderCats(); show('categoryLayer'); } } }
+function checkDeepLinks(){ const p=new URLSearchParams(window.location.search), s=p.get('store'), c=p.get('cat'), id=p.get('prod'); if(s && data[s]){ curStore=s; if(c && data[s][c]){ curCat=c; renderProds(id); show('productLayer'); } else { renderCats(); show('categoryLayer'); } } }
 window.onload = init;
 </script>
 </body>
 </html>
+
 
 
 
