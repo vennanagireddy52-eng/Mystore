@@ -10,25 +10,20 @@
 /* ---------- GLOBAL ---------- */
 body{
 margin:0;
-font-family:Segoe UI,sans-serif;
+font-family:Segoe UI;
 background:#f0f2f5;
 }
 
-.layer{
-display:none;
-min-height:100vh;
-}
+.layer{display:none;min-height:100vh;}
+.active{display:block;}
 
-.layer.active{
+/* ---------- STORE ---------- */
+#storeLayer{
+height:100vh;
 display:flex;
 flex-direction:column;
-}
-
-/* ---------- STORE PAGE ---------- */
-#storeLayer{
 justify-content:center;
 align-items:center;
-height:100vh;
 background:linear-gradient(135deg,#6C5CE7,#00B894);
 }
 
@@ -42,36 +37,20 @@ text-align:center;
 border-radius:20px;
 font-size:20px;
 font-weight:bold;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
 cursor:pointer;
 }
 
-/* ---------- TOP BAR ---------- */
+/* ---------- TOPBAR ---------- */
 .topbar{
 padding:15px;
 display:flex;
 gap:10px;
 align-items:center;
-position:sticky;
-top:0;
-z-index:100;
 color:white;
 }
 
-.back{
-font-size:24px;
-cursor:pointer;
-}
+.back{cursor:pointer;font-size:22px;}
 
-.search{
-flex:1;
-padding:10px 15px;
-border-radius:25px;
-border:none;
-outline:none;
-}
-
-/* ---------- GRID ---------- */
 .grid{
 column-count:2;
 column-gap:10px;
@@ -79,37 +58,18 @@ padding:15px;
 }
 
 .card{
-break-inside:avoid;
 background:white;
 margin-bottom:12px;
 border-radius:15px;
 overflow:hidden;
 position:relative;
-box-shadow:0 4px 10px rgba(0,0,0,0.05);
+break-inside:avoid;
 }
 
-.card img{
-width:100%;
-display:block;
-}
+.card img{width:100%;}
 
-.info{
-padding:10px;
-}
+.info{padding:10px;}
 
-.title{
-font-weight:bold;
-font-size:14px;
-}
-
-.price{
-color:#d63031;
-font-weight:bold;
-margin-top:5px;
-font-size:13px;
-}
-
-/* ---------- BUTTONS ---------- */
 .buy{
 display:block;
 background:#00b894;
@@ -117,10 +77,9 @@ color:white;
 text-align:center;
 padding:10px;
 text-decoration:none;
-font-size:13px;
-font-weight:bold;
 }
 
+/* LINK BUTTON */
 .share-btn{
 position:absolute;
 top:8px;
@@ -128,32 +87,40 @@ right:8px;
 background:white;
 border:none;
 border-radius:50%;
-width:30px;
-height:30px;
+width:28px;
+height:28px;
 cursor:pointer;
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
 }
 
-#toast{
+/* ADMIN BUTTON */
+#adminBtn{
 position:fixed;
 bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#333;
+right:20px;
+background:black;
 color:white;
-padding:8px 20px;
-border-radius:20px;
-display:none;
-z-index:1000;
-font-size:13px;
+border:none;
+padding:12px 16px;
+border-radius:30px;
+z-index:9999;
+cursor:pointer;
 }
+
+input,select{
+width:100%;
+margin:5px 0;
+padding:8px;
+}
+
+button{cursor:pointer;}
 
 </style>
 </head>
 
 <body>
 
-<div id="toast">Link Copied 🔗</div>
+<!-- ADMIN BUTTON -->
+<button id="adminBtn" onclick="openAdmin()">⚙</button>
 
 <!-- STORE -->
 <div id="storeLayer" class="layer active">
@@ -163,59 +130,85 @@ font-size:13px;
 
 <!-- CATEGORY -->
 <div id="categoryLayer" class="layer">
-<div class="topbar" style="background:#6C5CE7;">
+<div class="topbar" style="background:#6C5CE7">
 <span class="back" onclick="goHome()">⬅</span>
-<input class="search" placeholder="Search category">
+<b>Categories</b>
 </div>
-
 <div id="categoryGrid" class="grid"></div>
 </div>
 
-<!-- PRODUCT -->
+<!-- PRODUCTS -->
 <div id="productLayer" class="layer">
-<div class="topbar" style="background:#00B894;">
+<div class="topbar" style="background:#00B894">
 <span class="back" onclick="backToCategories()">⬅</span>
-<input class="search" placeholder="Search product">
+<b>Products</b>
+</div>
+<div id="productGrid" class="grid"></div>
 </div>
 
-<div id="productGrid" class="grid"></div>
+<!-- ADMIN PANEL -->
+<div id="adminLayer" class="layer">
+<div class="topbar" style="background:black">
+<span class="back" onclick="goHome()">⬅</span>
+<b>ADMIN PANEL</b>
+</div>
+
+<div style="padding:20px">
+
+<h3>Add Category</h3>
+<select id="adminStore">
+<option value="IND">IND</option>
+<option value="US">US</option>
+</select>
+
+<input id="catName" placeholder="Category Name">
+<input id="catImg" placeholder="Category Image URL">
+
+<button onclick="addCategory()">Add Category</button>
+
+<hr>
+
+<h3>Add Product</h3>
+<input id="prodCat" placeholder="Category Name">
+<input id="prodName" placeholder="Product Name">
+<input id="prodImg" placeholder="Product Image URL">
+<input id="prodPrice" placeholder="Price">
+<input id="prodLink" placeholder="Affiliate Link">
+
+<button onclick="addProduct()">Add Product</button>
+
+</div>
 </div>
 
 <script>
 
 /* ---------- DATA ---------- */
-const data={
+
+let data={
 IND:{
 Tech:[
-{name:"JBL Speaker",img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",price:"₹2799",link:"https://amzn.to/40OZeuH"}
+{name:"JBL Speaker",img:"https://via.placeholder.com/300",price:"₹2799",link:"https://amzn.to"}
 ]
 },
-US:{
-Tech:[
-{name:"JBL Speaker",img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",price:"$97",link:"https://amzn.to/3PvtdW7"}
-]
-}
+US:{}
 };
 
 let currentStore="";
 let currentCategory="";
 
-/* ---------- NAVIGATION ---------- */
+/* ---------- LAYER CONTROL ---------- */
+
 function showLayer(id){
 document.querySelectorAll(".layer").forEach(l=>l.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
+/* ---------- NAVIGATION ---------- */
+
 function openStore(store){
 currentStore=store;
-renderCategories();
 showLayer("categoryLayer");
-}
-
-function openCategory(cat){
-currentCategory=cat;
-renderProducts();
-showLayer("productLayer");
+renderCategories();
 }
 
 function goHome(){
@@ -226,49 +219,102 @@ function backToCategories(){
 showLayer("categoryLayer");
 }
 
+function openCategory(cat){
+currentCategory=cat;
+showLayer("productLayer");
+renderProducts();
+}
+
+/* ---------- LINK COPY ---------- */
+
+function copyLink(text,e){
+e.stopPropagation();
+navigator.clipboard.writeText(text);
+alert("Link copied");
+}
+
 /* ---------- RENDER ---------- */
+
 function renderCategories(){
+
 const grid=document.getElementById("categoryGrid");
 grid.innerHTML="";
 
 Object.keys(data[currentStore]).forEach(cat=>{
+
+let link=location.origin+location.pathname+
+`?store=${currentStore}&cat=${cat}`;
+
 grid.innerHTML+=`
 <div class="card" onclick="openCategory('${cat}')">
-<button class="share-btn" onclick="copyLink(event)">🔗</button>
+<button class="share-btn"
+onclick="copyLink('${link}',event)">🔗</button>
 <img src="${data[currentStore][cat][0].img}">
-<div class="info"><div class="title">${cat}</div></div>
+<div class="info"><b>${cat}</b></div>
 </div>`;
 });
 }
 
 function renderProducts(){
+
 const grid=document.getElementById("productGrid");
 grid.innerHTML="";
 
 data[currentStore][currentCategory].forEach(p=>{
+
 grid.innerHTML+=`
 <div class="card">
-<button class="share-btn" onclick="copyLink(event,'${p.link}')">🔗</button>
+<button class="share-btn"
+onclick="copyLink('${p.link}',event)">🔗</button>
 <img src="${p.img}">
 <div class="info">
-<div class="title">${p.name}</div>
-<div class="price">${p.price}</div>
+<b>${p.name}</b><br>${p.price}
 </div>
 <a class="buy" href="${p.link}" target="_blank">Buy Now</a>
 </div>`;
 });
 }
 
-/* ---------- LINK COPY ---------- */
-function copyLink(e,link){
-e.stopPropagation();
-navigator.clipboard.writeText(link || window.location.href);
-const t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",2000);
+/* ---------- ADMIN ---------- */
+
+function openAdmin(){
+showLayer("adminLayer");
+}
+
+function addCategory(){
+
+let store=document.getElementById("adminStore").value;
+let name=document.getElementById("catName").value;
+let img=document.getElementById("catImg").value;
+
+if(!data[store]) data[store]={};
+
+data[store][name]=[
+{name:"Sample",img:img,price:"",link:"#"}
+];
+
+alert("Category Added");
+}
+
+function addProduct(){
+
+let cat=document.getElementById("prodCat").value;
+
+if(!data[currentStore][cat]){
+alert("Category not found");
+return;
+}
+
+data[currentStore][cat].push({
+name:document.getElementById("prodName").value,
+img:document.getElementById("prodImg").value,
+price:document.getElementById("prodPrice").value,
+link:document.getElementById("prodLink").value
+});
+
+alert("Product Added");
 }
 
 </script>
-
 </body>
 </html>
