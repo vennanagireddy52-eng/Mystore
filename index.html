@@ -7,7 +7,7 @@
 <style>
 /* ---------- GLOBAL ---------- */
 body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; user-select: none; }
-.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 100px; }
+.layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 80px; }
 .active { display:block; }
 
 /* ---------- STORE PAGE ---------- */
@@ -23,14 +23,17 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
 .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer;}
-.card img { width:100%; display:block; background: #eee; min-height: 80px; }
+.card img { width:100%; display:block; background: #eee; min-height: 80px; border-bottom: 1px solid #f0f0f0; }
 .info { padding:10px; }
-.title { font-weight:bold; font-size:14px; margin-bottom:4px; }
-.price { font-weight: bold; color: #2d3436; font-size: 14px; }
+.title { font-weight:bold; font-size:14px; margin-bottom:4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.price { font-weight: bold; color: #2d3436; font-size: 13px; }
 
-/* ---------- LINK BUTTON ---------- */
-.share-link-btn { position:absolute; top:8px; right:8px; background:rgba(255,255,255,0.95); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:10; display:flex; align-items:center; justify-content:center; font-size:16px; transition: 0.2s; }
-.share-link-btn:active { transform: scale(0.9); }
+/* ---------- MINI LINK BUTTON ---------- */
+.mini-link { position:absolute; top:8px; right:8px; background:white; color: #6C5CE7; text-decoration: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; font-weight: bold; }
+.mini-link:hover { background: #f0f0f0; }
+
+/* ---------- BUY BUTTON ---------- */
+.buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:10px; text-decoration:none; font-size:12px; font-weight:bold; }
 
 /* ---------- ADMIN PANEL ---------- */
 #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 90%; background: white; z-index: 2000; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
@@ -39,18 +42,18 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
 .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
 .admin-item-row { background: white; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee; }
-.btn-del { background: #ff7675; color: white; border: none; padding: 5px; border-radius: 4px; width: 100%; margin-top: 5px; cursor: pointer; }
+.btn-del { background: #ff7675; color: white; border: none; padding: 6px; border-radius: 4px; width: 100%; margin-top: 5px; cursor: pointer; font-size: 11px; }
 
-#toast { position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:2500; font-size:13px; }
+#toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:8px 15px; border-radius:20px; display:none; z-index:2500; font-size:12px; }
 </style>
 </head>
 <body>
 
-<div id="toast">Link Copied!</div>
+<div id="toast">Action Saved</div>
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
-        <h2 style="margin:0">Owner Console</h2>
+        <h2 style="margin:0">Owner Settings</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
 
@@ -63,18 +66,20 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
     </div>
 
     <div class="admin-section">
-        <h3>2. Categories</h3>
+        <h3>2. Manage Categories</h3>
         <div id="adminCatList"></div>
+        <hr>
         <input type="text" id="newCatName" placeholder="Category Name">
-        <input type="text" id="newCatImg" placeholder="Category Image URL">
+        <input type="text" id="newCatImg" placeholder="Image URL">
         <button class="btn-main" onclick="addCategory()">Create Category</button>
     </div>
 
     <div class="admin-section">
-        <h3>3. Products</h3>
+        <h3>3. Manage Products</h3>
         <select id="adminProdCatSelect" onchange="refreshAdminLists()"><option value="">Select Category</option></select>
         <div id="adminProdList"></div>
-        <input type="text" id="pName" placeholder="Product Name">
+        <hr>
+        <input type="text" id="pName" placeholder="Name">
         <input type="text" id="pPrice" placeholder="Price">
         <input type="text" id="pImg" placeholder="Image URL">
         <input type="text" id="pLink" placeholder="Affiliate Link">
@@ -108,9 +113,10 @@ const ADMIN_PASS = "1234";
 let clickCount = 0;
 let clickTimer = null;
 
+// Initial Default Data
 const defaultData = {
-    IND: { "Tech": [{id: "jbl-1", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
-    US: { "Tech": [{id: "jbl-2", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
+    IND: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
+    US: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
 };
 
 let data = JSON.parse(localStorage.getItem('smartStoreData')) || defaultData;
@@ -119,36 +125,20 @@ let curCat = "";
 
 function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
-// --- DEEP LINK LOGIC ---
-function getDeepLink(store, cat, prodId) {
-    let url = new URL(window.location.href.split('?')[0]);
-    url.searchParams.set('store', store);
-    if(cat) url.searchParams.set('cat', cat);
-    if(prodId) url.searchParams.set('prod', prodId);
-    return url.toString();
-}
-
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text);
-    const t = document.getElementById('toast');
-    t.style.display = "block";
-    setTimeout(() => t.style.display = "none", 2000);
-}
-
-// --- SECRET TRIGGER ---
+// --- SECRET ADMIN TRIGGER ---
 function handleSecretClick(store) {
     clickCount++;
     if (clickCount === 1) {
         clickTimer = setTimeout(() => { if (clickCount < 3) openStore(store); clickCount = 0; }, 400);
     } else if (clickCount === 3) {
         clearTimeout(clickTimer); clickCount = 0;
-        if (prompt("Admin Key:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
+        if (prompt("Enter Password:") === ADMIN_PASS) { document.getElementById('adminPanel').classList.add('active'); refreshAdminLists(); }
         else { openStore(store); }
     }
 }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
-// --- NAV ---
+// --- NAVIGATION ---
 function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); }
 function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
@@ -160,22 +150,25 @@ function refreshAdminLists() {
     const s = document.getElementById('adminStoreSelect').value;
     const catSel = document.getElementById('adminProdCatSelect');
     
+    // Render Categories in Admin
     const cList = document.getElementById('adminCatList');
     cList.innerHTML = "";
     Object.keys(data[s]).forEach(cat => {
         cList.innerHTML += `
         <div class="admin-item-row">
             <b>${cat}</b>
-            <input type="text" value="${data[s][cat][0]?.img || ''}" placeholder="Category Image URL" onchange="updateCatImg('${s}','${cat}',this.value)">
+            <input type="text" value="${data[s][cat][0]?.img || ''}" placeholder="Category Thumbnail URL" onchange="updateCatImg('${s}','${cat}',this.value)">
             <button class="btn-del" onclick="deleteCat('${s}','${cat}')">Delete Category</button>
         </div>`;
     });
 
+    // Update Product Cat Dropdown
     const prevVal = catSel.value;
     catSel.innerHTML = '<option value="">Select Category</option>';
     Object.keys(data[s]).forEach(cat => { catSel.innerHTML += `<option value="${cat}">${cat}</option>`; });
     catSel.value = prevVal;
 
+    // Render Products in Admin
     const pList = document.getElementById('adminProdList');
     pList.innerHTML = "";
     if(catSel.value && data[s][catSel.value]) {
@@ -183,7 +176,8 @@ function refreshAdminLists() {
             pList.innerHTML += `
             <div class="admin-item-row">
                 <input type="text" value="${p.name}" onchange="updateProd('${s}','${catSel.value}',${i},'name',this.value)" placeholder="Name">
-                <input type="text" value="${p.img}" onchange="updateProd('${s}','${catSel.value}',${i},'img',this.value)" placeholder="Image URL">
+                <input type="text" value="${p.img}" onchange="updateProd('${s}','${catSel.value}',${i},'img',this.value)" placeholder="Img URL">
+                <input type="text" value="${p.link}" onchange="updateProd('${s}','${catSel.value}',${i},'link',this.value)" placeholder="Link">
                 <button class="btn-del" onclick="deleteProd('${s}','${catSel.value}',${i})">Delete Product</button>
             </div>`;
         });
@@ -196,11 +190,12 @@ function addCategory() {
     const n = document.getElementById('newCatName').value;
     const im = document.getElementById('newCatImg').value;
     if(!n) return;
-    data[s][n] = [{id: Date.now(), name:"Sample", price:"-", img: im || "", link:"#"}];
+    data[s][n] = [{name:"Sample", price:"-", img: im || "", link:"#"}];
     save(); refreshAdminLists(); renderCategories();
 }
 function updateCatImg(s, cat, url) { if(data[s][cat].length > 0) data[s][cat][0].img = url; save(); renderCategories(); }
-function deleteCat(s, cat) { if(confirm("Delete?")) { delete data[s][cat]; save(); refreshAdminLists(); renderCategories(); } }
+function deleteCat(s, cat) { if(confirm("Delete category?")) { delete data[s][cat]; save(); refreshAdminLists(); renderCategories(); } }
+
 function addProduct() {
     const s = document.getElementById('adminStoreSelect').value;
     const c = document.getElementById('adminProdCatSelect').value;
@@ -209,7 +204,7 @@ function addProduct() {
     const im = document.getElementById('pImg').value;
     const l = document.getElementById('pLink').value;
     if(!c || !n) return;
-    data[s][c].push({id: Date.now(), name:n, price:pr, img:im, link:l});
+    data[s][c].push({name:n, price:pr, img:im, link:l});
     save(); refreshAdminLists(); renderProducts();
 }
 function updateProd(s, cat, i, k, v) { data[s][cat][i][k] = v; save(); renderProducts(); }
@@ -219,10 +214,9 @@ function deleteProd(s, cat, i) { data[s][cat].splice(i, 1); save(); refreshAdmin
 function renderCategories() {
     const grid = document.getElementById('categoryGrid'); grid.innerHTML = "";
     Object.keys(data[curStore]).forEach(cat => {
-        const link = getDeepLink(curStore, cat);
         grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
-            <div class="share-link-btn" onclick="event.stopPropagation(); copyToClipboard('${link}')">🔗</div>
+            <a href="#" class="mini-link" onclick="event.stopPropagation(); openCategory('${cat}')">🔗</a>
             <img src="${data[curStore][cat][0]?.img || ''}">
             <div class="info"><div class="title">${cat}</div></div>
         </div>`;
@@ -232,37 +226,19 @@ function renderCategories() {
 function renderProducts() {
     const grid = document.getElementById('productGrid'); grid.innerHTML = "";
     data[curStore][curCat].forEach((p) => {
-        const link = getDeepLink(curStore, curCat, p.id);
         grid.innerHTML += `
         <div class="card">
-            <div class="share-link-btn" onclick="event.stopPropagation(); copyToClipboard('${link}')">🔗</div>
+            <a href="${p.link}" target="_blank" class="mini-link" onclick="event.stopPropagation();">🔗</a>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
                 <div class="price">${p.price}</div>
             </div>
-            <a class="buy" href="${p.link}" target="_blank">Buy Now</a>
+            <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
         </div>`;
     });
 }
-
-// --- ON LOAD ---
-window.onload = () => {
-    const params = new URLSearchParams(window.location.search);
-    const s = params.get('store');
-    const c = params.get('cat');
-    if(s && data[s]) {
-        curStore = s;
-        if(c && data[s][c]) {
-            curCat = c;
-            renderProducts();
-            showLayer('productLayer');
-        } else {
-            renderCategories();
-            showLayer('categoryLayer');
-        }
-    }
-};
 </script>
 </body>
 </html>
+
