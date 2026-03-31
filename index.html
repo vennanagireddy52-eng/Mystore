@@ -10,7 +10,7 @@ body{margin:0;font-family:Segoe UI;background:#f0f2f5}
 .layer{display:none;min-height:100vh}
 .active{display:block}
 
-/* STORE */
+/* STORE PAGE */
 #storeLayer{
 display:flex;
 flex-direction:column;
@@ -31,6 +31,19 @@ width:260px;
 text-align:center;
 }
 
+/* ADMIN BUTTON */
+.adminBtn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#000;
+color:#fff;
+padding:12px 16px;
+border-radius:30px;
+cursor:pointer;
+z-index:999;
+}
+
 /* TOPBAR */
 .topbar{
 padding:15px;
@@ -38,8 +51,6 @@ color:white;
 display:flex;
 align-items:center;
 gap:10px;
-position:sticky;
-top:0;
 }
 
 .purple{background:#6C5CE7}
@@ -48,11 +59,7 @@ top:0;
 .back{cursor:pointer;font-size:22px}
 
 /* GRID */
-.grid{
-column-count:2;
-column-gap:10px;
-padding:15px;
-}
+.grid{column-count:2;column-gap:10px;padding:15px}
 
 .card{
 background:white;
@@ -65,7 +72,6 @@ box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 
 .card img{width:100%}
-
 .info{padding:10px;font-weight:bold}
 
 .buy{
@@ -77,7 +83,7 @@ padding:10px;
 text-decoration:none;
 }
 
-/* SMALL LINK BUTTON */
+/* LINK ICON */
 .linkBtn{
 position:absolute;
 top:8px;
@@ -91,7 +97,6 @@ cursor:pointer;
 box-shadow:0 2px 5px rgba(0,0,0,.3);
 }
 
-/* TOAST */
 #toast{
 position:fixed;
 bottom:20px;
@@ -110,6 +115,9 @@ display:none;
 
 <div id="toast">Link Copied 🔗</div>
 
+<!-- ADMIN BUTTON -->
+<div class="adminBtn" onclick="openAdmin()">ADMIN</div>
+
 <!-- STORE -->
 <div id="storeLayer" class="layer active">
 <div class="storeCard" onclick="openStore('IND')">🇮🇳 INDIA STORE</div>
@@ -125,7 +133,7 @@ display:none;
 <div id="categoryGrid" class="grid"></div>
 </div>
 
-<!-- PRODUCTS -->
+<!-- PRODUCT -->
 <div id="productLayer" class="layer">
 <div class="topbar green">
 <span class="back" onclick="backToCategories()">⬅</span>
@@ -134,41 +142,65 @@ display:none;
 <div id="productGrid" class="grid"></div>
 </div>
 
+<!-- ADMIN PANEL -->
+<div id="adminLayer" class="layer">
+<div class="topbar" style="background:black">
+<span class="back" onclick="goHome()">⬅</span>
+<b>Admin Panel</b>
+</div>
+
+<div style="padding:20px">
+
+<h3>Add Category</h3>
+<input id="catName" placeholder="Category Name"><br><br>
+<button onclick="addCategory()">Add Category</button>
+
+<hr>
+
+<h3>Add Product</h3>
+<input id="prodName" placeholder="Product Name"><br>
+<input id="prodImg" placeholder="Image URL"><br>
+<input id="prodPrice" placeholder="Price"><br>
+<input id="prodLink" placeholder="Affiliate Link"><br><br>
+<button onclick="addProduct()">Add Product</button>
+
+</div>
+</div>
+
 <script>
-/* ===== DATA (ADMIN CONTROLS HERE ONLY) ===== */
 const data={
-IND:{
-Tech:[
-{
-name:"JBL Speaker",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp",
-price:"₹2799",
-link:"https://amzn.to/40OZeuH"
-}
-],
-Travel:[
-{
-name:"Travel Bags",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/32db2e5a-2cad-455e-b073-9f9be1bb940d.jpg",
-price:"₹799",
-link:"https://amzn.to/47iPnky"
-}
-]
-},
-US:{
-Tech:[
-{
-name:"JBL Speaker",
-img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp",
-price:"$97",
-link:"https://amzn.to/3PvtdW7"
-}
-]
-}
+IND:{Tech:[],Travel:[]},
+US:{Tech:[]}
 };
 
 let currentStore="";
 let currentCategory="";
+
+/* ===== LAYER SWITCH (FIX STICKY ISSUE) ===== */
+function showLayer(id){
+document.querySelectorAll(".layer")
+.forEach(l=>l.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+window.scrollTo(0,0);
+}
+
+/* NAVIGATION */
+function openStore(store){
+currentStore=store;
+showLayer("categoryLayer");
+renderCategories();
+}
+
+function openCategory(cat){
+currentCategory=cat;
+showLayer("productLayer");
+renderProducts();
+}
+
+function goHome(){showLayer("storeLayer")}
+function backToCategories(){showLayer("categoryLayer")}
+function openAdmin(){showLayer("adminLayer")}
 
 /* TOAST */
 function toast(){
@@ -184,57 +216,25 @@ navigator.clipboard.writeText(link);
 toast();
 }
 
-/* NAVIGATION */
-function openStore(store){
-currentStore=store;
-switchLayer("categoryLayer");
-renderCategories();
-}
-
-function openCategory(cat){
-currentCategory=cat;
-switchLayer("productLayer");
-renderProducts();
-}
-
-function goHome(){
-switchLayer("storeLayer");
-}
-
-function backToCategories(){
-switchLayer("categoryLayer");
-}
-
-/* LAYER SWITCH (FIXES STICKY ISSUE) */
-function switchLayer(id){
-document.querySelectorAll(".layer")
-.forEach(l=>l.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-window.scrollTo(0,0);
-}
-
-/* RENDER CATEGORY */
+/* CATEGORY RENDER */
 function renderCategories(){
 const grid=document.getElementById("categoryGrid");
 grid.innerHTML="";
 
 Object.keys(data[currentStore]).forEach(cat=>{
-const shareLink=`${location.href}?store=${currentStore}&cat=${cat}`;
+const link=`${location.origin}?store=${currentStore}&cat=${cat}`;
 
 grid.innerHTML+=`
 <div class="card" onclick="openCategory('${cat}')">
-
 <button class="linkBtn"
-onclick="copyLink('${shareLink}',event)">🔗</button>
-
-<img src="${data[currentStore][cat][0].img}">
+onclick="copyLink('${link}',event)">🔗</button>
+<img src="https://via.placeholder.com/400x300">
 <div class="info">${cat}</div>
-
 </div>`;
 });
 }
 
-/* RENDER PRODUCTS */
+/* PRODUCT RENDER */
 function renderProducts(){
 const grid=document.getElementById("productGrid");
 grid.innerHTML="";
@@ -242,17 +242,31 @@ grid.innerHTML="";
 data[currentStore][currentCategory].forEach(p=>{
 grid.innerHTML+=`
 <div class="card">
-
 <button class="linkBtn"
 onclick="copyLink('${p.link}',event)">🔗</button>
-
 <img src="${p.img}">
 <div class="info">${p.name}<br>${p.price}</div>
-
 <a class="buy" href="${p.link}" target="_blank">Buy Now</a>
-
 </div>`;
 });
+}
+
+/* ADMIN ACTIONS */
+function addCategory(){
+const name=document.getElementById("catName").value;
+if(!name)return;
+data[currentStore][name]=[];
+alert("Category Added");
+}
+
+function addProduct(){
+data[currentStore][currentCategory].push({
+name:prodName.value,
+img:prodImg.value,
+price:prodPrice.value,
+link:prodLink.value
+});
+alert("Product Added");
 }
 </script>
 
