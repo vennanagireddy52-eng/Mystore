@@ -6,7 +6,7 @@
 <title>Smart Affiliate Store</title>
 <style>
 /* ---------- GLOBAL ---------- */
-body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; user-select: none; }
+body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: #2d3436; user-select: none; scroll-behavior: smooth; }
 .layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f0f2f5; padding-bottom: 80px; }
 .active { display:block; }
 
@@ -22,7 +22,8 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 
 /* ---------- GRID & CARDS ---------- */
 .grid { column-count:2; column-gap:10px; padding:15px; }
-.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer;}
+.card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; position:relative; box-shadow:0 4px 10px rgba(0,0,0,0.05); cursor:pointer; border: 2px solid transparent; transition: 0.3s;}
+.card.highlight { border-color: #00B894; transform: scale(1.02); box-shadow: 0 0 15px rgba(0,184,148,0.4); }
 .card img { width:100%; display:block; background: #eee; min-height: 80px; }
 .info { padding:10px; }
 .title { font-weight:bold; font-size:14px; margin-bottom:4px; }
@@ -41,7 +42,6 @@ body { margin:0; font-family:'Segoe UI', sans-serif; background:#f0f2f5; color: 
 input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
 .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
 
-/* ---------- TOAST ---------- */
 #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size:12px; }
 </style>
 </head>
@@ -55,7 +55,7 @@ input, select, .btn-main { width: 100%; padding: 10px; margin: 5px 0; border-rad
         <button onclick="closeAdmin()" style="border:none; background:#eee; border-radius:50%; width:35px; height:35px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-section">
-        <h3>1. Select Store</h3>
+        <h3>1. Store</h3>
         <select id="adminStoreSelect" onchange="refreshAdminLists()">
             <option value="IND">🇮🇳 India Store</option>
             <option value="US">🇺🇸 US Store</option>
@@ -106,9 +106,10 @@ const ADMIN_PASS = "1234";
 let clickCount = 0;
 let clickTimer = null;
 
+// Use timestamps as IDs for easy deep linking
 const defaultData = {
-    IND: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
-    US: { "Tech": [{name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
+    IND: { "Tech": [{id: "101", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7bd6dcb8-d791-44a1-895b-78b5e25157f1.webp", price:"₹2799", link:"https://amzn.to/40OZeuH"}] },
+    US: { "Tech": [{id: "201", name:"JBL Speaker", img:"https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fbac8cc5-2800-41cf-9458-3f9bcddfead7.webp", price:"$97", link:"https://amzn.to/3PvtdW7"}] }
 };
 
 let data = JSON.parse(localStorage.getItem('smartStoreData')) || defaultData;
@@ -117,7 +118,7 @@ let curCat = "";
 
 function save() { localStorage.setItem('smartStoreData', JSON.stringify(data)); }
 
-// --- CLIPBOARD FUNCTION ---
+// --- CLIPBOARD ---
 function copyLink(text, e) {
     if(e) e.stopPropagation();
     navigator.clipboard.writeText(text).then(() => {
@@ -127,7 +128,7 @@ function copyLink(text, e) {
     });
 }
 
-// --- ADMIN TRIGGER ---
+// --- ADMIN ---
 function handleSecretClick(store) {
     clickCount++;
     if (clickCount === 1) {
@@ -144,30 +145,33 @@ function closeAdmin() { document.getElementById('adminPanel').classList.remove('
 function showLayer(id){ document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function openStore(s){ curStore=s; renderCategories(); showLayer('categoryLayer'); }
 function openCategory(c){ curCat=c; renderProducts(); showLayer('productLayer'); }
-function goHome(){ curStore=""; curCat=""; showLayer('storeLayer'); }
+function goHome(){ curStore=""; curCat=""; window.history.replaceState({}, '', window.location.pathname); showLayer('storeLayer'); }
 function backToCategories(){ curCat=""; renderCategories(); showLayer('categoryLayer'); }
 
 // --- RENDER FRONT END ---
 function renderCategories() {
     const grid = document.getElementById('categoryGrid'); grid.innerHTML = "";
     Object.keys(data[curStore]).forEach(cat => {
-        // Deep link for the category
-        const link = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(cat)}`;
+        const shareLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(cat)}`;
         grid.innerHTML += `
         <div class="card" onclick="openCategory('${cat}')">
-            <button class="mini-link" onclick="copyLink('${link}', event)">🔗</button>
+            <button class="mini-link" onclick="copyLink('${shareLink}', event)">🔗</button>
             <img src="${data[curStore][cat][0]?.img || ''}">
             <div class="info"><div class="title">${cat}</div></div>
         </div>`;
     });
 }
 
-function renderProducts() {
+function renderProducts(highlightId = null) {
     const grid = document.getElementById('productGrid'); grid.innerHTML = "";
     data[curStore][curCat].forEach((p) => {
+        // Product Deep Link (points to YOUR store, not the affiliate link)
+        const shareLink = `${window.location.origin}${window.location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
+        const isHighlight = p.id == highlightId;
+        
         grid.innerHTML += `
-        <div class="card">
-            <button class="mini-link" onclick="copyLink('${p.link}', event)">🔗</button>
+        <div class="card ${isHighlight ? 'highlight' : ''}" id="p-${p.id}">
+            <button class="mini-link" onclick="copyLink('${shareLink}', event)">🔗</button>
             <img src="${p.img}">
             <div class="info">
                 <div class="title">${p.name}</div>
@@ -176,9 +180,16 @@ function renderProducts() {
             <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
         </div>`;
     });
+    
+    if(highlightId) {
+        setTimeout(() => {
+            const el = document.getElementById(`p-${highlightId}`);
+            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    }
 }
 
-// --- ADMIN FUNCTIONS ---
+// --- ADMIN LOGIC ---
 function refreshAdminLists() {
     const s = document.getElementById('adminStoreSelect').value;
     const catSel = document.getElementById('adminProdCatSelect');
@@ -190,27 +201,49 @@ function refreshAdminLists() {
     catSel.innerHTML = '<option value="">Select Category</option>';
     Object.keys(data[s]).forEach(cat => { catSel.innerHTML += `<option value="${cat}">${cat}</option>`; });
 }
+
 function addCategory() {
     const s = document.getElementById('adminStoreSelect').value;
     const n = document.getElementById('newCatName').value;
     if(!n) return;
-    data[s][n] = [{name:"Sample", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
+    data[s][n] = [{id: Date.now(), name:"Sample", price:"-", img: document.getElementById('newCatImg').value, link:"#"}];
     save(); refreshAdminLists(); renderCategories();
 }
+
 function addProduct() {
     const s = document.getElementById('adminStoreSelect').value;
     const c = document.getElementById('adminProdCatSelect').value;
     if(!c) return;
-    data[s][c].push({name:document.getElementById('pName').value, price:document.getElementById('pPrice').value, img:document.getElementById('pImg').value, link:document.getElementById('pLink').value});
+    data[s][c].push({
+        id: Date.now(), 
+        name:document.getElementById('pName').value, 
+        price:document.getElementById('pPrice').value, 
+        img:document.getElementById('pImg').value, 
+        link:document.getElementById('pLink').value
+    });
     save(); renderProducts();
 }
-function deleteCat(s, c) { if(confirm("Delete?")) { delete data[s][c]; save(); refreshAdminLists(); renderCategories(); } }
 
-// Deep link support on load
+function deleteCat(s, c) { if(confirm("Delete Category?")) { delete data[s][c]; save(); refreshAdminLists(); renderCategories(); } }
+
+// --- DEEP LINK LOADING ---
 window.onload = () => {
     const p = new URLSearchParams(window.location.search);
-    const s = p.get('store'); const c = p.get('cat');
-    if(s && data[s]) { curStore=s; if(c && data[s][c]){ curCat=c; renderProducts(); showLayer('productLayer'); } else { renderCategories(); showLayer('categoryLayer'); }}
+    const s = p.get('store'); 
+    const c = p.get('cat');
+    const prodId = p.get('prod');
+
+    if(s && data[s]) { 
+        curStore = s; 
+        if(c && data[s][c]){ 
+            curCat = c; 
+            renderProducts(prodId); 
+            showLayer('productLayer'); 
+        } else { 
+            renderCategories(); 
+            showLayer('categoryLayer'); 
+        }
+    }
 };
 </script>
 </body>
