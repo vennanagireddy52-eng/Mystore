@@ -14,9 +14,9 @@
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
         
-        /* TOP NAVIGATION */
-        .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
-        .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        /* TOP NAVIGATION (Back Arrow Removed) */
+        .topbar { padding:18px; display:flex; justify-content:center; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; text-align: center; }
+        .top-title { font-weight: bold; font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         /* PRODUCT GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
@@ -32,7 +32,7 @@
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ADMIN INTERFACE */
+        /* ADMIN PANEL */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.4); display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
@@ -52,7 +52,7 @@
         <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
     </div>
-    <div class="admin-section" style="border: 1px solid orange; background: #fffcf5;">
+    <div class="admin-section">
         <button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button>
     </div>
     <div class="admin-section">
@@ -85,12 +85,12 @@
 </div>
 
 <div id="catLayer" class="layer">
-    <div class="topbar"><span onclick="window.history.back()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="stTitle">Categories</span></div>
+    <div class="topbar"><span class="top-title" id="stTitle">Categories</span></div>
     <div id="catGrid" class="grid"></div>
 </div>
 
 <div id="pLayer" class="layer">
-    <div class="topbar"><span onclick="window.history.back()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="ctTitle">Products</span></div>
+    <div class="topbar"><span class="top-title" id="ctTitle">Products</span></div>
     <div id="pGrid" class="grid"></div>
 </div>
 
@@ -107,9 +107,9 @@ function getImg(u) {
 // --- 🛡️ THE 3-CLICK BACK BUTTON ENGINE ---
 window.onpopstate = function(e) {
     if (e.state && e.state.layer) {
-        showLayer(e.state.layer, false); // Switch layers without adding new history
+        showLayer(e.state.layer, false);
     } else {
-        showLayer('storeLayer', false); // Safety floor
+        showLayer('storeLayer', false);
     }
 };
 
@@ -133,23 +133,17 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // CLICK 3 (Floor): Set Store Selection as the starting point
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            
-            // BUILD THE STAIRS IN THE BACKGROUND
             setTimeout(() => {
-                // CLICK 2: Inject Category Layer into history
                 window.history.pushState({ layer: 'catLayer' }, "");
-                // CLICK 1: Inject Product Layer (Current View)
                 window.history.pushState({ layer: 'pLayer' }, "");
-                
                 showLayer('pLayer', false);
-            }, 300); // Wait for mobile browser to register the stack
+            }, 300);
         } else {
             setTimeout(() => {
                 window.history.pushState({ layer: 'catLayer' }, "");
@@ -162,7 +156,6 @@ async function init() {
     syncUI();
 }
 
-// --- NAVIGATION ---
 function hSec(s) { 
     cc++;
     setTimeout(() => {
@@ -174,7 +167,6 @@ function hSec(s) {
 
 function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
 
-// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
@@ -206,7 +198,7 @@ function renP(scrollToId = null) {
     if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN TOOLS ---
+// --- ADMIN ENGINE ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -261,7 +253,6 @@ function deletePManual() {
     }
 }
 
-// --- UTILS ---
 function cp(t, e) {
     e.stopPropagation();
     navigator.clipboard.writeText(t);
