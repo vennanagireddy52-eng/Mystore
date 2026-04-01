@@ -98,7 +98,7 @@
 
 <script>
 const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
-let data = { IND:{}, US:{} };
+let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
 
 function getImg(u) {
@@ -112,8 +112,13 @@ async function init() {
         const cloud = await res.json();
         if(cloud && cloud.IND) data = cloud;
     } catch (e) {
-        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} };
+        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{ IND:{}, US:{} } };
     }
+    // Safety check: ensure META vault exists
+    if(!data.META) data.META = { IND:{}, US:{} };
+    if(!data.META.IND) data.META.IND = {};
+    if(!data.META.US) data.META.US = {};
+    
     saveLoc(); syncUI(); checkLink();
 }
 
@@ -121,33 +126,52 @@ async function init() {
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
-    let h = '<option value="">-- Select --</option>';
+    let h = '<option value="">-- Select Category --</option>';
     Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
     cSel.innerHTML = h; pCSel.innerHTML = h;
 }
 function syncPList() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
     const pSel = document.getElementById('editPSel');
-    pSel.innerHTML = '<option value="">-- New --</option>';
+    pSel.innerHTML = '<option value="">-- New Product --</option>';
     if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
 }
 function loadCat() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     document.getElementById('catInp').value = c;
-    document.getElementById('catImgInp').value = (c && data[s][c]._img) ? data[s][c]._img : "";
+    document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
 }
 function saveCat() {
     const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value;
     const n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
-    if(!n) return;
-    if(old && old!==n) { data[s][n]=data[s][old]; delete data[s][old]; }
-    else if(!data[s][n]) data[s][n]=[];
-    data[s][n]._img = img;
-    saveLoc(); syncUI(); alert("Category Saved locally! Click Orange button next.");
+    if(!n) return alert("Enter a category name!");
+
+    // Rename logic
+    if(old && old!==n) { 
+        data[s][n] = data[s][old]; delete data[s][old]; 
+        if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; }
+    } else if(!data[s][n]) { 
+        data[s][n] = []; 
+    }
+    
+    // Save image to safe META vault
+    if(!data.META[s][n]) data.META[s][n] = {};
+    data.META[s][n].img = img;
+    
+    saveLoc(); syncUI(); 
+    document.getElementById('catInp').value = ""; document.getElementById('catImgInp').value = "";
+    alert("✅ Category Saved! Now click the ORANGE COPY button.");
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; saveLoc(); syncUI(); }
+    if(!c) return alert("Select a category to delete!");
+    if(confirm(`Are you sure you want to delete "${c}" and all its products?`)) { 
+        delete data[s][c]; 
+        if(data.META[s]) delete data.META[s][c];
+        saveLoc(); syncUI(); 
+        document.getElementById('catInp').value = ""; document.getElementById('catImgInp').value = "";
+        alert("🗑️ Category Deleted! Now click the ORANGE COPY button."); 
+    }
 }
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
@@ -156,14 +180,22 @@ function loadP() {
 }
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select Category");
+    if(!c) return alert("Select a Category first!");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); alert("Product Saved Locally!");
+    saveLoc(); syncPList(); 
+    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = "");
+    alert("✅ Product Saved! Now click the ORANGE COPY button.");
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(id && confirm("Delete product?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); }
+    if(!id) return alert("Select a product to delete!");
+    if(confirm("Delete this product?")) { 
+        data[s][c] = data[s][c].filter(x => x.id !== id); 
+        saveLoc(); syncPList(); 
+        ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = "");
+        alert("🗑️ Product Deleted! Now click the ORANGE COPY button."); 
+    }
 }
 
 // RENDERING
@@ -172,7 +204,7 @@ function renC() {
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
     Object.keys(data[curStore]).forEach(c => {
         const l = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(c)}`;
-        const img = data[curStore][c]._img || (data[curStore][c][0]?.img);
+        const img = (data.META[curStore] && data.META[curStore][c] && data.META[curStore][c].img) ? data.META[curStore][c].img : (data[curStore][c][0]?.img);
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><button class="link-symbol" onclick="cp('${l}',event)">🔗</button><img src="${getImg(img)}"><div class="info"><b>${c}</b><span style="font-size:10px; color:#999; display:block; margin-top:3px;">${data[curStore][c].length} Items</span></div></div>`;
     });
 }
@@ -188,8 +220,8 @@ function renP(hId=null) {
 
 // UTILS
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied! Paste into GitHub now."); }
-function hSec(s) { cc++; setTimeout(() => { if(cc>=3) { if(prompt("Pass")==="1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc===1) { curStore=s; renC(); show('catLayer'); } cc=0; }, 400); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("📋 Copied!\n\nPaste into GitHub store-data.json now to save permanently."); }
+function hSec(s) { cc++; setTimeout(() => { if(cc>=3) { if(prompt("Admin Pin:")==="1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc===1) { curStore=s; renC(); show('catLayer'); } cc=0; }, 400); }
 function openC(c) { curCat=c; renP(); show('pLayer'); }
 function cp(t,e) { e.stopPropagation(); navigator.clipboard.writeText(t); const ts=document.getElementById('toast'); ts.style.display='block'; setTimeout(()=>ts.style.display='none',2000); }
 function show(id) { document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
@@ -201,6 +233,7 @@ window.onload = init;
 </script>
 </body>
 </html>
+
 
 
 
