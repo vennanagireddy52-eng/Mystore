@@ -20,8 +20,14 @@
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
+        
         .info { padding:12px; }
-        .price { font-weight: 800; color: #00b894; font-size: 16px; margin-top: 5px; display: block; }
+        .info b { font-size: 14px; display: block; margin-bottom: 4px; }
+        
+        /* DESCRIPTION STYLING */
+        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+        
+        .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         
         /* UI ELEMENTS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
@@ -102,7 +108,6 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- 🛡️ THE NAVIGATION ENGINE ---
 function showLayer(id, push = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
@@ -115,7 +120,6 @@ window.onpopstate = function(e) {
     showLayer(layerId, false);
 };
 
-// --- 🚀 THE 3-CLICK HISTORY INJECTOR ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -147,7 +151,6 @@ async function init() {
     syncUI();
 }
 
-// --- RENDERERS ---
 function hSec(s) { 
     cc++;
     setTimeout(() => {
@@ -179,11 +182,16 @@ function renP(scrollToId = null) {
     if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
+        // INJECTING DESCRIPTION AND NEW STYLING BELOW
         g.innerHTML += `
             <div class="card" id="${p.id}">
                 <button class="link-symbol" onclick="cp('${shareLink}',event)">🔗</button>
                 <img src="${getImg(p.img)}">
-                <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
+                <div class="info">
+                    <b>${p.name}</b>
+                    <div class="p-desc">${p.desc || ''}</div>
+                    <span class="price">${p.price}</span>
+                </div>
                 <a class="buy-btn" href="${p.link}" target="_blank">View Product</a>
             </div>`;
     });
@@ -220,7 +228,7 @@ function saveCat() {
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete entire category "${c}" and all its products?`)) {
+    if(c && confirm(`Delete entire category "${c}"?`)) {
         delete data[s][c];
         if(data.META[s]) delete data.META[s][c];
         saveLoc(); syncUI(); renC(); alert("Deleted Locally!");
@@ -240,7 +248,7 @@ function saveP() {
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(id && confirm("Delete this product?")) {
+    if(id && confirm("Delete product?")) {
         data[s][c] = data[s][c].filter(x => x.id !== id);
         saveLoc(); syncPList(); if(curCat === c) renP(); alert("Deleted Locally!");
     }
@@ -255,7 +263,7 @@ function cp(t, e) {
     setTimeout(() => ts.style.display = 'none', 2000);
 }
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Copied! Now paste into your GitHub file."); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Copied!"); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 window.onload = init;
