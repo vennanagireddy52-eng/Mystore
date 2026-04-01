@@ -14,11 +14,11 @@
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
         
-        /* TOP BAR (Back Arrow Removed) */
+        /* TOP BAR (Back Arrow Removed for Real-Time Navigation) */
         .topbar { padding:18px; display:flex; justify-content:center; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; text-align: center; }
         .top-title { font-weight: bold; font-size: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* GRID */
+        /* PRODUCT GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; border-bottom: 1px solid #f0f0f0; }
@@ -28,7 +28,7 @@
         .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         
-        /* BUTTONS */
+        /* UI BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
@@ -95,13 +95,13 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- 🛡️ REAL-TIME NAVIGATION ENGINE ---
+// --- 🛡️ REAL-TIME HARDWARE NAVIGATION (Triangle Button) ---
 window.onpopstate = function(e) {
-    // If user hits the triangle button, the browser pops the state
+    // When the user clicks the mobile triangle button, it pops the "fake" history we created
     if (e.state && e.state.layer) {
         showLayer(e.state.layer, false);
     } else {
-        // When we run out of layers, it goes back to Pinterest
+        // Floor of the app
         showLayer('storeLayer', false);
     }
 };
@@ -110,11 +110,11 @@ function showLayer(id, push = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
     if(target) { target.classList.add('active'); target.scrollTop = 0; }
-    // Only push to history if we are moving forward
+    // Add to history only if moving FORWARD
     if (push) window.history.pushState({ layer: id }, "");
 }
 
-// --- 🚀 PINTEREST DEEP-LINK INJECTOR ---
+// --- 🚀 PINTEREST DEEP-LINK INJECTOR (Solves Direct Exit Issue) ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -127,24 +127,29 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // 1. CLEAR AND SET THE FLOOR (Store Layer)
+    // STEP 1: Set the very bottom of the history to the Store Layer
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            // 2. INJECT STEPS IN ORDER (Category -> Product)
+            
+            // STEP 2 & 3: Inject the "Missing" clicks into history
+            // This forces the triangle button to go back to Cat -> then Store -> then Pin
             setTimeout(() => {
-                window.history.pushState({ layer: 'catLayer' }, ""); // Back Click 2
-                window.history.pushState({ layer: 'pLayer' }, "");   // Back Click 1
-                showLayer('pLayer', false); 
-            }, 100);
+                // Injects the Category layer behind the user
+                window.history.pushState({ layer: 'catLayer' }, ""); 
+                // Injects the Product layer as the current active spot
+                window.history.pushState({ layer: 'pLayer' }, "");
+                
+                showLayer('pLayer', false); // Show it without adding a 3rd duplicate state
+            }, 300); // Wait 300ms for mobile browser to finish building the stack
         } else {
             setTimeout(() => {
                 window.history.pushState({ layer: 'catLayer' }, "");
                 showLayer('catLayer', false);
-            }, 100);
+            }, 300);
         }
     } else {
         showLayer('storeLayer', false);
@@ -164,7 +169,7 @@ function hSec(s) {
 
 function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
 
-// --- RENDER FUNCTIONS ---
+// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
@@ -193,10 +198,10 @@ function renP(scrollToId = null) {
                 <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
             </div>`;
     });
-    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 700);
+    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN FUNCTIONS ---
+// --- ADMIN PANEL CORE ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -222,11 +227,11 @@ function saveCat() {
     else if(!data[s][n]) { data[s][n] = []; }
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Saved!");
+    saveLoc(); syncUI(); renC(); alert("Saved locally!");
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm("Delete?")) { delete data[s][c]; if(data.META[s]) delete data.META[s][c]; saveLoc(); syncUI(); renC(); }
+    if(c && confirm("Delete category?")) { delete data[s][c]; if(data.META[s]) delete data.META[s][c]; saveLoc(); syncUI(); renC(); }
 }
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
@@ -238,7 +243,7 @@ function saveP() {
     if(!c) return alert("Select Category");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
+    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved locally!");
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
