@@ -10,35 +10,30 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* HOME SCREEN */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
-        .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; border:none; }
-        .storeCard:active { transform: scale(0.96); }
+        .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; border:none; transition: transform 0.2s; }
+        .storeCard:active { transform: scale(0.95); }
 
-        /* NAVIGATION */
         .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; }
 
-        /* GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; transition: 0.2s; }
+        .card:active { transform: scale(0.98); }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; max-height: 220px; background: #fff; }
         .info { padding:12px; }
         .price { font-weight: 800; color: #00b894; font-size: 16px; margin-top: 5px; display: block; }
         
-        /* LINK SYMBOL BUTTON */
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 32px; height: 32px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; font-size: 14px; color: #6C5CE7; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
+        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; font-size: 16px; color: #6C5CE7; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
 
-        /* ADMIN & TOAST */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.4); display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
-        input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
+        input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; outline: none; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-del { background: #ff7675 !important; }
-        #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 20px; border-radius:30px; display:none; z-index:3000; font-size: 12px; font-weight: bold; }
+        .btn-del { background: #ff7675 !important; color: white; }
+        #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:3000; font-size: 13px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -60,11 +55,11 @@
         <h3>2. Categories</h3>
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
-        <input type="text" id="catInp" placeholder="Name">
-        <input type="text" id="catImgInp" placeholder="Image URL">
+        <input type="text" id="catInp" placeholder="Category Name">
+        <input type="text" id="catImgInp" placeholder="Category Image URL">
         <div style="display:flex; gap:8px;">
-            <button class="btn-main" onclick="saveCat()">Save</button>
-            <button class="btn-main btn-del" onclick="deleteCatManual()">Delete</button>
+            <button class="btn-main" style="flex:2" onclick="saveCat()">Save Category</button>
+            <button class="btn-main btn-del" style="flex:1" onclick="deleteCatManual()">Delete</button>
         </div>
     </div>
 
@@ -72,11 +67,13 @@
         <h3>3. Products</h3>
         <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
         <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
-        <input type="text" id="pName" placeholder="Name"><textarea id="pDesc" placeholder="Description"></textarea>
-        <input type="text" id="pPrice" placeholder="Price"><input type="text" id="pImg" placeholder="Image URL">
-        <input type="text" id="pLink" placeholder="Affiliate/External Link">
-        <button class="btn-main" onclick="saveP()" style="background:#00B894;">Save Product</button>
-        <button class="btn-main btn-del" onclick="deletePManual()">Delete Product</button>
+        <input type="text" id="pName" placeholder="Product Name"><textarea id="pDesc" placeholder="Description"></textarea>
+        <input type="text" id="pPrice" placeholder="Price (e.g. ₹499)"><input type="text" id="pImg" placeholder="Product Image URL">
+        <input type="text" id="pLink" placeholder="Product Link (Amazon/Pinterest)">
+        <div style="display:flex; gap:8px;">
+            <button class="btn-main" style="flex:2; background:#00B894;" onclick="saveP()">Save Product</button>
+            <button class="btn-main btn-del" style="flex:1" onclick="deletePManual()">Delete</button>
+        </div>
     </div>
 </div>
 
@@ -101,27 +98,25 @@ let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
 
 function getImg(u) {
-    if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
+    if(!u || u.trim() === "") return "https://via.placeholder.com/300x200?text=No+Image";
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- 🛡️ THE NAVIGATION ENGINE ---
 function showLayer(id, push = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const target = document.getElementById(id);
+    if(target) {
+        target.classList.add('active');
+        target.scrollTop = 0;
+    }
     if (push) window.history.pushState({ layer: id }, "");
 }
 
-// Catches physical back button to navigate internal app layers securely
 window.onpopstate = function(e) {
-    if (e.state && e.state.layer) {
-        showLayer(e.state.layer, false);
-    } else {
-        showLayer('storeLayer', false);
-    }
+    const layerId = (e.state && e.state.layer) ? e.state.layer : 'storeLayer';
+    showLayer(layerId, false);
 };
 
-// --- 🚀 THE AUTO-STACK INJECTOR (WhatsApp/Pinterest Deep Linking) ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -133,47 +128,28 @@ async function init() {
     if(!data.META) data.META = { IND:{}, US:{} };
     
     const params = new URLSearchParams(window.location.search);
-    const s = params.get('store'), c = params.get('cat'), id = params.get('prod');
+    const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // 1. Establish the base of the history stack (Store layer)
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
-        
         if (c && data[s][c]) {
-            curCat = c; renP();
-            
-            // 2. Inject Category layer into history
+            curCat = c; 
+            renP(pid); // Pass the product ID to the renderer
             window.history.pushState({ layer: 'catLayer' }, "");
-            
-            // 3. Inject Product layer into history
             window.history.pushState({ layer: 'pLayer' }, "");
-            
-            // 4. Show the Product Layer 
             showLayer('pLayer', false);
-            
-            // Smoothly scroll to the specific product if linked
-            if(id) {
-                setTimeout(() => {
-                    const targetEl = document.getElementById(id);
-                    if(targetEl) targetEl.scrollIntoView({behavior:'smooth', block:'center'});
-                }, 600);
-            }
         } else {
-            // Only category linked
             window.history.pushState({ layer: 'catLayer' }, "");
             showLayer('catLayer', false);
         }
     } else {
-        // No link, standard homepage
         showLayer('storeLayer', false);
     }
-    
     syncUI();
 }
 
-// --- RENDERING & CLICKS ---
 function hSec(s) {
     cc++;
     setTimeout(() => {
@@ -190,21 +166,23 @@ function renC() {
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India" : "US";
     Object.keys(data[curStore]).forEach(c => {
         const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(c)}`;
-        const img = (data.META[curStore] && data.META[curStore][c]) ? data.META[curStore][c].img : (data[curStore][c][0]?.img);
+        const metaImg = (data.META[curStore] && data.META[curStore][c]) ? data.META[curStore][c].img : null;
+        const fallbackImg = (data[curStore][c] && data[curStore][c][0]) ? data[curStore][c][0].img : null;
+        const displayImg = metaImg || fallbackImg;
         g.innerHTML += `
             <div class="card" onclick="openC('${c}')">
                 <button class="link-symbol" onclick="cp('${shareLink}',event)">🔗</button>
-                <img src="${getImg(img)}">
+                <img src="${getImg(displayImg)}">
                 <div class="info"><b>${c}</b></div>
             </div>`;
     });
 }
 
-function renP() {
+function renP(scrollToId = null) {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
-    (data[curStore][curCat] || []).forEach(p => {
-        // Generates the deep link URL for this specific product
+    const products = data[curStore][curCat] || [];
+    products.forEach(p => {
         const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
         g.innerHTML += `
             <div class="card" id="${p.id}">
@@ -214,9 +192,15 @@ function renP() {
                 <a class="buy-btn" href="${p.link}" target="_blank">View Product</a>
             </div>`;
     });
+    
+    if(scrollToId) {
+        setTimeout(() => {
+            const target = document.getElementById(scrollToId);
+            if(target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
+    }
 }
 
-// --- UTILS & CLIPBOARD ---
 function cp(t, e) {
     e.stopPropagation();
     navigator.clipboard.writeText(t);
@@ -224,62 +208,74 @@ function cp(t, e) {
     ts.style.display = 'block';
     setTimeout(() => ts.style.display = 'none', 2000);
 }
+
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied!"); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied! Paste into GitHub."); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
-// --- CLOUD ADMIN FUNCTIONS ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
     let h = '<option value="">-- Select --</option>';
-    Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
+    if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
     cSel.innerHTML = h; pCSel.innerHTML = h;
 }
+
 function syncPList() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
     const pSel = document.getElementById('editPSel');
-    pSel.innerHTML = '<option value="">-- New --</option>';
-    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+    pSel.innerHTML = '<option value="">-- New Product --</option>';
+    if(c && data[s] && data[s][c]) {
+        data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+    }
 }
+
 function loadCat() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     document.getElementById('catInp').value = c;
     document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
 }
+
 function saveCat() {
     const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
     if(!n) return;
+    if(!data[s]) data[s] = {};
+    if(!data.META[s]) data.META[s] = {};
     if(old && old!==n) { data[s][n] = data[s][old]; delete data[s][old]; if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; } }
     else if(!data[s][n]) { data[s][n] = []; }
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    saveLoc(); syncUI(); alert("Saved Locally! Use Copy for Github.");
+    saveLoc(); syncUI(); renC(); alert("Saved Locally!");
 }
+
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; delete data.META[s][c]; saveLoc(); syncUI(); }
+    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; delete data.META[s][c]; saveLoc(); syncUI(); renC(); }
 }
+
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    const p = data[s][c]?.find(x => x.id === id);
-    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
+    const p = (data[s] && data[s][c]) ? data[s][c].find(x => x.id === id) : null;
+    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? (p[k.substring(1).toLowerCase()] || "") : "");
 }
+
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select Category");
+    if(!c) return alert("Select Category First");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); alert("Saved Locally!");
+    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved Locally!");
 }
+
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(id && confirm("Delete Product?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); }
+    if(id && confirm("Delete Product?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); if(curCat === c) renP(); }
 }
 
 window.onload = init;
 </script>
 </body>
 </html>
+
 
 
