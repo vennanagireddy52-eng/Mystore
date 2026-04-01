@@ -41,7 +41,18 @@
       }
     ]
   },
-  "US": {},
+  "US": {
+    "Tech": [
+      {
+        "id": "p1775067784537",
+        "name": "Ear buds ",
+        "desc": "Soundcore P20i Wireless Earbuds |Big Bass Bluetooth 5.3 Earphones",
+        "price": "$24.99 | ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg",
+        "link": "https://amzn.to/4tqi3kb"
+      }
+    ]
+  },
   "META": {
     "IND": {
       "Tech": {
@@ -57,6 +68,10 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp"
       }
     },
-    "US": {}
+    "US": {
+      "Tech": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg"
+      }
+    }
   }
 }
