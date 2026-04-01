@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>Pro Store Sync</title>
     <style>
@@ -10,9 +10,11 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* LAYERS */
+        /* STORE SELECTION */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
+        
+        /* TOP BAR */
         .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
         .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -26,7 +28,7 @@
         .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         
-        /* UI BUTTONS */
+        /* BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
@@ -105,7 +107,15 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- 🛡️ NAVIGATION ENGINE ---
+// --- 🛡️ TRIANGLE BUTTON ENGINE ---
+window.onpopstate = function(e) {
+    if (e.state && e.state.layer) {
+        showLayer(e.state.layer, false);
+    } else {
+        showLayer('storeLayer', false);
+    }
+};
+
 function showLayer(id, push = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
@@ -113,12 +123,7 @@ function showLayer(id, push = true) {
     if (push) window.history.pushState({ layer: id }, "");
 }
 
-window.onpopstate = function(e) {
-    const layerId = (e.state && e.state.layer) ? e.state.layer : 'storeLayer';
-    showLayer(layerId, false);
-};
-
-// --- 🚀 HISTORY STACK INJECTOR ---
+// --- 🚀 PINTEREST DEEP-LINK & HISTORY INJECTOR ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -131,24 +136,24 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // Lock base state
+    // Base history state
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            // Wait 100ms for mobile browser readiness
+            // Delay injection for mobile triangle button registration
             setTimeout(() => {
                 window.history.pushState({ layer: 'catLayer' }, "");
                 window.history.pushState({ layer: 'pLayer' }, "");
                 showLayer('pLayer', false);
-            }, 150);
+            }, 250);
         } else {
             setTimeout(() => {
                 window.history.pushState({ layer: 'catLayer' }, "");
                 showLayer('catLayer', false);
-            }, 150);
+            }, 250);
         }
     } else {
         showLayer('storeLayer', false);
@@ -156,6 +161,7 @@ async function init() {
     syncUI();
 }
 
+// --- NAVIGATION ---
 function hSec(s) { 
     cc++;
     setTimeout(() => {
