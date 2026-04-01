@@ -10,15 +10,15 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* STORE SELECTION */
+        /* STORE LAYER */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
         
-        /* TOP BAR */
+        /* TOP NAVIGATION */
         .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
         .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* GRID SYSTEM */
+        /* PRODUCT GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; border-bottom: 1px solid #f0f0f0; }
@@ -28,11 +28,11 @@
         .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         
-        /* BUTTONS */
+        /* UI BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ADMIN PANEL */
+        /* ADMIN INTERFACE */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.4); display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
@@ -52,11 +52,9 @@
         <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
     </div>
-    
     <div class="admin-section" style="border: 1px solid orange; background: #fffcf5;">
         <button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button>
     </div>
-
     <div class="admin-section">
         <h3>Categories</h3>
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
@@ -68,7 +66,6 @@
             <button class="btn-main btn-del" style="flex:1" onclick="deleteCatManual()">Delete</button>
         </div>
     </div>
-
     <div class="admin-section">
         <h3>Products</h3>
         <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
@@ -107,12 +104,12 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- 🛡️ TRIANGLE BUTTON ENGINE ---
+// --- 🛡️ THE 3-CLICK BACK BUTTON ENGINE ---
 window.onpopstate = function(e) {
     if (e.state && e.state.layer) {
-        showLayer(e.state.layer, false);
+        showLayer(e.state.layer, false); // Switch layers without adding new history
     } else {
-        showLayer('storeLayer', false);
+        showLayer('storeLayer', false); // Safety floor
     }
 };
 
@@ -123,7 +120,7 @@ function showLayer(id, push = true) {
     if (push) window.history.pushState({ layer: id }, "");
 }
 
-// --- 🚀 PINTEREST DEEP-LINK & HISTORY INJECTOR ---
+// --- 🚀 THE PINTEREST DEEP-LINK INJECTOR ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -136,24 +133,28 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // Base history state
+    // CLICK 3 (Floor): Set Store Selection as the starting point
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            // Delay injection for mobile triangle button registration
+            
+            // BUILD THE STAIRS IN THE BACKGROUND
             setTimeout(() => {
+                // CLICK 2: Inject Category Layer into history
                 window.history.pushState({ layer: 'catLayer' }, "");
+                // CLICK 1: Inject Product Layer (Current View)
                 window.history.pushState({ layer: 'pLayer' }, "");
+                
                 showLayer('pLayer', false);
-            }, 250);
+            }, 300); // Wait for mobile browser to register the stack
         } else {
             setTimeout(() => {
                 window.history.pushState({ layer: 'catLayer' }, "");
                 showLayer('catLayer', false);
-            }, 250);
+            }, 300);
         }
     } else {
         showLayer('storeLayer', false);
@@ -180,11 +181,7 @@ function renC() {
     if(!data[curStore]) return;
     Object.keys(data[curStore]).forEach(c => {
         const img = (data.META && data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
-        g.innerHTML += `
-            <div class="card" onclick="openC('${c}')">
-                <img src="${getImg(img)}">
-                <div class="info"><b>${c}</b></div>
-            </div>`;
+        g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
 
@@ -206,10 +203,10 @@ function renP(scrollToId = null) {
                 <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
             </div>`;
     });
-    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 700);
+    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN ENGINE ---
+// --- ADMIN TOOLS ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -235,14 +232,13 @@ function saveCat() {
     else if(!data[s][n]) { data[s][n] = []; }
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Saved Locally!");
+    saveLoc(); syncUI(); renC(); alert("Saved locally!");
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     if(c && confirm("Delete category?")) {
-        delete data[s][c];
-        if(data.META[s]) delete data.META[s][c];
-        saveLoc(); syncUI(); renC(); alert("Deleted Locally!");
+        delete data[s][c]; if(data.META[s]) delete data.META[s][c];
+        saveLoc(); syncUI(); renC();
     }
 }
 function loadP() {
@@ -255,13 +251,13 @@ function saveP() {
     if(!c) return alert("Select Category");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved Locally!");
+    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved locally!");
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(id && confirm("Delete product?")) {
         data[s][c] = data[s][c].filter(x => x.id !== id);
-        saveLoc(); syncPList(); if(curCat === c) renP(); alert("Deleted Locally!");
+        saveLoc(); syncPList(); if(curCat === c) renP();
     }
 }
 
@@ -274,7 +270,7 @@ function cp(t, e) {
     setTimeout(() => ts.style.display = 'none', 2000);
 }
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Copied!"); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON copied!"); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 window.onload = init;
