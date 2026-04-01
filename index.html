@@ -7,36 +7,53 @@
     <title>Pro Store Sync</title>
     <style>
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 100px; }
+        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🔙 FLOATING ARROW BUTTON */
-        #floatingBack { 
-            position: fixed; bottom: 30px; right: 25px; 
-            width: 55px; height: 55px; background: #1a1a1a; color: white; 
-            border-radius: 50%; display: none; align-items: center; justify-content: center;
-            font-size: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: none; 
-            cursor: pointer; z-index: 5000; transition: transform 0.2s;
+        /* 🏛️ HEADER WITH INTEGRATED BACK BUTTON */
+        .topbar { 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            color: white; 
+            background: #6C5CE7; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 30px;
         }
-        #floatingBack:active { transform: scale(0.9); background: #6C5CE7; }
+        
+        .back-icon {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: none; /* Hidden by default on Home */
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .back-icon:active { background: rgba(255,255,255,0.4); }
 
-        /* STORE LAYER */
+        .top-title { font-weight: bold; font-size: 18px; text-transform: capitalize; flex-grow: 1; }
+
+        /* STORE SELECTION */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
-        
-        /* TOP BAR */
-        .topbar { padding:18px; display:flex; justify-content:center; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; text-align: center; }
-        .top-title { font-weight: bold; font-size: 18px; }
 
-        /* GRIDS */
+        /* PRODUCT GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
         .info { padding:12px; }
-        .info b { font-size: 14px; display: block; margin-bottom: 4px; }
+        .info b { font-size: 14px; display: block; margin-bottom: 4px; color: #333; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; }
         
-        /* UI BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #6C5CE7; border:none; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
@@ -51,7 +68,6 @@
 </head>
 <body>
 
-<button id="floatingBack" onclick="goBackManual()">←</button>
 <div id="toast">Link Copied!</div>
 
 <div id="adminPanel">
@@ -83,12 +99,18 @@
 </div>
 
 <div id="catLayer" class="layer">
-    <div class="topbar"><span class="top-title" id="stTitle">Categories</span></div>
+    <div class="topbar">
+        <button class="back-icon" onclick="manualBack()">←</button>
+        <span class="top-title" id="stTitle">Categories</span>
+    </div>
     <div id="catGrid" class="grid"></div>
 </div>
 
 <div id="pLayer" class="layer">
-    <div class="topbar"><span class="top-title" id="ctTitle">Products</span></div>
+    <div class="topbar">
+        <button class="back-icon" onclick="manualBack()">←</button>
+        <span class="top-title" id="ctTitle">Products</span>
+    </div>
     <div id="pGrid" class="grid"></div>
 </div>
 
@@ -96,27 +118,26 @@
 const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
-let currentActiveLayerId = "storeLayer";
+let currentLayer = "storeLayer";
 
-// --- 🛠️ MANUAL BACK ENGINE ---
-function goBackManual() {
-    if (currentActiveLayerId === "pLayer") {
-        renderLayer("catLayer");
-    } else if (currentActiveLayerId === "catLayer") {
-        renderLayer("storeLayer");
-    }
+// --- 🛡️ HEADER BACK NAVIGATION ---
+function manualBack() {
+    if (currentLayer === "pLayer") renderLayer("catLayer");
+    else if (currentLayer === "catLayer") renderLayer("storeLayer");
 }
 
 function renderLayer(id) {
-    currentActiveLayerId = id;
+    currentLayer = id;
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
     if(target) {
         target.classList.add('active');
         target.scrollTop = 0;
+        
+        // Show Back Button in Header if not on Home
+        const backBtns = target.querySelectorAll('.back-icon');
+        backBtns.forEach(btn => btn.style.display = (id === "storeLayer") ? "none" : "flex");
     }
-    // Show arrow only if NOT on the home (Store) screen
-    document.getElementById('floatingBack').style.display = (id === "storeLayer") ? "none" : "flex";
 }
 
 async function init() {
@@ -148,7 +169,7 @@ async function init() {
 function hSec(s) { 
     cc++;
     setTimeout(() => {
-        if(cc >= 3) { if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); }
+        if(cc >= 3) { if(prompt("Admin Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); }
         else if(cc === 1) { curStore = s; renC(); renderLayer('catLayer'); }
         cc = 0;
     }, 400);
@@ -161,7 +182,6 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
-// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
@@ -192,7 +212,7 @@ function renP(scrollToId = null) {
     if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN ---
+// --- ADMIN TOOLS ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
