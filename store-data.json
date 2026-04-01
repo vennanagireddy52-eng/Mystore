@@ -19,6 +19,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg",
         "link": "https://amzn.to/4srj0I9"
       }
+    ],
+    "Kitchen": [
+      {
+        "id": "p1775063145221",
+        "name": "Vegetable chopper ",
+        "desc": "Amazon Solimo 15-in-1 Vegetable Chopper | Stainless Steel Multi Cutter, Kitchen Must-Have Tool",
+        "price": " ₹579 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg",
+        "link": "https://amzn.to/48nmPqi"
+      }
     ]
   },
   "US": {},
@@ -29,6 +39,9 @@
       },
       "Fashion": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg"
+      },
+      "Kitchen": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg"
       }
     },
     "US": {}
