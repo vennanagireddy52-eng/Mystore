@@ -10,7 +10,7 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🏛️ HEADER WITH INCREASED BACK BUTTON SIZE */
+        /* 🏛️ HEADER WITH LARGE BACK BUTTON */
         .topbar { 
             padding: 15px; 
             display: flex; 
@@ -21,26 +21,23 @@
             color: white; 
             background: #6C5CE7; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            min-height: 40px; /* Increased slightly to handle larger button */
+            min-height: 45px;
         }
         
         .back-icon {
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            /* --- INCREASED SIZE HERE --- */
-            width: 50px;  /* was 35px */
-            height: 50px; /* was 35px */
+            width: 50px; 
+            height: 50px;
             border-radius: 50%;
-            display: none; /* Hidden by default on Home */
+            display: none; 
             align-items: center;
             justify-content: center;
-            font-size: 26px; /* was 18px - arrow icon itself is larger */
-            /* --------------------------- */
+            font-size: 28px;
             margin-right: 15px;
             cursor: pointer;
             padding: 0;
-            line-height: 1;
         }
         .back-icon:active { background: rgba(255,255,255,0.4); }
 
@@ -61,41 +58,12 @@
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #6C5CE7; border:none; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ADMIN PANEL */
-        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 6000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        #adminPanel.active { display: flex; }
-        .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
-        input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
-        .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; }
         #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:7000; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div id="toast">Link Copied!</div>
-
-<div id="adminPanel">
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
-        <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%;">✕</button>
-    </div>
-    <div class="admin-section"><button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button></div>
-    <div class="admin-section">
-        <h3>Categories</h3>
-        <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
-        <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
-        <input type="text" id="catInp" placeholder="Category Name"><input type="text" id="catImgInp" placeholder="Image URL">
-        <button class="btn-main" onclick="saveCat()">Save</button>
-    </div>
-    <div class="admin-section">
-        <h3>Products</h3>
-        <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
-        <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
-        <input type="text" id="pName" placeholder="Product Name"><textarea id="pDesc" placeholder="Description"></textarea>
-        <input type="text" id="pPrice" placeholder="Price"><input type="text" id="pImg" placeholder="Image URL"><input type="text" id="pLink" placeholder="Affiliate Link">
-        <button class="btn-main" style="background:#00B894;" onclick="saveP()">Save Product</button>
-    </div>
-</div>
 
 <div id="storeLayer" class="layer active">
     <div class="storeCard" onclick="hSec('IND')">🇮🇳 INDIA STORE</div>
@@ -104,7 +72,7 @@
 
 <div id="catLayer" class="layer">
     <div class="topbar">
-        <button class="back-icon" onclick="manualBack()">←</button>
+        <button class="back-icon" onclick="history.back()">←</button>
         <span class="top-title" id="stTitle">Categories</span>
     </div>
     <div id="catGrid" class="grid"></div>
@@ -112,7 +80,7 @@
 
 <div id="pLayer" class="layer">
     <div class="topbar">
-        <button class="back-icon" onclick="manualBack()">←</button>
+        <button class="back-icon" onclick="history.back()">←</button>
         <span class="top-title" id="ctTitle">Products</span>
     </div>
     <div id="pGrid" class="grid"></div>
@@ -121,26 +89,29 @@
 <script>
 const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
-let curStore = "", curCat = "", cc = 0;
-let currentLayer = "storeLayer";
+let curStore = "", curCat = "";
 
-// --- 🛡️ HEADER BACK NAVIGATION ---
-function manualBack() {
-    if (currentLayer === "pLayer") renderLayer("catLayer");
-    else if (currentLayer === "catLayer") renderLayer("storeLayer");
-}
+// --- 🛡️ THE FIX: SYNC HARDWARE BACK BUTTON ---
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.layer) {
+        renderLayer(event.state.layer, false);
+    } else {
+        renderLayer('storeLayer', false);
+    }
+});
 
-function renderLayer(id) {
-    currentLayer = id;
+function renderLayer(id, pushHistory = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
     if(target) {
         target.classList.add('active');
         target.scrollTop = 0;
-        
-        // Show Back Button in Header if not on Home
         const backBtns = target.querySelectorAll('.back-icon');
         backBtns.forEach(btn => btn.style.display = (id === "storeLayer") ? "none" : "flex");
+    }
+    // Push to browser history so hardware button works
+    if(pushHistory) {
+        history.pushState({layer: id}, "");
     }
 }
 
@@ -151,7 +122,9 @@ async function init() {
     } catch (e) {
         data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} };
     }
-    if(!data.META) data.META = { IND:{}, US:{} };
+    
+    // Set initial state
+    history.replaceState({layer: 'storeLayer'}, "");
 
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
@@ -165,21 +138,21 @@ async function init() {
             renderLayer('catLayer');
         }
     } else {
-        renderLayer('storeLayer');
+        renderLayer('storeLayer', false);
     }
-    syncUI();
 }
 
 function hSec(s) { 
-    cc++;
-    setTimeout(() => {
-        if(cc >= 3) { if(prompt("Admin Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); }
-        else if(cc === 1) { curStore = s; renC(); renderLayer('catLayer'); }
-        cc = 0;
-    }, 400);
+    curStore = s; 
+    renC(); 
+    renderLayer('catLayer'); 
 }
 
-function openC(c) { curCat = c; renP(); renderLayer('pLayer'); }
+function openC(c) { 
+    curCat = c; 
+    renP(); 
+    renderLayer('pLayer'); 
+}
 
 function getImg(u) {
     if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
@@ -189,9 +162,8 @@ function getImg(u) {
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
-    if(!data[curStore]) return;
-    Object.keys(data[curStore]).forEach(c => {
-        const img = (data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
+    Object.keys(data[curStore] || {}).forEach(c => {
+        const img = (data.META && data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
@@ -216,50 +188,7 @@ function renP(scrollToId = null) {
     if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN TOOLS ---
-function syncUI() {
-    const s = document.getElementById('manageStore').value;
-    const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
-    let h = '<option value="">-- Select --</option>';
-    if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
-    cSel.innerHTML = h; pCSel.innerHTML = h;
-}
-function syncPList() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
-    const pSel = document.getElementById('editPSel');
-    pSel.innerHTML = '<option value="">-- New Product --</option>';
-    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
-}
-function loadCat() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    document.getElementById('catInp').value = c;
-    document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
-}
-function saveCat() {
-    const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
-    if(!n) return;
-    if(old && old!==n) { data[s][n] = data[s][old]; delete data[s][old]; if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; } }
-    else if(!data[s][n]) { data[s][n] = []; }
-    if(!data.META[s][n]) data.META[s][n] = {};
-    data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Saved!");
-}
-function loadP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    const p = data[s][c]?.find(x => x.id === id);
-    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
-}
-function saveP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select Category!");
-    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
-    if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
-}
 function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); const ts = document.getElementById('toast'); ts.style.display = 'block'; setTimeout(() => ts.style.display = 'none', 2000); }
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Data Copied!"); }
-function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 window.onload = init;
 </script>
