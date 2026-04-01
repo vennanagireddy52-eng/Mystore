@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Pro Cloud Store</title>
+    <title>Cloud Store Ultimate</title>
     <style>
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; }
         .layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f4f7f6; padding-bottom: 100px; }
@@ -26,7 +26,6 @@
         .info { padding:12px; }
         .price { font-weight: 800; color: #00b894; font-size: 16px; margin-top: 5px; display: block; }
         
-        /* BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 36px; height: 36px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; font-size: 16px; color: #6C5CE7; display: flex; align-items: center; justify-content: center; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
 
@@ -47,14 +46,14 @@
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; color:#6C5CE7;">Store Settings</h2>
+        <h2 style="margin:0; color:#6C5CE7;">Cloud Sync</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
     </div>
     
     <div class="admin-section" style="border: 2px solid orange; background: #fffcf5;">
-        <h3 style="margin-top:0; color:orange;">1. Sync Changes</h3>
+        <h3 style="margin-top:0; color:orange;">1. Permanent Save</h3>
         <button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button>
-        <p style="font-size:11px; color:#666;">Pasted this into <b>store-data.json</b> on GitHub to save permanently.</p>
+        <p style="font-size:11px; color:#666;">After clicking, paste into your <b>store-data.json</b> on GitHub.</p>
     </div>
 
     <div class="admin-section">
@@ -62,7 +61,7 @@
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India Store</option><option value="US">🇺🇸 US Store</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Add/Edit Category --</option></select>
         <input type="text" id="catInp" placeholder="Category Name">
-        <input type="text" id="catImgInp" placeholder="Category Banner URL">
+        <input type="text" id="catImgInp" placeholder="Category Image URL (Direct Link)">
         <div style="display:flex; gap:8px;">
             <button class="btn-main" onclick="saveCat()">Save Cat</button>
             <button class="btn-main btn-del" onclick="deleteCatManual()">Delete Cat</button>
@@ -78,7 +77,7 @@
         <input type="text" id="pPrice" placeholder="Price (e.g. ₹999)"><input type="text" id="pImg" placeholder="Image URL">
         <input type="text" id="pLink" placeholder="Affiliate Link">
         <button class="btn-main" onclick="saveP()" style="background:#00B894;">Save Product</button>
-        <button class="btn-main btn-del" onclick="deletePManual()" style="margin-top:5px;">Delete Product</button>
+        <button class="btn-main btn-del" onclick="deletePManual()">Delete Product</button>
     </div>
 </div>
 
@@ -109,12 +108,13 @@ function getImg(u) {
 
 async function init() {
     try {
-        const res = await fetch(GITHUB_URL + "?nocache=" + Date.now());
-        data = await res.json();
+        const res = await fetch(GITHUB_URL + "?v=" + Date.now());
+        const cloud = await res.json();
+        if(cloud && cloud.IND) data = cloud;
     } catch (e) {
         data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} };
     }
-    syncUI(); checkLink();
+    saveLoc(); syncUI(); checkLink();
 }
 
 // ADMIN CORE
@@ -134,19 +134,20 @@ function syncPList() {
 function loadCat() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     document.getElementById('catInp').value = c;
-    document.getElementById('catImgInp').value = c ? (data[s][c]._img || "") : "";
+    document.getElementById('catImgInp').value = (c && data[s][c]._img) ? data[s][c]._img : "";
 }
 function saveCat() {
-    const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
+    const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value;
+    const n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
     if(!n) return;
     if(old && old!==n) { data[s][n]=data[s][old]; delete data[s][old]; }
     else if(!data[s][n]) data[s][n]=[];
     data[s][n]._img = img;
-    saveLoc(); syncUI(); alert("Saved locally!");
+    saveLoc(); syncUI(); alert("Category Saved locally! Click Orange button next.");
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; saveLoc(); syncUI(); alert("Deleted Locally! Now update GitHub."); }
+    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; saveLoc(); syncUI(); }
 }
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
@@ -158,11 +159,11 @@ function saveP() {
     if(!c) return alert("Select Category");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); alert("Product Saved!");
+    saveLoc(); syncPList(); alert("Product Saved Locally!");
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(id && confirm("Delete product?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); alert("Deleted!"); }
+    if(id && confirm("Delete product?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); }
 }
 
 // RENDERING
@@ -172,7 +173,7 @@ function renC() {
     Object.keys(data[curStore]).forEach(c => {
         const l = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(c)}`;
         const img = data[curStore][c]._img || (data[curStore][c][0]?.img);
-        g.innerHTML += `<div class="card" onclick="openC('${c}')"><button class="link-symbol" onclick="cp('${l}',event)">🔗</button><img src="${getImg(img)}"><div class="info"><b>${c}</b><span style="font-size:10px; color:#999; display:block;">${data[curStore][c].length} Items</span></div></div>`;
+        g.innerHTML += `<div class="card" onclick="openC('${c}')"><button class="link-symbol" onclick="cp('${l}',event)">🔗</button><img src="${getImg(img)}"><div class="info"><b>${c}</b><span style="font-size:10px; color:#999; display:block; margin-top:3px;">${data[curStore][c].length} Items</span></div></div>`;
     });
 }
 function renP(hId=null) {
