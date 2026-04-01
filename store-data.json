@@ -71,6 +71,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/acca3151-aac0-4342-94f4-727fcf485fa6.jpg",
         "link": "https://amzn.to/47Bkkk0"
       }
+    ],
+    "Fashion": [
+      {
+        "id": "p1775069064279",
+        "name": "Men hoodies ",
+        "desc": "Real Essentials Men’s Cotton Henley Hoodie 3-Pack |",
+        "price": "$31.44 | ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg",
+        "link": "https://amzn.to/4m5bwbV"
+      }
     ]
   },
   "META": {
@@ -97,6 +107,9 @@
       },
       "Home": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/acca3151-aac0-4342-94f4-727fcf485fa6.jpg"
+      },
+      "Fashion": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg"
       }
     }
   }
