@@ -16,17 +16,17 @@
         .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; }
         .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* GRID */
+        /* GRID SYSTEM */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; border-bottom: 1px solid #f0f0f0; }
         
         .info { padding:12px; }
-        .info b { font-size: 14px; display: block; margin-bottom: 4px; }
+        .info b { font-size: 14px; display: block; margin-bottom: 4px; line-height: 1.2; }
         .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         
-        /* UI ELEMENTS */
+        /* UI BUTTONS */
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
@@ -56,7 +56,7 @@
     </div>
 
     <div class="admin-section">
-        <h3>Manage Categories</h3>
+        <h3>Categories</h3>
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
         <input type="text" id="catInp" placeholder="Category Name">
@@ -68,7 +68,7 @@
     </div>
 
     <div class="admin-section">
-        <h3>Manage Products</h3>
+        <h3>Products</h3>
         <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
         <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
         <input type="text" id="pName" placeholder="Product Name"><textarea id="pDesc" placeholder="Description"></textarea>
@@ -105,10 +105,11 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
+// --- 🛡️ NAVIGATION ENGINE ---
 function showLayer(id, push = true) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
-    if(target) target.classList.add('active');
+    if(target) { target.classList.add('active'); target.scrollTop = 0; }
     if (push) window.history.pushState({ layer: id }, "");
 }
 
@@ -117,6 +118,7 @@ window.onpopstate = function(e) {
     showLayer(layerId, false);
 };
 
+// --- 🚀 HISTORY STACK INJECTOR ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -129,18 +131,24 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
+    // Lock base state
     window.history.replaceState({ layer: 'storeLayer' }, "");
 
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            window.history.pushState({ layer: 'catLayer' }, "");
-            window.history.pushState({ layer: 'pLayer' }, "");
-            showLayer('pLayer', false);
+            // Wait 100ms for mobile browser readiness
+            setTimeout(() => {
+                window.history.pushState({ layer: 'catLayer' }, "");
+                window.history.pushState({ layer: 'pLayer' }, "");
+                showLayer('pLayer', false);
+            }, 150);
         } else {
-            window.history.pushState({ layer: 'catLayer' }, "");
-            showLayer('catLayer', false);
+            setTimeout(() => {
+                window.history.pushState({ layer: 'catLayer' }, "");
+                showLayer('catLayer', false);
+            }, 150);
         }
     } else {
         showLayer('storeLayer', false);
@@ -159,9 +167,10 @@ function hSec(s) {
 
 function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
 
+// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
-    document.getElementById('stTitle').innerText = curStore === "IND" ? "India" : "US";
+    document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
     if(!data[curStore]) return;
     Object.keys(data[curStore]).forEach(c => {
         const img = (data.META && data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
@@ -179,7 +188,6 @@ function renP(scrollToId = null) {
     if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        // Clicking the image now opens the affiliate link directly
         g.innerHTML += `
             <div class="card" id="${p.id}">
                 <button class="link-symbol" onclick="cp('${shareLink}',event)">🔗</button>
@@ -192,10 +200,10 @@ function renP(scrollToId = null) {
                 <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
             </div>`;
     });
-    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 600);
+    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 700);
 }
 
-// --- ADMIN FUNCTIONS ---
+// --- ADMIN ENGINE ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -225,7 +233,7 @@ function saveCat() {
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm(`Delete entire category "${c}"?`)) {
+    if(c && confirm("Delete category?")) {
         delete data[s][c];
         if(data.META[s]) delete data.META[s][c];
         saveLoc(); syncUI(); renC(); alert("Deleted Locally!");
