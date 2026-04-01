@@ -18,20 +18,51 @@
 
         /* GRID */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
         .info { padding:12px; }
         .price { font-weight: 800; color: #00b894; font-size: 16px; margin-top: 5px; display: block; }
         
         /* UI ELEMENTS */
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; }
+        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
+        
+        /* ADMIN */
+        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.4); display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        #adminPanel.active { display: flex; }
+        .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
+        input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
+        .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
+
         #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:3000; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="toast">Link Copied!</div>
+
+<div id="adminPanel">
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="margin:0; color:#6C5CE7;">Admin</h2>
+        <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
+    </div>
+    <div class="admin-section">
+        <button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button>
+    </div>
+    <div class="admin-section">
+        <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
+        <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
+        <input type="text" id="catInp" placeholder="Name"><input type="text" id="catImgInp" placeholder="Image URL">
+        <button class="btn-main" onclick="saveCat()">Save Category</button>
+    </div>
+    <div class="admin-section">
+        <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
+        <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
+        <input type="text" id="pName" placeholder="Name"><textarea id="pDesc" placeholder="Description"></textarea>
+        <input type="text" id="pPrice" placeholder="Price"><input type="text" id="pImg" placeholder="Image URL"><input type="text" id="pLink" placeholder="Link">
+        <button class="btn-main" onclick="saveP()" style="background:#00B894;">Save Product</button>
+    </div>
+</div>
 
 <div id="storeLayer" class="layer active">
     <div class="storeCard" onclick="hSec('IND')">🇮🇳 INDIA STORE</div>
@@ -51,7 +82,12 @@
 <script>
 const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
-let curStore = "", curCat = "";
+let curStore = "", curCat = "", cc = 0;
+
+function getImg(u) {
+    if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
+    return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
+}
 
 // --- 🛡️ THE NAVIGATION ENGINE ---
 function showLayer(id, push = true) {
@@ -61,7 +97,6 @@ function showLayer(id, push = true) {
     if (push) window.history.pushState({ layer: id }, "");
 }
 
-// Mobile Hardware Back Button Handler
 window.onpopstate = function(e) {
     const layerId = (e.state && e.state.layer) ? e.state.layer : 'storeLayer';
     showLayer(layerId, false);
@@ -75,6 +110,7 @@ async function init() {
     } catch (e) {
         data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} };
     }
+    if(!data.META) data.META = { IND:{}, US:{} };
 
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
@@ -97,29 +133,36 @@ async function init() {
             // Show the Product layer (without pushing again)
             showLayer('pLayer', false);
         } else {
-            // Only Category was linked
             window.history.pushState({ layer: 'catLayer' }, "");
             showLayer('catLayer', false);
         }
     } else {
-        // No deep link, start at Store Selection
         showLayer('storeLayer', false);
     }
+    syncUI();
 }
 
 // --- RENDERERS ---
-function hSec(s) { curStore = s; renC(); showLayer('catLayer'); }
+function hSec(s) { 
+    cc++;
+    setTimeout(() => {
+        if(cc >= 3) { if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); }
+        else if(cc === 1) { curStore = s; renC(); showLayer('catLayer'); }
+        cc = 0;
+    }, 400);
+}
+
 function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
 
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India" : "US";
     Object.keys(data[curStore]).forEach(c => {
-        const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(c)}`;
+        // NOTE: Link Symbol removed for Category cards as requested
+        const img = (data.META && data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
         g.innerHTML += `
             <div class="card" onclick="openC('${c}')">
-                <button class="link-symbol" onclick="cp('${shareLink}',event)">🔗</button>
-                <img src="${(data.META && data.META[curStore][c]?.img) || data[curStore][c][0]?.img || ''}">
+                <img src="${getImg(img)}">
                 <div class="info"><b>${c}</b></div>
             </div>`;
     });
@@ -129,16 +172,58 @@ function renP(scrollToId = null) {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
     (data[curStore][curCat] || []).forEach(p => {
+        // Link Symbol RETAINED for Products for easy sharing
         const shareLink = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
         g.innerHTML += `
             <div class="card" id="${p.id}">
                 <button class="link-symbol" onclick="cp('${shareLink}',event)">🔗</button>
-                <img src="${p.img}">
+                <img src="${getImg(p.img)}">
                 <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
                 <a class="buy-btn" href="${p.link}" target="_blank">View Product</a>
             </div>`;
     });
-    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 500);
+    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 600);
+}
+
+// --- ADMIN & UTILS ---
+function syncUI() {
+    const s = document.getElementById('manageStore').value;
+    const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
+    let h = '<option value="">-- Select --</option>';
+    if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
+    cSel.innerHTML = h; pCSel.innerHTML = h;
+}
+function syncPList() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
+    const pSel = document.getElementById('editPSel');
+    pSel.innerHTML = '<option value="">-- New --</option>';
+    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+}
+function loadCat() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
+    document.getElementById('catInp').value = c;
+    document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
+}
+function saveCat() {
+    const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
+    if(!n) return;
+    if(old && old!==n) { data[s][n] = data[s][old]; delete data[s][old]; if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; } }
+    else if(!data[s][n]) { data[s][n] = []; }
+    if(!data.META[s][n]) data.META[s][n] = {};
+    data.META[s][n].img = img;
+    saveLoc(); syncUI(); alert("Saved Locally!");
+}
+function loadP() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
+    const p = data[s][c]?.find(x => x.id === id);
+    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
+}
+function saveP() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
+    if(!c) return alert("Select Category");
+    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
+    if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
+    saveLoc(); syncPList(); alert("Saved Locally!");
 }
 
 function cp(t, e) {
@@ -148,6 +233,9 @@ function cp(t, e) {
     ts.style.display = 'block';
     setTimeout(() => ts.style.display = 'none', 2000);
 }
+function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied!"); }
+function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 window.onload = init;
 </script>
