@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Cloud Store Ultimate</title>
+    <title>Cloud Store Pro</title>
     <style>
-        body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; }
-        .layer { display:none; position:absolute; top:0; left:0; width:100%; height:100%; overflow:auto; background:#f4f7f6; padding-bottom: 100px; }
+        body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; transition: transform 0.3s ease; }
         .active { display:block; }
         
         /* HOME SCREEN */
-        #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); min-height: 100vh; }
-        .storeCard { background:white; width:80%; max-width:300px; padding:45px 20px; margin:15px; text-align:center; border-radius:25px; font-size:22px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; border:none; transition: 0.2s; }
-        .storeCard:active { transform: scale(0.95); }
+        #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; position: relative; }
+        .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; border:none; transition: 0.2s; }
+        .storeCard:active { transform: scale(0.96); }
 
         /* NAVIGATION */
         .topbar { padding:15px; display:flex; gap:12px; align-items:center; position:sticky; top:0; z-index:100; color:white; background:#6C5CE7; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .top-title { font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; }
 
         /* GRID SYSTEM */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); cursor:pointer; border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; max-height: 220px; background: #fff; }
         .info { padding:12px; }
         .price { font-weight: 800; color: #00b894; font-size: 16px; margin-top: 5px; display: block; }
@@ -46,14 +46,14 @@
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; color:#6C5CE7;">Cloud Sync</h2>
+        <h2 style="margin:0; color:#6C5CE7;">Admin Console</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
     </div>
     
     <div class="admin-section" style="border: 2px solid orange; background: #fffcf5;">
-        <h3 style="margin-top:0; color:orange;">1. Permanent Save</h3>
+        <h3 style="margin-top:0; color:orange;">1. Permanent Sync</h3>
         <button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button>
-        <p style="font-size:11px; color:#666;">After clicking, paste into your <b>store-data.json</b> on GitHub.</p>
+        <p style="font-size:11px; color:#666;">You must paste this into GitHub <b>store-data.json</b> or changes will vanish on refresh.</p>
     </div>
 
     <div class="admin-section">
@@ -61,7 +61,7 @@
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India Store</option><option value="US">🇺🇸 US Store</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Add/Edit Category --</option></select>
         <input type="text" id="catInp" placeholder="Category Name">
-        <input type="text" id="catImgInp" placeholder="Category Image URL (Direct Link)">
+        <input type="text" id="catImgInp" placeholder="Category Banner URL">
         <div style="display:flex; gap:8px;">
             <button class="btn-main" onclick="saveCat()">Save Cat</button>
             <button class="btn-main btn-del" onclick="deleteCatManual()">Delete Cat</button>
@@ -70,7 +70,7 @@
 
     <div class="admin-section">
         <h3>3. Products</h3>
-        <select id="pCatSel" onchange="syncPList()"><option value="">Choose Category First</option></select>
+        <select id="pCatSel" onchange="syncPList()"><option value="">Select Category First</option></select>
         <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
         <hr style="border:0; border-top:1px solid #ddd; margin:15px 0;">
         <input type="text" id="pName" placeholder="Name"><textarea id="pDesc" placeholder="Description"></textarea>
@@ -87,12 +87,12 @@
 </div>
 
 <div id="catLayer" class="layer">
-    <div class="topbar"><span onclick="goHome()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="stTitle">Categories</span></div>
+    <div class="topbar"><span onclick="window.history.back()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="stTitle">Categories</span></div>
     <div id="catGrid" class="grid"></div>
 </div>
 
 <div id="pLayer" class="layer">
-    <div class="topbar"><span onclick="backC()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="ctTitle">Products</span></div>
+    <div class="topbar"><span onclick="window.history.back()" style="cursor:pointer; font-size:24px; padding:0 10px;">⬅</span><span class="top-title" id="ctTitle">Products</span></div>
     <div id="pGrid" class="grid"></div>
 </div>
 
@@ -106,6 +106,7 @@ function getImg(u) {
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
+// --- INITIALIZATION ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -114,15 +115,26 @@ async function init() {
     } catch (e) {
         data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{ IND:{}, US:{} } };
     }
-    // Safety check: ensure META vault exists
     if(!data.META) data.META = { IND:{}, US:{} };
-    if(!data.META.IND) data.META.IND = {};
-    if(!data.META.US) data.META.US = {};
-    
     saveLoc(); syncUI(); checkLink();
+    
+    // Register the first page for back-button navigation
+    window.history.replaceState({ layer: 'storeLayer' }, "", "");
 }
 
-// ADMIN CORE
+// --- NAVIGATION (BACK BUTTON FIX) ---
+function show(id, pushToHistory = true) {
+    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (pushToHistory) window.history.pushState({ layer: id }, "", "");
+}
+
+window.addEventListener('popstate', (e) => {
+    const layerId = (e.state && e.state.layer) ? e.state.layer : 'storeLayer';
+    show(layerId, false);
+});
+
+// --- ADMIN LOGIC ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -144,34 +156,18 @@ function loadCat() {
 function saveCat() {
     const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value;
     const n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
-    if(!n) return alert("Enter a category name!");
-
-    // Rename logic
+    if(!n) return alert("Enter Name");
     if(old && old!==n) { 
         data[s][n] = data[s][old]; delete data[s][old]; 
         if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; }
-    } else if(!data[s][n]) { 
-        data[s][n] = []; 
-    }
-    
-    // Save image to safe META vault
+    } else if(!data[s][n]) { data[s][n] = []; }
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    
-    saveLoc(); syncUI(); 
-    document.getElementById('catInp').value = ""; document.getElementById('catImgInp').value = "";
-    alert("✅ Category Saved! Now click the ORANGE COPY button.");
+    saveLoc(); syncUI(); alert("Saved Locally!");
 }
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(!c) return alert("Select a category to delete!");
-    if(confirm(`Are you sure you want to delete "${c}" and all its products?`)) { 
-        delete data[s][c]; 
-        if(data.META[s]) delete data.META[s][c];
-        saveLoc(); syncUI(); 
-        document.getElementById('catInp').value = ""; document.getElementById('catImgInp').value = "";
-        alert("🗑️ Category Deleted! Now click the ORANGE COPY button."); 
-    }
+    if(c && confirm(`Delete "${c}"?`)) { delete data[s][c]; delete data.META[s][c]; saveLoc(); syncUI(); }
 }
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
@@ -180,32 +176,24 @@ function loadP() {
 }
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select a Category first!");
+    if(!c) return alert("Select Cat");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); 
-    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = "");
-    alert("✅ Product Saved! Now click the ORANGE COPY button.");
+    saveLoc(); syncPList(); alert("Saved Locally!");
 }
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!id) return alert("Select a product to delete!");
-    if(confirm("Delete this product?")) { 
-        data[s][c] = data[s][c].filter(x => x.id !== id); 
-        saveLoc(); syncPList(); 
-        ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = "");
-        alert("🗑️ Product Deleted! Now click the ORANGE COPY button."); 
-    }
+    if(id && confirm("Delete?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); }
 }
 
-// RENDERING
+// --- RENDERING ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
     Object.keys(data[curStore]).forEach(c => {
         const l = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(c)}`;
-        const img = (data.META[curStore] && data.META[curStore][c] && data.META[curStore][c].img) ? data.META[curStore][c].img : (data[curStore][c][0]?.img);
-        g.innerHTML += `<div class="card" onclick="openC('${c}')"><button class="link-symbol" onclick="cp('${l}',event)">🔗</button><img src="${getImg(img)}"><div class="info"><b>${c}</b><span style="font-size:10px; color:#999; display:block; margin-top:3px;">${data[curStore][c].length} Items</span></div></div>`;
+        const img = (data.META[curStore] && data.META[curStore][c]) ? data.META[curStore][c].img : (data[curStore][c][0]?.img);
+        g.innerHTML += `<div class="card" onclick="openC('${c}')"><button class="link-symbol" onclick="cp('${l}',event)">🔗</button><img src="${getImg(img)}"><div class="info"><b>${c}</b><span style="font-size:10px; color:#999; display:block;">${data[curStore][c].length} Items</span></div></div>`;
     });
 }
 function renP(hId=null) {
@@ -218,22 +206,20 @@ function renP(hId=null) {
     if(hId) setTimeout(()=>document.getElementById(hId)?.scrollIntoView({behavior:'smooth',block:'center'}),600);
 }
 
-// UTILS
+// --- UTILS ---
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("📋 Copied!\n\nPaste into GitHub store-data.json now to save permanently."); }
-function hSec(s) { cc++; setTimeout(() => { if(cc>=3) { if(prompt("Admin Pin:")==="1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc===1) { curStore=s; renC(); show('catLayer'); } cc=0; }, 400); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("📋 Copied! Paste to GitHub now."); }
+function hSec(s) { cc++; setTimeout(() => { if(cc>=3) { if(prompt("Pass")==="1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc===1) { curStore=s; renC(); show('catLayer'); } cc=0; }, 400); }
 function openC(c) { curCat=c; renP(); show('pLayer'); }
 function cp(t,e) { e.stopPropagation(); navigator.clipboard.writeText(t); const ts=document.getElementById('toast'); ts.style.display='block'; setTimeout(()=>ts.style.display='none',2000); }
-function show(id) { document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function goHome() { show('storeLayer'); }
-function backC() { show('catLayer'); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
-function checkLink() { const p=new URLSearchParams(location.search), s=p.get('store'), c=p.get('cat'), id=p.get('prod'); if(s && data[s]){ curStore=s; if(c && data[s][c]){ curCat=c; renP(id); show('pLayer'); } else { renC(); show('catLayer'); } } }
+function checkLink() { const p=new URLSearchParams(location.search), s=p.get('store'), c=p.get('cat'), id=p.get('prod'); if(s && data[s]){ curStore=s; if(c && data[s][c]){ curCat=c; renP(id); show('pLayer', false); } else { renC(); show('catLayer', false); } } }
 window.onload = init;
 </script>
 </body>
 </html>
 
+ 
 
 
 
