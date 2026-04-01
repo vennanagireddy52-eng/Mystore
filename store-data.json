@@ -29,6 +29,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg",
         "link": "https://amzn.to/48nmPqi"
       }
+    ],
+    "Home": [
+      {
+        "id": "p1775065584986",
+        "name": "Wall hooks ",
+        "desc": "JIALTO Wooden Wall Hooks Set | 6PCS Self-Adhesive Bathroom & Kitchen Hooks, Stylish Home Decor Organizer",
+        "price": "₹499 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp",
+        "link": "https://amzn.to/4s3LkQB"
+      }
     ]
   },
   "US": {},
@@ -42,6 +52,9 @@
       },
       "Kitchen": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg"
+      },
+      "Home": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp"
       }
     },
     "US": {}
