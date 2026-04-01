@@ -7,9 +7,19 @@
     <title>Pro Store Sync</title>
     <style>
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
+        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 100px; }
         .active { display:block; }
         
+        /* 🔙 FLOATING ARROW BUTTON */
+        #floatingBack { 
+            position: fixed; bottom: 30px; right: 25px; 
+            width: 55px; height: 55px; background: #1a1a1a; color: white; 
+            border-radius: 50%; display: none; align-items: center; justify-content: center;
+            font-size: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: none; 
+            cursor: pointer; z-index: 5000; transition: transform 0.2s;
+        }
+        #floatingBack:active { transform: scale(0.9); background: #6C5CE7; }
+
         /* STORE LAYER */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
@@ -27,34 +37,35 @@
         .price { font-weight: 800; color: #00b894; font-size: 15px; }
         
         /* UI BUTTONS */
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: none; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; }
+        .link-symbol { position:absolute; top:10px; right:10px; background:white; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #6C5CE7; border:none; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
         /* ADMIN PANEL */
-        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 50px rgba(0,0,0,0.4); display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 6000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
         input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
-        .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-        #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:3000; font-size: 13px; font-weight: bold; }
+        .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; }
+        #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:7000; font-size: 13px; }
     </style>
 </head>
 <body>
 
+<button id="floatingBack" onclick="goBackManual()">←</button>
 <div id="toast">Link Copied!</div>
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
         <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
-        <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
+        <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%;">✕</button>
     </div>
     <div class="admin-section"><button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button></div>
     <div class="admin-section">
         <h3>Categories</h3>
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
-        <input type="text" id="catInp" placeholder="Category Name"><input type="text" id="catImgInp" placeholder="Category Image URL">
-        <button class="btn-main" onclick="saveCat()">Save Category</button>
+        <input type="text" id="catInp" placeholder="Category Name"><input type="text" id="catImgInp" placeholder="Image URL">
+        <button class="btn-main" onclick="saveCat()">Save</button>
     </div>
     <div class="admin-section">
         <h3>Products</h3>
@@ -85,29 +96,27 @@
 const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
+let currentActiveLayerId = "storeLayer";
 
-// --- 🛡️ HARDWARE NAVIGATION ENGINE ---
-// This handles the physical back button on the phone
-window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.layer) {
-        showLayer(event.state.layer, false);
-    } else {
-        // If we run out of layers, go back to the home layer
-        showLayer('storeLayer', false);
+// --- 🛠️ MANUAL BACK ENGINE ---
+function goBackManual() {
+    if (currentActiveLayerId === "pLayer") {
+        renderLayer("catLayer");
+    } else if (currentActiveLayerId === "catLayer") {
+        renderLayer("storeLayer");
     }
-});
+}
 
-function showLayer(id, push = true) {
+function renderLayer(id) {
+    currentActiveLayerId = id;
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     const target = document.getElementById(id);
     if(target) {
         target.classList.add('active');
         target.scrollTop = 0;
     }
-    // Record this step in the mobile's internal "Back" memory
-    if (push) {
-        history.pushState({ layer: id }, "", "");
-    }
+    // Show arrow only if NOT on the home (Store) screen
+    document.getElementById('floatingBack').style.display = (id === "storeLayer") ? "none" : "flex";
 }
 
 async function init() {
@@ -122,28 +131,16 @@ async function init() {
     const params = new URLSearchParams(window.location.search);
     const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
 
-    // 1. Set the very first point of history (The Exit Point)
-    history.replaceState({ layer: 'storeLayer' }, "");
-
     if (s && data[s]) {
         curStore = s; renC();
         if (c && data[s][c]) {
             curCat = c; renP(pid);
-            
-            // 2. THE PINTEREST TRICK: 
-            // We push the Category layer into the "Back" memory first...
-            history.pushState({ layer: 'catLayer' }, "");
-            
-            // 3. ...then we show the Product layer. 
-            // Now the phone's back button "sees" a path to follow.
-            setTimeout(() => {
-                showLayer('pLayer'); 
-            }, 50); 
+            renderLayer('pLayer');
         } else {
-            showLayer('catLayer');
+            renderLayer('catLayer');
         }
     } else {
-        showLayer('storeLayer', false);
+        renderLayer('storeLayer');
     }
     syncUI();
 }
@@ -152,18 +149,19 @@ function hSec(s) {
     cc++;
     setTimeout(() => {
         if(cc >= 3) { if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); }
-        else if(cc === 1) { curStore = s; renC(); showLayer('catLayer'); }
+        else if(cc === 1) { curStore = s; renC(); renderLayer('catLayer'); }
         cc = 0;
     }, 400);
 }
 
-function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
+function openC(c) { curCat = c; renP(); renderLayer('pLayer'); }
 
 function getImg(u) {
     if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
     return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
 }
 
+// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
@@ -194,7 +192,7 @@ function renP(scrollToId = null) {
     if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN & TOOLS ---
+// --- ADMIN ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -236,7 +234,7 @@ function saveP() {
 }
 function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); const ts = document.getElementById('toast'); ts.style.display = 'block'; setTimeout(() => ts.style.display = 'none', 2000); }
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Copied!"); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("JSON Data Copied!"); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
 
 window.onload = init;
