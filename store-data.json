@@ -65,6 +65,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp",
         "link": "https://amzn.to/4dUImu8"
       }
+    ],
+    "Desk set-up": [
+      {
+        "id": "p1775155654004",
+        "name": "Laptop stand",
+        "desc": "Dyazo Adjustable Aluminum Laptop Stand – Ergonomic Foldable Riser ",
+        "price": "₹369 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp",
+        "link": "https://amzn.to/3PQthzO"
+      }
     ]
   },
   "US": {
@@ -125,6 +135,9 @@
       },
       "Books": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp"
+      },
+      "Desk set-up": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp"
       }
     },
     "US": {
