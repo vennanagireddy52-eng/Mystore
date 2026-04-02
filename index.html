@@ -20,14 +20,14 @@
         
         /* 🏛️ HEADER & LARGE BACK BUTTON */
         .topbar { padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; color: white; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); min-height: 55px; }
-        .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 50px; height: 50px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 32px; margin-right: 15px; cursor: pointer; }
+        .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 52px; height: 52px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 32px; margin-right: 15px; cursor: pointer; }
         .top-title { font-weight: bold; font-size: 18px; text-transform: capitalize; flex-grow: 1; }
 
-        /* STORE CARDS */
+        /* STORE SELECTION */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
 
-        /* GRID */
+        /* GRID & PRODUCT CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
@@ -39,7 +39,7 @@
         .link-symbol { position:absolute; top:10px; right:10px; background:white; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #6C5CE7; border:none; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ADMIN PANEL */
+        /* ⚙️ ADMIN PANEL */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 6000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
@@ -102,7 +102,7 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", clickTimer, clickCount = 0;
 
-// 🛡️ THE PINTEREST BACK-BUTTON FIX
+// 🛡️ PINTEREST IN-APP BROWSER NAVIGATION FIX
 window.addEventListener('popstate', e => {
     if (e.state && e.state.layer) renderLayer(e.state.layer, false);
     else renderLayer('storeLayer', false);
@@ -128,7 +128,7 @@ async function init() {
     }
     if(!data.META) data.META = { IND:{}, US:{} };
 
-    // Push two states immediately to prevent exiting the Pinterest browser
+    // Set initial history state
     history.replaceState({layer: 'storeLayer'}, "");
     
     const p = new URLSearchParams(window.location.search);
@@ -138,10 +138,11 @@ async function init() {
         curStore = s; renC();
         if (c && data[s][c]) { 
             curCat = c; renP(pid); 
-            renderLayer('catLayer'); // Push category history
-            renderLayer('pLayer');   // Show product history
+            // Build history stack for Pinterest back button
+            renderLayer('catLayer', true); 
+            renderLayer('pLayer', true);   
         } else {
-            renderLayer('catLayer');
+            renderLayer('catLayer', true);
         }
     } else {
         renderLayer('storeLayer', false);
@@ -190,7 +191,7 @@ function renP(scrollToId = null) {
     if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// ADMIN FUNCTIONS
+// --- ADMIN SYSTEM ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
