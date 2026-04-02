@@ -55,6 +55,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5f4a23b4-b37d-4809-b3f9-77384b0ed603.jpg",
         "link": "https://amzn.to/47FFQEb"
       }
+    ],
+    "Books": [
+      {
+        "id": "p1775155235713",
+        "name": "Stop letting everything affects you",
+        "desc": "Stop Letting Everything Affect You Book – Break Overthinking Best Deal\n",
+        "price": "₹260 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp",
+        "link": "https://amzn.to/4dUImu8"
+      }
     ]
   },
   "US": {
@@ -112,6 +122,9 @@
       },
       "Home": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp"
+      },
+      "Books": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp"
       }
     },
     "US": {
