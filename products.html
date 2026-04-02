@@ -1,24 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Products</title>
-<link rel="stylesheet" href="style.css">
+<title>Product</title>
 </head>
 
 <body>
 
-<header>
-<button onclick="history.back()">⬅ Back</button>
-<h3 id="catTitle"></h3>
-</header>
-
-<div id="productGrid"></div>
-
-<script src="script.js"></script>
+<h1>Product Page</h1>
+<p>This product opened from Pinterest.</p>
 
 <script>
-loadProducts();
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Check visitor came from Pinterest
+    var referrer = document.referrer.toLowerCase();
+
+    if (referrer.includes("pinterest")) {
+
+        // Add history layers ONLY once
+        if (!sessionStorage.getItem("historyAdded")) {
+
+            sessionStorage.setItem("historyAdded", "yes");
+
+            // Create 3 navigation layers
+            history.replaceState({page:"product"}, "", window.location.href);
+
+            history.pushState({page:"category"}, "", "#category");
+
+            history.pushState({page:"store"}, "", "#store");
+        }
+    }
+});
+</script>
+
+<script>
+// Handle BACK button navigation
+window.addEventListener("popstate", function(event) {
+
+    if (!event.state) return;
+
+    if (event.state.page === "category") {
+        window.location.href = "category.html";
+    }
+
+    if (event.state.page === "store") {
+        window.location.href = "store.html";
+    }
+
+});
 </script>
 
 </body>
