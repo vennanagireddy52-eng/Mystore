@@ -1,150 +1,207 @@
-/* ================= STATE ================= */
+/* ===============================
+   PAGE ELEMENTS
+================================*/
+
+const storePage = document.getElementById("storePage");
+const categoryPage = document.getElementById("categoryPage");
+const productPage = document.getElementById("productPage");
 
 let currentStore=null;
 let currentCategory=null;
 let currentProduct=null;
 
 
-/* ================= HISTORY PUSH ================= */
+/* ===============================
+   SHOW PAGES (FIXED)
+================================*/
+
+function showStore(){
+    storePage.style.display="block";
+    categoryPage.style.display="none";
+    productPage.style.display="none";
+}
+
+function showCategory(){
+    storePage.style.display="none";
+    categoryPage.style.display="block";
+    productPage.style.display="none";
+}
+
+function showProduct(){
+    storePage.style.display="none";
+    categoryPage.style.display="none";
+    productPage.style.display="block";
+}
+
+
+/* ===============================
+   HISTORY PUSH
+================================*/
 
 function push(state,url){
-history.pushState(state,"",url);
+    history.pushState(state,"",url);
 }
 
 
-/* ================= PAGE SHOW ================= */
-
-function show(store,category,product){
-
-document.getElementById("storePage").style.display =
-store && !category ? "block":"none";
-
-document.getElementById("categoryPage").style.display =
-category && !product ? "block":"none";
-
-document.getElementById("productPage").style.display =
-product ? "block":"none";
-}
-
-
-/* ================= STORE ================= */
+/* ===============================
+   OPEN STORE
+================================*/
 
 function openStore(store){
 
-currentStore=store;
-currentCategory=null;
-currentProduct=null;
+    currentStore=store;
+    currentCategory=null;
+    currentProduct=null;
 
-show(true,false,false);
+    showStore();
 
-push(
-{page:"store",store},
-`?store=${store}`
-);
+    push(
+        {page:"store",store},
+        `?store=${store}`
+    );
 }
 
 
-/* ================= CATEGORY ================= */
+/* ===============================
+   OPEN CATEGORY
+================================*/
 
 function openCategory(store,cat){
 
-currentStore=store;
-currentCategory=cat;
-currentProduct=null;
+    currentStore=store;
+    currentCategory=cat;
+    currentProduct=null;
 
-document.getElementById("categoryTitle").innerText=cat;
+    document.getElementById("categoryTitle").innerText=cat;
 
-show(false,true,false);
+    showCategory();
 
-push(
-{page:"category",store,cat},
-`?store=${store}&cat=${cat}`
-);
+    push(
+        {page:"category",store,cat},
+        `?store=${store}&cat=${cat}`
+    );
 }
 
 
-/* ================= PRODUCT ================= */
+/* ===============================
+   OPEN PRODUCT
+================================*/
 
 function openProduct(store,cat,prod){
 
-currentStore=store;
-currentCategory=cat;
-currentProduct=prod;
+    currentStore=store;
+    currentCategory=cat;
+    currentProduct=prod;
 
-show(false,false,true);
+    showProduct();
 
-push(
-{page:"product",store,cat,prod},
-`?store=${store}&cat=${cat}&prod=${prod}`
-);
+    push(
+        {page:"product",store,cat,prod},
+        `?store=${store}&cat=${cat}&prod=${prod}`
+    );
 }
 
 
-/* ================= BACK BUTTONS ================= */
+/* ===============================
+   BACK BUTTON SUPPORT
+================================*/
 
 function goStore(){
-history.back();
+    history.back();
 }
 
 function goCategory(){
-history.back();
+    history.back();
 }
 
 
-/* ================= ANDROID BACK SUPPORT ================= */
+/* ===============================
+   ANDROID BACK BUTTON
+================================*/
 
 window.onpopstate=function(e){
 
-if(!e.state){
-location.reload();
-return;
-}
+    if(!e.state){
+        location.reload();
+        return;
+    }
 
-const s=e.state;
+    const s=e.state;
 
-if(s.page==="store") openStore(s.store);
-if(s.page==="category") openCategory(s.store,s.cat);
-if(s.page==="product") openProduct(s.store,s.cat,s.prod);
+    if(s.page==="store"){
+        showStore();
+    }
+
+    if(s.page==="category"){
+        document.getElementById("categoryTitle").innerText=s.cat;
+        showCategory();
+    }
+
+    if(s.page==="product"){
+        showProduct();
+    }
 };
 
 
-/* ================= PINTEREST DIRECT LOAD ================= */
+/* ===============================
+   PINTEREST DIRECT LINK LOAD
+================================*/
 
 window.onload=function(){
 
-const p=new URLSearchParams(location.search);
+    const p=new URLSearchParams(location.search);
 
-const store=p.get("store");
-const cat=p.get("cat");
-const prod=p.get("prod");
+    const store=p.get("store");
+    const cat=p.get("cat");
+    const prod=p.get("prod");
 
-if(store && cat && prod){
-openStore(store);
-openCategory(store,cat);
-openProduct(store,cat,prod);
-return;
-}
+    if(store && cat && prod){
+        showStore();
+        showCategory();
+        showProduct();
 
-if(store && cat){
-openStore(store);
-openCategory(store,cat);
-return;
-}
+        history.replaceState(
+            {page:"product",store,cat,prod},
+            "",
+            location.href
+        );
+        return;
+    }
 
-if(store){
-openStore(store);
-}
+    if(store && cat){
+        showStore();
+        showCategory();
+
+        history.replaceState(
+            {page:"category",store,cat},
+            "",
+            location.href
+        );
+        return;
+    }
+
+    if(store){
+        showStore();
+
+        history.replaceState(
+            {page:"store",store},
+            "",
+            location.href
+        );
+    }
 };
 
 
-/* ================= DATA SAVE ================= */
+/* ===============================
+   DATA SAVE (WORKING)
+================================*/
 
 function saveData(){
 
-localStorage.setItem(
-"savedProduct",
-currentProduct
-);
+    localStorage.setItem(
+        "savedProduct",
+        currentProduct
+    );
 
-document.getElementById("saveStatus").innerText="Saved ✅";
+    document.getElementById("saveStatus").innerText="Saved ✅";
 }
