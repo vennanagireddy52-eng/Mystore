@@ -128,6 +128,14 @@
         "price": "$37.99 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/82a6332a-e5ba-4c57-83a6-286a7beb9a83.jpg",
         "link": "https://amzn.to/4dXGbG6"
+      },
+      {
+        "id": "p1775242442403",
+        "name": "RBG  Gaming Keyboard ",
+        "desc": "Redragon K556 PRO Wireless RGB Gaming Keyboard | Tri-Mode Mechanical",
+        "price": "$39.43 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b648d5f3-50b6-42b4-a00a-1a433cc07c8e.jpg",
+        "link": "https://amzn.to/4vsbOyb"
       }
     ],
     "Kitchen": [
@@ -138,6 +146,14 @@
         "price": "$69.99 | ⭐4.7",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3329afce-132b-4ed6-870f-6092df149d72.jpg",
         "link": "https://amzn.to/4scCz6T"
+      },
+      {
+        "id": "p1775242640601",
+        "name": "Air Fryer ",
+        "desc": "COSORI 9-in-1 TurboBlaze Air Fryer | Cooking Kitchen upgrade",
+        "price": "$89.87 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7daddd1d-12dd-48fb-a770-c6d3202f1397.jpg",
+        "link": "https://amzn.to/4cpwHlO"
       }
     ],
     "Home": [
