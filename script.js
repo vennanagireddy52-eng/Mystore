@@ -1,113 +1,170 @@
+/* =====================================
+   MYSTORE FINAL APP.JS
+   Router + Pinterest Back Navigation
+===================================== */
 
-const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
-let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
-let curStore = "", curCat = "", cc = 0;
 
-function getImg(u) {
-    if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
-    return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&default=https://via.placeholder.com/300x200?text=Error`;
-}
-
-// --- 1. THE NAVIGATION ENGINE (PHYSICAL BACK BUTTON FIX) ---
-
-function show(id, push = true) {
-    // Hide all layers, show the target one
-    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-
-    // If we are moving FORWARD, we add a "breadcrumb" to the phone's history
-    if (push) {
-        window.history.pushState({ layer: id }, "");
-    }
-}
-
-// This handles the Physical Android Back Button (Triangle)
-window.onpopstate = function(event) {
-    if (event.state && event.state.layer) {
-        // Go to the previous layer without adding a new history entry
-        show(event.state.layer, false);
-    } else {
-        // If no history left, it will naturally exit the site or go to storeLayer
-        show('storeLayer', false);
-    }
+/* -------------------------------
+   STORE DATA (example)
+--------------------------------*/
+const storeData = {
+    Tech:[
+        {id:"p1",name:"Wireless Earbuds"},
+        {id:"p2",name:"Bluetooth Mouse"}
+    ],
+    Fashion:[
+        {id:"p3",name:"Men Shirt"}
+    ]
 };
 
-// --- 2. INITIALIZATION ---
 
-async function init() {
-    try {
-        const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-        const cloud = await res.json();
-        if(cloud && cloud.IND) data = cloud;
-    } catch (e) {
-        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{ IND:{}, US:{} } };
-    }
-    if(!data.META) data.META = { IND:{}, US:{} };
-    
-    // Set the starting point in the phone's history
-    window.history.replaceState({ layer: 'storeLayer' }, "");
-    
-    saveLoc(); 
-    syncUI(); 
-    checkLink();
+/* -------------------------------
+   HELPERS
+--------------------------------*/
+function qs(){
+    return new URLSearchParams(location.search);
 }
 
-// --- 3. RENDERING & CLICKS ---
+function fromPinterest(){
+    const ref=document.referrer.toLowerCase();
+    const ua=navigator.userAgent.toLowerCase();
 
-function hSec(s) {
-    cc++;
-    setTimeout(() => {
-        if(cc >= 3) {
-            if(prompt("Admin Pin:") === "1234") document.getElementById('adminPanel').classList.add('active');
-        } else if(cc === 1) {
-            curStore = s;
-            renC();
-            show('catLayer'); // This triggers the history push
-        }
-        cc = 0;
-    }, 400);
+    return (
+        ref.includes("pinterest") ||
+        ref.includes("pin.it") ||
+        ua.includes("pinterest")
+    );
 }
 
-function openC(c) {
-    curCat = c;
-    renP();
-    show('pLayer'); // This triggers the history push
-}
 
-function renC() {
-    const g = document.getElementById('catGrid'); g.innerHTML = "";
-    document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
-    Object.keys(data[curStore]).forEach(c => {
-        const img = (data.META[curStore] && data.META[curStore][c]) ? data.META[curStore][c].img : (data[curStore][c][0]?.img);
-        g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
-    });
-}
+/* -------------------------------
+   RENDER ROUTER
+--------------------------------*/
+function render(){
 
-function renP() {
-    const g = document.getElementById('pGrid'); g.innerHTML = "";
-    document.getElementById('ctTitle').innerText = curCat;
-    (data[curStore][curCat] || []).forEach(p => {
-        g.innerHTML += `<div class="card">
-            <img src="${getImg(p.img)}">
-            <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
-            <a class="buy-btn" href="${p.link}" target="_blank">View Product</a>
+    const params = qs();
+
+    const store = params.get("store");
+    const cat   = params.get("cat");
+    const prod  = params.get("prod");
+
+    const app   = document.getElementById("app");
+    const title = document.getElementById("pageTitle");
+
+
+    /* ===== STORE PAGE ===== */
+    if(!cat && !prod){
+
+        title.innerText="Store";
+
+        app.innerHTML=`
+        <div class="card">
+            <a href="?store=IND&cat=Tech">Tech</a>
+        </div>
+
+        <div class="card">
+            <a href="?store=IND&cat=Fashion">Fashion</a>
         </div>`;
-    });
-}
+        return;
+    }
 
-// --- 4. ADMIN & UTILS ---
 
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function syncUI() { /* Your existing sync code */ }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied!"); }
-function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
-function checkLink() {
-    const p = new URLSearchParams(location.search);
-    const s = p.get('store'), c = p.get('cat');
-    if(s && data[s]) {
-        curStore = s; renC(); show('catLayer', false);
-        if(c && data[s][c]) { curCat = c; renP(); show('pLayer', false); }
+    /* ===== CATEGORY PAGE ===== */
+    if(cat && !prod){
+
+        title.innerText=cat+" Category";
+
+        let html="";
+
+        storeData[cat].forEach(p=>{
+            html+=`
+            <div class="card">
+                <a href="?store=IND&cat=${cat}&prod=${p.id}">
+                    ${p.name}
+                </a>
+            </div>`;
+        });
+
+        app.innerHTML=html;
+        return;
+    }
+
+
+    /* ===== PRODUCT PAGE ===== */
+    if(prod){
+
+        title.innerText="Product";
+
+        app.innerHTML=`
+        <div class="card">
+            <h3>Product ID: ${prod}</h3>
+            <p>Opened from Pinterest</p>
+        </div>`;
+
+
+        /* ===========================
+           PINTEREST NAVIGATION FIX
+        ============================ */
+
+        if(fromPinterest() &&
+           !sessionStorage.getItem("pinLayers")){
+
+            sessionStorage.setItem("pinLayers","1");
+
+            /* product layer */
+            history.replaceState(
+                {page:"product"},
+                "",
+                `?store=${store}&cat=${cat}&prod=${prod}`
+            );
+
+            /* category layer */
+            history.pushState(
+                {page:"category"},
+                "",
+                `?store=${store}&cat=${cat}`
+            );
+
+            /* store layer */
+            history.pushState(
+                {page:"store"},
+                "",
+                `?store=${store}`
+            );
+        }
+
+        return;
     }
 }
 
-window.onload = init;
+
+/* -------------------------------
+   BACK BUTTON CONTROLLER
+--------------------------------*/
+window.onpopstate = function(e){
+
+    const params = qs();
+
+    if(e.state && e.state.page==="category"){
+        params.delete("prod");
+        history.replaceState({}, "", "?"+params.toString());
+        render();
+        return;
+    }
+
+    if(e.state && e.state.page==="store"){
+        params.delete("prod");
+        params.delete("cat");
+        history.replaceState({}, "", "?"+params.toString());
+        render();
+        return;
+    }
+
+    render();
+};
+
+
+/* -------------------------------
+   INITIAL LOAD
+--------------------------------*/
+render();
