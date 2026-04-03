@@ -3,11 +3,199 @@
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-15GKXJTXQF"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-15GKXJTXQF');
-    </script>
+const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
+let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
+let curStore = "", curCat = "", clickTimer, clickCount = 0;
+let isFirstLoad = true;
+
+// 1. 🛡️ PINTEREST-PROOF NAVIGATION
+window.addEventListener('popstate', (e) => {
+    // If Pinterest tries to close the app on the first back click, 
+    // we check if we are on a deep link and redirect internally instead.
+    if (e.state && e.state.layer) {
+        renderLayer(e.state.layer, false);
+    } else {
+        // Fallback: If no state exists, always go to Store Layer before exiting
+        if (document.getElementById('pLayer').classList.contains('active')) {
+            renderLayer('catLayer', false);
+        } else if (document.getElementById('catLayer').classList.contains('active')) {
+            renderLayer('storeLayer', false);
+        } else {
+            // Truly at the start, let the browser (Pinterest) close the window
+            history.back();
+        }
+    }
+});
+
+function renderLayer(id, push = true) {
+    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+    const target = document.getElementById(id);
+    if(target) {
+        target.classList.add('active');
+        target.scrollTop = 0;
+        const backBtn = target.querySelector('.back-icon');
+        // Only show back button if NOT on the store selection screen
+        if (backBtn) backBtn.style.display = (id === 'storeLayer') ? 'none' : 'flex';
+    }
+    // Crucial: Push state so the "Back" button has somewhere to go
+    if(push) history.pushState({layer: id}, "");
+}
+
+// 2. 🚀 INITIALIZE WITH HISTORY INJECTION
+async function init() {
+    try {
+        const res = await fetch(GITHUB_URL + "?v=" + Date.now());
+        data = await res.json();
+    } catch (e) {
+        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{IND:{}, US:{}} };
+    }
+    
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
+
+    if (s && data[s]) {
+        curStore = s; renC();
+        
+        if (c && data[s][c]) {
+            curCat = c; renP(pid);
+            
+            // --- THE PINTEREST FIX ---
+            // We force a history stack: [Home] -> [Category] -> [Product]
+            history.replaceState({ layer: 'storeLayer' }, "");
+            history.pushState({ layer: 'catLayer' }, "");
+            renderLayer('pLayer', true); 
+        } else {
+            history.replaceState({ layer: 'storeLayer' }, "");
+            renderLayer('catLayer', true);
+        }
+    } else {
+        // Normal entry
+        history.replaceState({ layer: 'storeLayer' }, "");
+        renderLayer('storeLayer', false);
+    }
+    if(typeof syncUI === 'function') syncUI();
+}
+
+// 3. 🏬 STORE & CATEGORY CLICK HANDLERS
+function hStore(s) {
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => {
+        if (clickCount >= 3) {
+            if (prompt("Admin Pin:") === "1234") document.getElementById('adminPanel').style.display = 'flex';
+        } else {
+            curStore = s; renC(); 
+            renderLayer('catLayer');
+        }
+        clickCount = 0;
+    }, 400);
+}
+
+function openC(c) { 
+    curCat = c; 
+    renP(); 
+    renderLayer('pLayer'); 
+}
+
+// 4. 🖼️ RENDERING ENGINES
+function renC() {
+    const g = document.getElementById('catGrid'); g.innerHTML = "";
+    document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
+    Object.keys(data[curStore] || {}).forEach(c => {
+        const img = (data.META[curStore] && data.META[curStore][c]?.img) || (data[curStore][c][0]?.img);
+        g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
+    });
+}
+
+function renP(scrollId = null) {
+    const g = document.getElementById('pGrid'); g.innerHTML = "";
+    document.getElementById('ctTitle').innerText = curCat;
+    if(!data[curStore] || !data[curStore][curCat]) return;
+    
+    data[curStore][curCat].forEach(p => {
+        const share = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
+        g.innerHTML += `
+        <div class="card" id="${p.id}">
+            <button class="link-symbol" onclick="cp('${share}',event)">🔗</button>
+            <img src="${getImg(p.img)}" onclick="window.open('${p.link}','_blank')">
+            <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
+            <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
+        </div>`;
+    });
+    if(scrollId) setTimeout(() => document.getElementById(scrollId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
+}
+
+// 5. UTILITIES
+function getImg(u) { return u ? `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=400` : "https://via.placeholder.com/300"; }
+function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); const o = document.getElementById('toast'); o.style.display='block'; setTimeout(()=>o.style.display='none',2000); }
+
+// 6. ADMIN (REQUIRED FOR BUTTONS TO WORK)
+function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
+function syncUI() {
+    const s = document.getElementById('manageStore').value;
+    const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
+    let h = '<option value="">-- Select --</option>';
+    if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
+    cSel.innerHTML = h; pCSel.innerHTML = h;
+}
+function syncPList() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
+    const pSel = document.getElementById('editPSel'); pSel.innerHTML = '<option value="">-- New Product --</option>';
+    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+}
+function loadCat() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
+    document.getElementById('catInp').value = c || "";
+    document.getElementById('catImgInp').value = (data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
+}
+function saveCat() {
+    const s = document.getElementById('manageStore').value, oldC = document.getElementById('editCatSelect').value, newC = document.getElementById('catInp').value;
+    if(!newC) return;
+    if(!data[s]) data[s] = {};
+    if(oldC && oldC !== newC) { data[s][newC] = data[s][oldC]; delete data[s][oldC]; }
+    if(!data[s][newC]) data[s][newC] = [];
+    if(!data.META[s]) data.META[s] = {};
+    data.META[s][newC] = { img: document.getElementById('catImgInp').value };
+    localStorage.setItem('storeData', JSON.stringify(data));
+    syncUI(); alert("Saved Locally!");
+}
+function deleteCat() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
+    if(c && confirm("Delete?")) { delete data[s][c]; localStorage.setItem('storeData', JSON.stringify(data)); syncUI(); }
+}
+function loadP() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, pid = document.getElementById('editPSel').value;
+    if(!pid) { ["pName", "pDesc", "pPrice", "pImg", "pLink"].forEach(i => document.getElementById(i).value = ""); return; }
+    const p = data[s][c].find(x => x.id == pid);
+    document.getElementById("pName").value = p.name; document.getElementById("pDesc").value = p.desc;
+    document.getElementById("pPrice").value = p.price; document.getElementById("pImg").value = p.img;
+    document.getElementById("pLink").value = p.link;
+}
+function saveP() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, pid = document.getElementById('editPSel').value;
+    if(!c) return alert("Select Category!");
+    const pObj = { id: pid || "p" + Date.now(), name: document.getElementById("pName").value, desc: document.getElementById("pDesc").value, price: document.getElementById("pPrice").value, img: document.getElementById("pImg").value, link: document.getElementById("pLink").value };
+    if(!pid) data[s][c].push(pObj);
+    else { const idx = data[s][c].findIndex(x => x.id == pid); data[s][c][idx] = pObj; }
+    localStorage.setItem('storeData', JSON.stringify(data));
+    syncPList(); alert("Saved!");
+}
+function deleteP() {
+    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, pid = document.getElementById('editPSel').value;
+    if(pid && confirm("Delete?")) { data[s][c] = data[s][c].filter(x => x.id != pid); localStorage.setItem('storeData', JSON.stringify(data)); syncPList(); }
+}
+function copyForGithub() {
+    const el = document.createElement('textarea');
+    el.value = JSON.stringify(data, null, 2);
+    document.body.appendChild(el); el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    alert("Copied! Paste to GitHub.");
+}
+
+window.onload = init;
+</script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
