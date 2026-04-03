@@ -1,170 +1,150 @@
-/* =====================================
-   MYSTORE FINAL APP.JS
-   Router + Pinterest Back Navigation
-===================================== */
+/* ================= STATE ================= */
+
+let currentStore=null;
+let currentCategory=null;
+let currentProduct=null;
 
 
-/* -------------------------------
-   STORE DATA (example)
---------------------------------*/
-const storeData = {
-    Tech:[
-        {id:"p1",name:"Wireless Earbuds"},
-        {id:"p2",name:"Bluetooth Mouse"}
-    ],
-    Fashion:[
-        {id:"p3",name:"Men Shirt"}
-    ]
+/* ================= HISTORY PUSH ================= */
+
+function push(state,url){
+history.pushState(state,"",url);
+}
+
+
+/* ================= PAGE SHOW ================= */
+
+function show(store,category,product){
+
+document.getElementById("storePage").style.display =
+store && !category ? "block":"none";
+
+document.getElementById("categoryPage").style.display =
+category && !product ? "block":"none";
+
+document.getElementById("productPage").style.display =
+product ? "block":"none";
+}
+
+
+/* ================= STORE ================= */
+
+function openStore(store){
+
+currentStore=store;
+currentCategory=null;
+currentProduct=null;
+
+show(true,false,false);
+
+push(
+{page:"store",store},
+`?store=${store}`
+);
+}
+
+
+/* ================= CATEGORY ================= */
+
+function openCategory(store,cat){
+
+currentStore=store;
+currentCategory=cat;
+currentProduct=null;
+
+document.getElementById("categoryTitle").innerText=cat;
+
+show(false,true,false);
+
+push(
+{page:"category",store,cat},
+`?store=${store}&cat=${cat}`
+);
+}
+
+
+/* ================= PRODUCT ================= */
+
+function openProduct(store,cat,prod){
+
+currentStore=store;
+currentCategory=cat;
+currentProduct=prod;
+
+show(false,false,true);
+
+push(
+{page:"product",store,cat,prod},
+`?store=${store}&cat=${cat}&prod=${prod}`
+);
+}
+
+
+/* ================= BACK BUTTONS ================= */
+
+function goStore(){
+history.back();
+}
+
+function goCategory(){
+history.back();
+}
+
+
+/* ================= ANDROID BACK SUPPORT ================= */
+
+window.onpopstate=function(e){
+
+if(!e.state){
+location.reload();
+return;
+}
+
+const s=e.state;
+
+if(s.page==="store") openStore(s.store);
+if(s.page==="category") openCategory(s.store,s.cat);
+if(s.page==="product") openProduct(s.store,s.cat,s.prod);
 };
 
 
-/* -------------------------------
-   HELPERS
---------------------------------*/
-function qs(){
-    return new URLSearchParams(location.search);
+/* ================= PINTEREST DIRECT LOAD ================= */
+
+window.onload=function(){
+
+const p=new URLSearchParams(location.search);
+
+const store=p.get("store");
+const cat=p.get("cat");
+const prod=p.get("prod");
+
+if(store && cat && prod){
+openStore(store);
+openCategory(store,cat);
+openProduct(store,cat,prod);
+return;
 }
 
-function fromPinterest(){
-    const ref=document.referrer.toLowerCase();
-    const ua=navigator.userAgent.toLowerCase();
-
-    return (
-        ref.includes("pinterest") ||
-        ref.includes("pin.it") ||
-        ua.includes("pinterest")
-    );
+if(store && cat){
+openStore(store);
+openCategory(store,cat);
+return;
 }
 
-
-/* -------------------------------
-   RENDER ROUTER
---------------------------------*/
-function render(){
-
-    const params = qs();
-
-    const store = params.get("store");
-    const cat   = params.get("cat");
-    const prod  = params.get("prod");
-
-    const app   = document.getElementById("app");
-    const title = document.getElementById("pageTitle");
-
-
-    /* ===== STORE PAGE ===== */
-    if(!cat && !prod){
-
-        title.innerText="Store";
-
-        app.innerHTML=`
-        <div class="card">
-            <a href="?store=IND&cat=Tech">Tech</a>
-        </div>
-
-        <div class="card">
-            <a href="?store=IND&cat=Fashion">Fashion</a>
-        </div>`;
-        return;
-    }
-
-
-    /* ===== CATEGORY PAGE ===== */
-    if(cat && !prod){
-
-        title.innerText=cat+" Category";
-
-        let html="";
-
-        storeData[cat].forEach(p=>{
-            html+=`
-            <div class="card">
-                <a href="?store=IND&cat=${cat}&prod=${p.id}">
-                    ${p.name}
-                </a>
-            </div>`;
-        });
-
-        app.innerHTML=html;
-        return;
-    }
-
-
-    /* ===== PRODUCT PAGE ===== */
-    if(prod){
-
-        title.innerText="Product";
-
-        app.innerHTML=`
-        <div class="card">
-            <h3>Product ID: ${prod}</h3>
-            <p>Opened from Pinterest</p>
-        </div>`;
-
-
-        /* ===========================
-           PINTEREST NAVIGATION FIX
-        ============================ */
-
-        if(fromPinterest() &&
-           !sessionStorage.getItem("pinLayers")){
-
-            sessionStorage.setItem("pinLayers","1");
-
-            /* product layer */
-            history.replaceState(
-                {page:"product"},
-                "",
-                `?store=${store}&cat=${cat}&prod=${prod}`
-            );
-
-            /* category layer */
-            history.pushState(
-                {page:"category"},
-                "",
-                `?store=${store}&cat=${cat}`
-            );
-
-            /* store layer */
-            history.pushState(
-                {page:"store"},
-                "",
-                `?store=${store}`
-            );
-        }
-
-        return;
-    }
+if(store){
+openStore(store);
 }
-
-
-/* -------------------------------
-   BACK BUTTON CONTROLLER
---------------------------------*/
-window.onpopstate = function(e){
-
-    const params = qs();
-
-    if(e.state && e.state.page==="category"){
-        params.delete("prod");
-        history.replaceState({}, "", "?"+params.toString());
-        render();
-        return;
-    }
-
-    if(e.state && e.state.page==="store"){
-        params.delete("prod");
-        params.delete("cat");
-        history.replaceState({}, "", "?"+params.toString());
-        render();
-        return;
-    }
-
-    render();
 };
 
 
-/* -------------------------------
-   INITIAL LOAD
---------------------------------*/
-render();
+/* ================= DATA SAVE ================= */
+
+function saveData(){
+
+localStorage.setItem(
+"savedProduct",
+currentProduct
+);
+
+document.getElementById("saveStatus").innerText="Saved ✅";
+}
