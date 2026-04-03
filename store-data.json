@@ -70,6 +70,14 @@
         "price": "₹216 ⭐4.2 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5f4a23b4-b37d-4809-b3f9-77384b0ed603.jpg",
         "link": "https://amzn.to/47FFQEb"
+      },
+      {
+        "id": "p1775241269001",
+        "name": "LED Strip light",
+        "desc": "Trending Warm White LED Neon Strip Light 4M | Room Decor Light ",
+        "price": "₹398 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/49515a35-fb2a-4556-bfd3-141b64228b9f.webp",
+        "link": "https://amzn.to/3QhDMw6"
       }
     ],
     "Books": [
@@ -90,6 +98,16 @@
         "price": "₹369 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp",
         "link": "https://amzn.to/3PQthzO"
+      }
+    ],
+    "Toys & games": [
+      {
+        "id": "p1775241046954",
+        "name": "Drift stunt car",
+        "desc": "Trending 4WD Drift Stunt Car for Kids | 360° Rotating RC Toy",
+        "price": "₹1099 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg",
+        "link": "https://amzn.to/4c4r63c"
       }
     ]
   },
@@ -186,6 +204,9 @@
       },
       "Desk set-up": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp"
+      },
+      "Toys & games": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg"
       }
     },
     "US": {
