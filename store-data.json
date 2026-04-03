@@ -182,6 +182,24 @@
         "price": "$27.99 ⭐4.4 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/dda3dadc-8d0c-44cb-9010-0be6dad64cb6.jpg",
         "link": "https://amzn.to/4c0MQNg"
+      },
+      {
+        "id": "p1775242153400",
+        "name": "Men’s Summer Casual",
+        "desc": "COOFANDY Men’s Summer Casual Button Down Shirt | Trendy Untucked Style",
+        "price": "$17.99 ⭐4.3 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ee06a4a9-65d3-43fb-9a45-638c84a6519f.jpg",
+        "link": "https://amzn.to/3PO5Aby"
+      }
+    ],
+    "Toys & games ": [
+      {
+        "id": "p1775241935416",
+        "name": "RC Stunt Car ",
+        "desc": "RC Stunt Car for Boys | LED Spray Remote Control Toy ",
+        "price": "$39.99 ⭐4.5 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg",
+        "link": "https://amzn.to/41foqe1"
       }
     ]
   },
@@ -221,6 +239,9 @@
       },
       "Fashion": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg"
+      },
+      "Toys & games ": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg"
       }
     }
   }
