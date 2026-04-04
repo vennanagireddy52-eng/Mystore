@@ -52,6 +52,14 @@
         "price": "₹599 ⭐4.2 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a23acb40-c0a5-4996-8bda-dd35e32ac51a.webp",
         "link": "https://amzn.to/4mc0S3i"
+      },
+      {
+        "id": "p1775312228967",
+        "name": "Dining plates ",
+        "desc": "CELLO Opalware Dinner Set 18pcs | Microwave Safe Family Crockery",
+        "price": "₹1007 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9767e8be-7a5c-47a2-982a-de4c296819d7.jpg",
+        "link": "https://amzn.to/4sMsv5q"
       }
     ],
     "Home": [
@@ -80,10 +88,10 @@
         "link": "https://amzn.to/3QhDMw6"
       },
       {
-        "id": "p1775311584327",
-        "name": "Godrej aer matic",
+        "id": "p1775312028591",
+        "name": "Godrej aer Matic ",
         "desc": "Godrej aer Matic Kit | Automatic Room Freshener 60 Days Fragrance",
-        "price": "₹410 ⭐4.4 ",
+        "price": "  ₹410 ⭐4.4",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b8fe0708-ef06-4682-98c9-e90740b7fbd5.jpg",
         "link": "https://amzn.to/47HxbRK"
       }
@@ -116,6 +124,16 @@
         "price": "₹1099 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg",
         "link": "https://amzn.to/4c4r63c"
+      }
+    ],
+    "Wall accessories ": [
+      {
+        "id": "p1775311900231",
+        "name": "Charging phone holder",
+        "desc": "Wall Mobile Holder | Charging Stand, Remote & Key Holder",
+        "price": " ₹399 ⭐4.2  ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg",
+        "link": "https://amzn.to/4v1vQiy"
       }
     ]
   },
@@ -249,6 +267,9 @@
       },
       "Toys & games": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg"
+      },
+      "Wall accessories ": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg"
       }
     },
     "US": {
