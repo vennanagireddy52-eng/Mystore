@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-15GKXJTXQF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-15GKXJTXQF');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pro Store Sync</title>
@@ -9,27 +17,24 @@
         body { margin:0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); overflow: hidden; }
         
         /* 📱 Layer System */
-        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background: var(--bg); transition: 0.3s; }
+        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background: var(--bg); }
         .active { display:block; }
         
-        /* 🏛️ Top Bar */
-        .topbar { padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; color: white; background: var(--primary); min-height: 55px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* 🏛️ UI Components */
+        .topbar { padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; color: white; background: var(--primary); min-height: 55px; }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 22px; margin-right: 12px; cursor: pointer; }
         .top-title { font-weight: bold; font-size: 18px; flex-grow: 1; }
 
-        /* 🏬 Store Selection */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 100vh; }
-        .storeCard { background: white; width:80%; max-width:300px; padding:45px 20px; margin:10px; text-align:center; border-radius:20px; font-weight:900; font-size: 20px; box-shadow:0 10px 20px rgba(0,0,0,0.15); cursor:pointer; }
+        .storeCard { background: white; width:80%; max-width:300px; padding:45px 20px; margin:10px; text-align:center; border-radius:20px; font-weight:900; box-shadow:0 10px 20px rgba(0,0,0,0.15); cursor:pointer; }
 
-        /* 🖼️ Pinterest Grid */
         .grid { column-count:2; column-gap:10px; padding:10px; }
-        .card { break-inside: avoid; background:white; margin-bottom:10px; border-radius:15px; overflow:hidden; position:relative; border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card img { width:100%; display:block; min-height: 120px; background: #eee; }
-        .info { padding:10px; }
+        .card { break-inside: avoid; background:white; margin-bottom:10px; border-radius:15px; overflow:hidden; position:relative; border: 1px solid #eee; }
+        .card img { width:100%; display:block; background: #eee; min-height: 120px; }
+        .info { padding:10px; font-size: 14px; }
         .price { color: var(--secondary); font-weight: 800; display: block; margin-top: 5px; }
-        .buy-btn { display:block; background:var(--secondary); color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; font-size: 14px; }
+        .buy-btn { display:block; background:var(--secondary); color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; }
 
-        /* ⚙️ Admin & UI */
         #adminPanel { position: fixed; bottom: 0; width: 100%; height: 92%; background: white; z-index: 9999; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; border-radius: 20px 20px 0 0; }
         #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:10000; }
     </style>
@@ -40,10 +45,9 @@
 
 <div id="adminPanel">
     <div style="display:flex; justify-content: space-between; align-items:center;">
-        <h2 style="color:var(--primary)">Admin Panel</h2>
-        <button onclick="closeAdmin()" style="border:none; padding:10px 15px; border-radius:50%">✕</button>
+        <h2>Admin Panel</h2><button onclick="closeAdmin()">✕</button>
     </div>
-    <button onclick="copyForGithub()" style="width:100%; background:orange; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; margin-top:20px;">📋 COPY DATA FOR GITHUB</button>
+    <button onclick="copyForGithub()" style="width:100%; background:orange; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; margin-top:20px;">📋 COPY FOR GITHUB</button>
 </div>
 
 <div id="storeLayer" class="layer active">
@@ -67,35 +71,39 @@ let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", clickCount = 0, clickTimer;
 
 /**
- * 1. 🛡️ THE NAVIGATION ENGINE
- * This listens to the ACTUAL system back button/swipe.
+ * 1. 🛡️ HASH-BASED NAVIGATION ENGINE
+ * This is the only way to guarantee the physical back button works in Pinterest.
  */
-window.addEventListener('popstate', (event) => {
-    if (event.state && event.state.layer) {
-        switchLayer(event.state.layer, false);
+window.onhashchange = function() {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) {
+        renderLayer('storeLayer');
     } else {
-        // If we hit the bottom of our custom stack, show the Store Selection
-        switchLayer('storeLayer', false);
+        const parts = hash.split('/');
+        curStore = parts[0];
+        if (parts[1]) {
+            curCat = decodeURIComponent(parts[1]);
+            renP(); // Render products
+            renderLayer('pLayer');
+        } else {
+            renC(); // Render categories
+            renderLayer('catLayer');
+        }
     }
-});
+};
 
-function switchLayer(id, push = true) {
-    // Hide all
+function renderLayer(id) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    // Show target
     const target = document.getElementById(id);
     if(target) {
         target.classList.add('active');
         const backBtn = target.querySelector('.back-icon');
         if(backBtn) backBtn.style.display = (id === 'storeLayer') ? 'none' : 'flex';
     }
-    // Record in browser history
-    if(push) history.pushState({ layer: id }, "");
 }
 
 /**
- * 2. 🚀 THE PINTEREST INJECTION
- * We manually build a history stack so "Back" doesn't close the app.
+ * 2. 🚀 INITIALIZE
  */
 async function init() {
     try {
@@ -105,55 +113,54 @@ async function init() {
         data = JSON.parse(localStorage.getItem('storeData')) || {IND:{}, US:{}};
     }
 
+    // Check if we arrived via a deep link (e.g., ?store=IND&cat=Tools)
     const params = new URLSearchParams(window.location.search);
-    const s = params.get('store'), c = params.get('cat'), pid = params.get('prod');
+    const s = params.get('store'), c = params.get('cat');
 
-    // Base state is ALWAYS the store layer
-    history.replaceState({ layer: 'storeLayer' }, "");
-
-    if (s && data[s]) {
-        curStore = s; renC();
-        if (c && data[s][c]) {
-            curCat = c; renP(pid);
-            // Injection: Push Category into history so Back goes from Product -> Cat
-            history.pushState({ layer: 'catLayer' }, "");
-            switchLayer('pLayer', true); 
-        } else {
-            switchLayer('catLayer', true);
-        }
+    if (s && c) {
+        // Redirect standard URL parameters to Hash navigation for Pinterest compatibility
+        window.location.hash = `#${s}/${encodeURIComponent(c)}`;
+    } else if (window.location.hash) {
+        // If they arrived with a hash already, trigger the router
+        window.onhashchange();
+    } else {
+        renderLayer('storeLayer');
     }
 }
 
 /**
- * 3. 🏬 UI RENDERERS
+ * 3. 🏬 UI ACTIONS
  */
 function hStore(s) {
     clickCount++;
     clearTimeout(clickTimer);
     clickTimer = setTimeout(() => {
         if(clickCount >= 3) {
-            if(prompt("Admin PIN:") === "1234") document.getElementById('adminPanel').style.display='flex';
+            if(prompt("PIN:") === "1234") document.getElementById('adminPanel').style.display='flex';
         } else {
-            curStore = s; renC(); switchLayer('catLayer');
+            window.location.hash = `#${s}`;
         }
         clickCount = 0;
     }, 300);
 }
 
-function openC(c) { curCat = c; renP(); switchLayer('pLayer'); }
+function openC(c) {
+    window.location.hash = `#${curStore}/${encodeURIComponent(c)}`;
+}
 
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
-    document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
+    document.getElementById('stTitle').innerText = curStore;
     Object.keys(data[curStore] || {}).forEach(c => {
         const img = (data.META[curStore] && data.META[curStore][c]?.img) || (data[curStore][c][0]?.img);
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
 
-function renP(scrollId = null) {
+function renP() {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
+    if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         g.innerHTML += `
         <div class="card" id="${p.id}">
@@ -162,7 +169,6 @@ function renP(scrollId = null) {
             <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
         </div>`;
     });
-    if(scrollId) setTimeout(() => document.getElementById(scrollId)?.scrollIntoView({behavior:'smooth', block:'center'}), 600);
 }
 
 function getImg(u) { return u ? `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=400` : "https://via.placeholder.com/300"; }
@@ -170,7 +176,7 @@ function closeAdmin() { document.getElementById('adminPanel').style.display='non
 function copyForGithub() {
     const el = document.createElement('textarea'); el.value = JSON.stringify(data, null, 2);
     document.body.appendChild(el); el.select(); document.execCommand('copy');
-    document.body.removeChild(el); alert("Data Copied! Paste to GitHub.");
+    document.body.removeChild(el); alert("Copied!");
 }
 
 window.onload = init;
