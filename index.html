@@ -1,41 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-15GKXJTXQF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-15GKXJTXQF');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pro Store Sync</title>
+    <title>Affiliate Store Pro</title>
     <style>
-        :root { --primary: #6C5CE7; --secondary: #00B894; --bg: #f4f7f6; }
-        body { margin:0; font-family: system-ui, sans-serif; background: var(--bg); overflow: hidden; }
+        :root { --primary: #6C5CE7; --secondary: #00B894; --bg: #f4f7f6; --text: #2d3436; }
+        body { margin:0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
         
-        /* 📱 Layer Management */
+        /* 📱 Layer System */
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background: var(--bg); }
         .active { display:block; }
         
-        /* 🏛️ UI Components */
-        .topbar { padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; color: white; background: var(--primary); min-height: 55px; }
+        /* 🏛️ Header & Search */
+        .topbar { padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; color: white; background: var(--primary); min-height: 60px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 20px; margin-right: 12px; cursor: pointer; }
         .top-title { font-weight: bold; font-size: 18px; flex-grow: 1; }
 
-        #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 100vh; }
-        .storeCard { background: white; width:80%; max-width:300px; padding:45px 20px; margin:10px; text-align:center; border-radius:22px; font-weight:900; box-shadow:0 10px 20px rgba(0,0,0,0.1); cursor:pointer; }
+        .search-container { padding: 10px; background: var(--primary); position: sticky; top: 60px; z-index: 99; }
+        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 14px; box-sizing: border-box; }
 
-        .grid { column-count:2; column-gap:10px; padding:10px; }
-        .card { break-inside: avoid; background:white; margin-bottom:12px; border-radius:15px; overflow:hidden; border: 1px solid #eee; }
-        .card img { width:100%; display:block; }
-        .info { padding:10px; font-size: 14px; }
-        .buy-btn { display:block; background:var(--secondary); color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; }
+        /* 🏬 Store Cards */
+        #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 100vh; width: 100vw; }
+        .storeCard { background: white; width: 85%; max-width: 350px; padding: 60px 20px; margin: 15px; text-align: center; border-radius: 25px; font-weight: 900; font-size: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); cursor: pointer; }
+
+        /* 🖼️ Product Grid & Full Description */
+        .grid { column-count: 2; column-gap: 12px; padding: 12px; }
+        .card { break-inside: avoid; background: white; margin-bottom: 15px; border-radius: 18px; overflow: hidden; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card img { width: 100%; display: block; background: #fdfdfd; min-height: 150px; object-fit: contain; }
         
-        #adminPanel { position: fixed; bottom: 0; width: 100%; height: 90%; background: white; z-index: 9999; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; border-radius: 20px 20px 0 0; }
+        .info { padding: 12px; display: flex; flex-direction: column; }
+        .info b { font-size: 15px; display: block; margin-bottom: 4px; line-height: 1.2; }
+        
+        /* Fixed: Show Full Description */
+        .desc { font-size: 13px; color: #636e72; margin: 8px 0; line-height: 1.5; display: block; word-wrap: break-word; }
+        
+        .price { color: var(--secondary); font-weight: 800; font-size: 16px; margin: 8px 0; }
+        .buy-btn { display: block; background: var(--secondary); color: white; text-align: center; padding: 12px; text-decoration: none; font-weight: bold; border-radius: 0 0 18px 18px; }
+
+        /* ⚙️ Admin Overlay */
+        #adminPanel { position: fixed; bottom: 0; width: 100%; height: 90%; background: white; z-index: 9999; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; border-radius: 25px 25px 0 0; }
     </style>
 </head>
 <body>
 
 <div id="adminPanel">
-    <div style="display:flex; justify-content: space-between;">
-        <h2>Admin</h2><button onclick="closeAdmin()">✕</button>
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+        <h2>Admin Panel</h2><button onclick="closeAdmin()" style="border:none; padding:15px; border-radius:50%">✕</button>
     </div>
-    <button onclick="copyForGithub()" style="width:100%; background:orange; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold;">COPY DATA</button>
+    <button onclick="copyForGithub()" style="width:100%; background:orange; color:white; border:none; padding:18px; border-radius:15px; font-weight:bold; margin-top:20px;">📋 COPY DATA FOR GITHUB</button>
 </div>
 
 <div id="storeLayer" class="layer active">
@@ -44,12 +65,14 @@
 </div>
 
 <div id="catLayer" class="layer">
-    <div class="topbar"><button class="back-icon" onclick="window.history.back()">←</button><span class="top-title" id="stTitle">Categories</span></div>
+    <div class="topbar"><button class="back-icon" onclick="history.back()">←</button><span class="top-title" id="stTitle">Categories</span></div>
+    <div class="search-container"><input type="text" class="search-bar" placeholder="Search categories..." oninput="renC(this.value)"></div>
     <div id="catGrid" class="grid"></div>
 </div>
 
 <div id="pLayer" class="layer">
-    <div class="topbar"><button class="back-icon" onclick="window.history.back()">←</button><span class="top-title" id="ctTitle">Products</span></div>
+    <div class="topbar"><button class="back-icon" onclick="history.back()">←</button><span class="top-title" id="ctTitle">Products</span></div>
+    <div class="search-container"><input type="text" class="search-bar" placeholder="Search products..." oninput="renP(this.value)"></div>
     <div id="pGrid" class="grid"></div>
 </div>
 
@@ -58,37 +81,28 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", clickCount = 0, clickTimer;
 
-/**
- * 1. 🛡️ THE HYBRID ROUTER
- * This listens to the PHONE'S back button and the UI back button equally.
- */
+// --- 🛡️ NAVIGATION & REFRESH LOGIC ---
 window.addEventListener('popstate', (e) => {
-    if (e.state && e.state.layer) {
-        renderUI(e.state.layer);
-    } else {
-        renderUI('storeLayer');
-    }
+    if (e.state && e.state.layer) renderUI(e.state.layer);
+    else renderUI('storeLayer');
 });
 
-function renderUI(layerId) {
+function renderUI(id) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    const target = document.getElementById(layerId);
+    const target = document.getElementById(id);
     if(target) {
         target.classList.add('active');
         const btn = target.querySelector('.back-icon');
-        if(btn) btn.style.display = (layerId === 'storeLayer') ? 'none' : 'flex';
+        if(btn) btn.style.display = (id === 'storeLayer') ? 'none' : 'flex';
     }
 }
 
-function navigateTo(layerId) {
-    // This pushes the state so the browser (and hardware button) knows we moved
-    history.pushState({ layer: layerId }, "", "");
-    renderUI(layerId);
+function navigateTo(id, params = "") {
+    history.pushState({ layer: id }, "", window.location.pathname + params);
+    renderUI(id);
 }
 
-/**
- * 2. 🚀 INITIALIZE & GHOST HISTORY
- */
+// --- 🚀 INITIALIZE ---
 async function init() {
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
@@ -99,69 +113,71 @@ async function init() {
 
     const p = new URLSearchParams(window.location.search);
     const s = p.get('store'), c = p.get('cat');
-
-    // Clear current state and set base
-    history.replaceState({ layer: 'storeLayer' }, "", "");
+    history.replaceState({ layer: 'storeLayer' }, "", window.location.pathname);
 
     if (s && data[s]) {
         curStore = s; renC();
-        // We push Category into history silently
-        history.pushState({ layer: 'catLayer' }, "", "");
-        
+        history.pushState({ layer: 'catLayer' }, "", `?store=${s}`);
         if (c && data[s][c]) {
             curCat = c; renP();
-            // We push Product into history
-            history.pushState({ layer: 'pLayer' }, "", "");
+            history.pushState({ layer: 'pLayer' }, "", `?store=${s}&cat=${encodeURIComponent(c)}`);
             renderUI('pLayer');
-        } else {
-            renderUI('catLayer');
-        }
+        } else { renderUI('catLayer'); }
     }
 }
 
-/**
- * 3. 🏬 APP LOGIC
- */
+// --- 🏬 RENDERING & AUTO-DESCRIPTION ---
 function hStore(s) {
     clickCount++;
     clearTimeout(clickTimer);
     clickTimer = setTimeout(() => {
         if(clickCount >= 3) {
-            if(prompt("PIN:") === "1234") document.getElementById('adminPanel').style.display='flex';
+            if(prompt("PIN:") === "NAGI") document.getElementById('adminPanel').style.display='flex';
         } else {
-            curStore = s; renC(); navigateTo('catLayer');
+            curStore = s; renC(); navigateTo('catLayer', `?store=${s}`);
         }
         clickCount = 0;
     }, 300);
 }
 
-function openC(c) {
-    curCat = c; renP(); navigateTo('pLayer');
-}
-
-function renC() {
+function renC(filter = "") {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
-    document.getElementById('stTitle').innerText = curStore;
-    Object.keys(data[curStore] || {}).forEach(c => {
+    document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
+    Object.keys(data[curStore] || {}).filter(c => c.toLowerCase().includes(filter.toLowerCase())).forEach(c => {
         const img = (data.META[curStore] && data.META[curStore][c]?.img) || (data[curStore][c][0]?.img);
-        g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
+        g.innerHTML += `<div class="card" onclick="curCat='${c}'; renP(); navigateTo('pLayer', '?store=${curStore}&cat=${encodeURIComponent(c)}');"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
 
-function renP() {
+function renP(filter = "") {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
-    data[curStore][curCat].forEach(p => {
-        g.innerHTML += `<div class="card"><img src="${getImg(p.img)}" onclick="window.open('${p.link}')"><div class="info"><b>${p.name}</b><br>${p.price}</div><a class="buy-btn" href="${p.link}">Buy Now</a></div>`;
+    if(!data[curStore][curCat]) return;
+
+    data[curStore][curCat].filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).forEach(p => {
+        // Automatic Fallback Description
+        const fullDesc = p.desc && p.desc.trim() !== "" ? p.desc : `Premium ${p.name} - Top quality selected for our ${curCat} collection. Get the best price today in our ${curStore} store!`;
+
+        g.innerHTML += `
+        <div class="card">
+            <img src="${getImg(p.img)}" onclick="window.open('${p.link}','_blank')">
+            <div class="info">
+                <b>${p.name}</b>
+                <p class="desc">${fullDesc}</p>
+                <span class="price">${p.price}</span>
+            </div>
+            <a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a>
+        </div>`;
     });
 }
 
+// --- 🛠️ UTILS ---
 function getImg(u) { return u ? `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=400` : "https://via.placeholder.com/300"; }
 function closeAdmin() { document.getElementById('adminPanel').style.display='none'; }
 function copyForGithub() {
     const el = document.createElement('textarea'); el.value = JSON.stringify(data, null, 2);
     document.body.appendChild(el); el.select(); document.execCommand('copy');
-    document.body.removeChild(el); alert("Copied!");
+    document.body.removeChild(el); alert("Data Copied! Paste into GitHub store-data.json");
 }
 
 window.onload = init;
