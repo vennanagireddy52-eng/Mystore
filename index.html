@@ -18,36 +18,30 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🏛️ HEADER & LARGE BACK BUTTON */
         .topbar { padding: 12px 15px; display: flex; flex-direction: column; position: sticky; top: 0; z-index: 100; color: white; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .top-row { display: flex; align-items: center; width: 100%; margin-bottom: 10px; }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; margin-right: 12px; cursor: pointer; }
         .top-title { font-weight: bold; font-size: 18px; text-transform: capitalize; flex-grow: 1; }
 
-        /* 🔍 SEARCH BAR */
         .search-container { width: 100%; position: relative; }
         .search-bar { width: 100%; padding: 10px 15px; border-radius: 12px; border: none; outline: none; font-size: 14px; background: rgba(255,255,255,0.9); box-sizing: border-box; }
 
-        /* STORE SELECTION */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
 
-        /* GRID & PRODUCT CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; transition: transform 0.2s; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
         .info { padding:12px; }
         .info b { font-size: 14px; display: block; color: #333; line-height: 1.2; }
-        .p-desc { font-size: 11px; color: #666; margin: 5px 0; line-height: 1.3; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; margin-top: 5px; }
         
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #6C5CE7; border:none; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ⚙️ ADMIN PANEL */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 6000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
+        .warning-box { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 10px; font-weight: bold; }
         input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
         
@@ -59,31 +53,35 @@
 <div id="toast">Link Copied!</div>
 
 <div id="adminPanel">
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:10px;">
         <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%;">✕</button>
     </div>
-    <div class="admin-section"><button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button></div>
+    
+    <div class="warning-box">⚠️ AFTER SAVING: You MUST click "COPY FOR GITHUB" and update your store-data.json file or changes will be lost!</div>
+
+    <div class="admin-section">
+        <button class="btn-main" onclick="copyForGithub()" style="background:orange; font-size: 18px;">📋 STEP 2: COPY FOR GITHUB</button>
+    </div>
+
     <div class="admin-section">
         <h3>Categories</h3>
         <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
         <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
-        <input type="text" id="catInp" placeholder="Category Name"><input type="text" id="catImgInp" placeholder="Image URL">
-        <div style="display:flex; gap:10px;">
-            <button class="btn-main" onclick="saveCat()">Save</button>
-            <button class="btn-main" onclick="deleteCat()" style="background:#ff4757;">Delete</button>
-        </div>
+        <input type="text" id="catInp" placeholder="Category Name">
+        <input type="text" id="catImgInp" placeholder="Image URL">
+        <button class="btn-main" onclick="saveCat()">STEP 1: Save Category</button>
     </div>
+
     <div class="admin-section">
         <h3>Products</h3>
         <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
         <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
-        <input type="text" id="pName" placeholder="Product Name"><textarea id="pDesc" placeholder="Description"></textarea>
-        <input type="text" id="pPrice" placeholder="Price"><input type="text" id="pImg" placeholder="Image URL"><input type="text" id="pLink" placeholder="Affiliate Link">
-        <div style="display:flex; gap:10px;">
-            <button class="btn-main" style="background:#00B894;" onclick="saveP()">Save</button>
-            <button class="btn-main" onclick="deleteP()" style="background:#ff4757;">Delete</button>
-        </div>
+        <input type="text" id="pName" placeholder="Product Name">
+        <input type="text" id="pPrice" placeholder="Price">
+        <input type="text" id="pImg" placeholder="Image URL">
+        <input type="text" id="pLink" placeholder="Affiliate Link">
+        <button class="btn-main" style="background:#00B894;" onclick="saveP()">STEP 1: Save Product</button>
     </div>
 </div>
 
@@ -94,26 +92,16 @@
 
 <div id="catLayer" class="layer">
     <div class="topbar">
-        <div class="top-row">
-            <button class="back-icon" onclick="history.back()">←</button>
-            <span class="top-title" id="stTitle">Categories</span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-bar" id="catSearch" placeholder="Search categories..." onkeyup="filterItems('catGrid', this.value)">
-        </div>
+        <div class="top-row"><button class="back-icon" onclick="history.back()">←</button><span class="top-title" id="stTitle">Categories</span></div>
+        <div class="search-container"><input type="text" class="search-bar" id="catSearch" placeholder="Search categories..." onkeyup="filterItems('catGrid', this.value)"></div>
     </div>
     <div id="catGrid" class="grid"></div>
 </div>
 
 <div id="pLayer" class="layer">
     <div class="topbar">
-        <div class="top-row">
-            <button class="back-icon" onclick="history.back()">←</button>
-            <span class="top-title" id="ctTitle">Products</span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-bar" id="pSearch" placeholder="Search products..." onkeyup="filterItems('pGrid', this.value)">
-        </div>
+        <div class="top-row"><button class="back-icon" onclick="history.back()">←</button><span class="top-title" id="ctTitle">Products</span></div>
+        <div class="search-container"><input type="text" class="search-bar" id="pSearch" placeholder="Search products..." onkeyup="filterItems('pGrid', this.value)"></div>
     </div>
     <div id="pGrid" class="grid"></div>
 </div>
@@ -123,7 +111,6 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", clickTimer, clickCount = 0;
 
-// 🛡️ NAVIGATION FIX
 window.addEventListener('popstate', e => {
     if (e.state && e.state.layer) renderLayer(e.state.layer, false);
     else renderLayer('storeLayer', false);
@@ -136,13 +123,10 @@ function renderLayer(id, push = true) {
         target.classList.add('active');
         target.scrollTop = 0;
         target.querySelectorAll('.back-icon').forEach(btn => btn.style.display = (id === 'storeLayer') ? 'none' : 'flex');
-        // Clear searches when switching layers
-        document.querySelectorAll('.search-bar').forEach(s => s.value = "");
     }
     if(push) history.pushState({layer: id}, "");
 }
 
-// 🔍 FILTER LOGIC
 function filterItems(gridId, val) {
     const query = val.toLowerCase();
     const cards = document.querySelectorAll(`#${gridId} .card`);
@@ -153,26 +137,24 @@ function filterItems(gridId, val) {
 }
 
 async function init() {
+    // 🛡️ Always try to load fresh Cloud data first
     try {
         const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-        data = await res.json();
+        if(res.ok) {
+            data = await res.json();
+            console.log("Cloud data loaded");
+        } else {
+            throw new Error();
+        }
     } catch (e) {
-        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} };
+        // Only use local if cloud fails
+        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{IND:{}, US:{}} };
+        console.log("Local backup loaded");
     }
-    if(!data.META) data.META = { IND:{}, US:{} };
-
-    history.replaceState({layer: 'storeLayer'}, "");
-    const p = new URLSearchParams(window.location.search);
-    const s = p.get('store'), c = p.get('cat'), pid = p.get('prod');
     
-    if (s && data[s]) {
-        curStore = s; renC();
-        if (c && data[s][c]) { 
-            curCat = c; renP(pid); 
-            renderLayer('catLayer', true); 
-            renderLayer('pLayer', true);   
-        } else { renderLayer('catLayer', true); }
-    } else { renderLayer('storeLayer', false); }
+    if(!data.META) data.META = { IND:{}, US:{} };
+    history.replaceState({layer: 'storeLayer'}, "");
+    renderLayer('storeLayer', false);
     syncUI();
 }
 
@@ -184,13 +166,12 @@ function hStore(s) {
             if (prompt("Admin Pin:") === "1234") document.getElementById('adminPanel').classList.add('active');
         } else {
             curStore = s; renC(); renderLayer('catLayer'); 
-            gtag('event', 'select_store', {'store': s});
         }
         clickCount = 0;
     }, 300);
 }
 
-function openC(c) { curCat = c; renP(); renderLayer('pLayer'); gtag('event','view_cat',{'cat':c}); }
+function openC(c) { curCat = c; renP(); renderLayer('pLayer'); }
 
 function getImg(u) {
     if(!u) return "https://via.placeholder.com/300x200?text=No+Image";
@@ -201,23 +182,33 @@ function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     document.getElementById('stTitle').innerText = curStore === "IND" ? "India Store" : "US Store";
     Object.keys(data[curStore] || {}).forEach(c => {
-        const img = (data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
+        const img = (data.META[curStore] && data.META[curStore][c]?.img) || (data[curStore][c][0]?.img);
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
 
-function renP(scrollToId = null) {
+function renP() {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
-    if(!data[curStore] || !data[curStore][curCat]) return;
+    if(!data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
-        const share = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        g.innerHTML += `<div class="card" id="${p.id}"><button class="link-symbol" onclick="cp('${share}',event)">🔗</button><img src="${getImg(p.img)}" onclick="window.open('${p.link}','_blank');gtag('event','p_view',{'name':'${p.name}'});"><div class="info"><b>${p.name}</b><div class="p-desc">${p.desc||""}</div><span class="price">${p.price}</span></div><a class="buy-btn" href="${p.link}" target="_blank" onclick="gtag('event','buy_click',{'p':'${p.name}'})">Buy Now</a></div>`;
+        g.innerHTML += `<div class="card"><img src="${getImg(p.img)}" onclick="window.open('${p.link}','_blank')"><div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div><a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a></div>`;
     });
-    if(scrollToId) setTimeout(() => document.getElementById(scrollToId)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
 }
 
-// --- ADMIN SYSTEM ---
+function saveLoc() {
+    localStorage.setItem('storeData', JSON.stringify(data));
+    console.log("Saved to local browser storage");
+}
+
+function copyForGithub() {
+    const jsonString = JSON.stringify(data, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+        alert("✅ DATA COPIED!\n\n1. Go to GitHub.com\n2. Open store-data.json\n3. Click Edit (pencil icon)\n4. Select all, Delete, and Paste this new data.\n5. Click Commit Changes.");
+    });
+}
+
+// Admin logic remains the same but calls saveLoc()
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -238,42 +229,21 @@ function loadCat() {
 function saveCat() {
     const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
     if(!n) return;
+    if(!data.META[s]) data.META[s] = {};
     if(old && old!==n) { data[s][n] = data[s][old]; delete data[s][old]; if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; } }
     else if(!data[s][n]) data[s][n] = [];
-    if(!data.META[s]) data.META[s] = {};
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Saved!");
-}
-function deleteCat() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(!c || !confirm("Delete category?")) return;
-    delete data[s][c]; if(data.META[s] && data.META[s][c]) delete data.META[s][c];
-    saveLoc(); syncUI(); renC(); alert("Deleted");
-}
-function loadP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    const p = data[s][c]?.find(x => x.id === id);
-    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
+    saveLoc(); syncUI(); renC(); alert("Step 1 Complete: Local Save Done!");
 }
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(!c) return alert("Select Category!");
-    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
+    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
+    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Step 1 Complete: Local Save Done!");
 }
-function deleteP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!id || !confirm("Delete product?")) return;
-    data[s][c] = data[s][c].filter(x => x.id !== id);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Deleted");
-}
-function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); const ts = document.getElementById('toast'); ts.style.display = 'block'; setTimeout(() => ts.style.display = 'none', 2000); }
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Data Copied!"); }
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
-
 window.onload = init;
 </script>
 </body>
