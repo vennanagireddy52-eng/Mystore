@@ -123,6 +123,13 @@
         "price": "  ₹410 ⭐4.4",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b8fe0708-ef06-4682-98c9-e90740b7fbd5.jpg",
         "link": "https://amzn.to/47HxbRK"
+      },
+      {
+        "id": "p1775415648559",
+        "name": "Under Desk Cable Organizer",
+        "price": "₹994 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/64365184-8fe2-48b5-a332-8358c3a9ff5e.jpg",
+        "link": "https://amzn.to/4ttWaQK"
       }
     ],
     "Books": [
@@ -312,8 +319,9 @@
       {
         "id": "p1775413821750",
         "name": "Men’s Casual Summer shirt",
+        "desc": "JMIERR Men’s Casual Summer Polo Shirt | Stretch Knit Golf & Beach ",
         "price": "$17.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e00a.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4435cb7b-1fe8-4f38-847f-4d4b8eb197ee.jpg",
         "link": "https://amzn.to/3PQLyNC"
       }
     ],
