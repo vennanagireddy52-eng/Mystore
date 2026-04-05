@@ -11,28 +11,23 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer">
     <title>Pro Store Sync</title>
     <style>
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🏛️ HEADER */
         .topbar { padding: 12px 15px; display: flex; flex-direction: column; position: sticky; top: 0; z-index: 100; color: white; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .top-row { display: flex; align-items: center; width: 100%; margin-bottom: 10px; }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 28px; margin-right: 12px; cursor: pointer; }
         .top-title { font-weight: bold; font-size: 18px; text-transform: capitalize; flex-grow: 1; }
 
-        /* 🔍 SEARCH */
         .search-container { width: 100%; position: relative; }
         .search-bar { width: 100%; padding: 10px 15px; border-radius: 12px; border: none; outline: none; font-size: 14px; background: rgba(255,255,255,0.9); box-sizing: border-box; }
 
-        /* STORE SELECTION */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
 
-        /* GRID & CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
         .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
@@ -41,14 +36,11 @@
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; margin-top: 5px; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ⚙️ ADMIN PANEL */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 6000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
         input, textarea, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-        
-        /* SIDE BY SIDE BUTTONS */
         .btn-group { display: flex; gap: 10px; margin-top: 5px; }
         .btn-group button { flex: 1; margin: 0; }
         .btn-del { background: #ff4757 !important; }
@@ -148,16 +140,22 @@ function filterItems(gridId, val) {
     });
 }
 
+// Aggressive init to ensure local data isn't killed by old cloud data
 async function init() {
+    const local = localStorage.getItem('storeData');
+    
     try {
-        const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-        if(res.ok) data = await res.json();
+        const res = await fetch(GITHUB_URL + "?cb=" + Date.now());
+        if(res.ok) {
+            const cloudData = await res.json();
+            // If local data exists, we assume user is in "Editing Mode" and keep it
+            data = local ? JSON.parse(local) : cloudData;
+        }
     } catch (e) {
-        data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{}, META:{IND:{}, US:{}} };
+        if(local) data = JSON.parse(local);
     }
+    
     if(!data.META) data.META = { IND:{}, US:{} };
-    history.replaceState({layer: 'storeLayer'}, "");
-    renderLayer('storeLayer', false);
     syncUI();
 }
 
@@ -193,16 +191,22 @@ function renC() {
 function renP() {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     document.getElementById('ctTitle').innerText = curCat;
-    if(!data[curStore][curCat]) return;
+    if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         g.innerHTML += `<div class="card"><img src="${getImg(p.img)}" onclick="window.open('${p.link}','_blank')"><div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div><a class="buy-btn" href="${p.link}" target="_blank">Buy Now</a></div>`;
     });
 }
 
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
+function saveState() {
+    localStorage.setItem('storeData', JSON.stringify(data));
+    // Immediately refresh the current view
+    if(curStore) renC();
+    if(curCat) renP();
+    syncUI();
+}
 
 function copyForGithub() {
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => alert("Data Copied! Update store-data.json on GitHub now."));
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => alert("Data Copied! Update GitHub now."));
 }
 
 function syncUI() {
@@ -233,14 +237,14 @@ function saveCat() {
     else if(!data[s][n]) data[s][n] = [];
     if(!data.META[s][n]) data.META[s][n] = {};
     data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Category Saved locally!");
+    saveState(); alert("Category Saved!");
 }
 
 function deleteCat() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(!c || !confirm("Delete this category?")) return;
+    if(!c || !confirm("Delete Category?")) return;
     delete data[s][c]; if(data.META[s]) delete data.META[s][c];
-    saveLoc(); syncUI(); renC(); alert("Deleted!");
+    saveState(); alert("Deleted!");
 }
 
 function loadP() {
@@ -251,22 +255,24 @@ function loadP() {
         document.getElementById('pPrice').value = p.price;
         document.getElementById('pImg').value = p.img;
         document.getElementById('pLink').value = p.link;
+    } else {
+        ['pName','pPrice','pImg','pLink'].forEach(id => document.getElementById(id).value = "");
     }
 }
 
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select Category!");
+    if(!c) return alert("Select Category First!");
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Product Saved locally!");
+    saveState(); syncPList(); alert("Product Saved!");
 }
 
 function deleteP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!id || !confirm("Delete this product?")) return;
+    if(!id || !confirm("Delete Product?")) return;
     data[s][c] = data[s][c].filter(x => x.id !== id);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Deleted!");
+    saveState(); syncPList(); alert("Deleted!");
 }
 
 function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
