@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>Pro Store Sync</title>
+    
     <link rel="preconnect" href="https://www.amazon.in">
     <link rel="preconnect" href="https://www.amazon.com">
     <link rel="preconnect" href="https://images.weserv.nl">
     
     <style>
+        /* 🚀 Performance Optimization: Eliminate 300ms tap delay */
+        * { touch-action: manipulation; box-sizing: border-box; }
+        
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
@@ -17,30 +21,31 @@
         /* STORE LAYER */
         #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
         .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
-        .storeCard:active { transform: scale(0.95); }
+        .storeCard:active { transform: scale(0.96); opacity: 0.9; }
         
         /* 🏛️ TOP BAR */
         .topbar { padding: 10px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); gap: 10px; }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
         .search-container { flex-grow: 1; }
-        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); box-sizing: border-box; color: #333; font-weight: 500; }
+        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); color: #333; font-weight: 500; }
 
         /* GRID & CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; transition: transform 0.1s; }
+        .card:active { transform: scale(0.98); }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; cursor: pointer; }
         
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: 1.5px solid #6C5CE7; border-radius: 50%; width: 34px; height: 34px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
+        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: 1.5px solid #6C5CE7; border-radius: 50%; width: 34px; height: 34px; z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
         .info { padding:12px; cursor: pointer; }
         .info b { font-size: 14px; display: block; margin-bottom: 4px; line-height: 1.2; color: #222; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:14px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
         /* ⚙️ ADMIN PANEL */
-        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; overflow-y: auto; }
         #adminPanel.active { display: flex; }
         .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
-        input, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        input, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
         .btn-del { background: #ff7675 !important; }
 
@@ -103,6 +108,21 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
 
+// ⚡ Speculative Warming: Connects to Amazon while the user is still pressing down
+function prewarm(url) {
+    if(!url) return;
+    const link = document.createElement('link');
+    link.rel = 'preconnect';
+    link.href = new URL(url).origin;
+    document.head.appendChild(link);
+}
+
+function fastRedirect(url) {
+    if(!url) return;
+    // 🚀 Reflex Action: replace is faster as it doesn't wait to snapshot history state
+    location.replace(url);
+}
+
 function filterItems(gridId, val) {
     const q = val.toLowerCase();
     document.querySelectorAll(`#${gridId} .card`).forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none");
@@ -161,7 +181,6 @@ function loadP() {
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(!c) return alert("Select Category");
-    // Description is forced to empty string to remove old data
     let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: "", price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
     saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
@@ -180,20 +199,21 @@ function renC() {
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
+
 function renP(sid = null) {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         const sl = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        // Description div REMOVED for clean UI
+        // 🔥 Performance: ontouchstart pre-warms the link while finger is still touching screen
         g.innerHTML += `
-            <div class="card" id="${p.id}">
+            <div class="card" id="${p.id}" ontouchstart="prewarm('${p.link}')">
                 <button class="link-symbol" onclick="cp('${sl}',event)">🔗</button>
-                <div onclick="location.href='${p.link}'">
+                <div onclick="fastRedirect('${p.link}')">
                     <img src="${getImg(p.img)}">
                     <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
                 </div>
-                <a class="buy-btn" href="${p.link}">Buy Now</a>
+                <a class="buy-btn" href="javascript:void(0)" onclick="fastRedirect('${p.link}')">Buy Now</a>
             </div>`;
     });
     if(sid) setTimeout(() => document.getElementById(sid)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
