@@ -214,6 +214,14 @@
         "price": "$53.99 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fe0eac46-1a53-4de9-8c87-8689d7117a85.jpg",
         "link": "https://amzn.to/4vdT2tU"
+      },
+      {
+        "id": "p1775490971066",
+        "name": "Slim Pocket Cooling Fan",
+        "desc": "",
+        "price": "$9.99 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bbaa753d-36d2-4b68-a2ba-585715ee12af.jpg",
+        "link": "https://amzn.to/4crKB6W"
       }
     ],
     "Kitchen": [
@@ -281,14 +289,6 @@
         "price": "$26.99 ⭐4.6 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fa8e5623-d15e-4e05-85c8-68c5d3cdd7cb.jpg",
         "link": "https://amzn.to/3POzOLq"
-      },
-      {
-        "id": "p1775490167589",
-        "name": "Retro Quote Canvas Art",
-        "desc": "",
-        "price": "$7.77 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9fe04c40-084f-496b-9dc3-a7c5d2e30a0c.jpg",
-        "link": "https://amzn.to/4sWPUkR"
       }
     ],
     "Fashion": [
@@ -330,14 +330,6 @@
         "price": "$17.99 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e00a.jpg",
         "link": "https://amzn.to/3PQLyNC"
-      },
-      {
-        "id": "p1775490281955",
-        "name": "Charged Surge 4 Sneakers",
-        "desc": "",
-        "price": " $49.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cc6cb70b-b2ad-4e51-9d13-cfd056e96176.jpg",
-        "link": "https://amzn.to/4sUK7fB"
       }
     ],
     "Toys & games ": [
