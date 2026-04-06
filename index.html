@@ -11,16 +11,41 @@
     <link rel="preconnect" href="https://images.weserv.nl">
     
     <style>
-        /* 🚀 Performance Optimization: Eliminate 300ms tap delay */
         * { touch-action: manipulation; box-sizing: border-box; }
         
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* STORE LAYER */
-        #storeLayer { display:flex; flex-direction:column; justify-content:center; align-items:center; background:linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; }
-        .storeCard { background:white; width:85%; max-width:320px; padding:50px 20px; margin:15px; text-align:center; border-radius:25px; font-size:24px; font-weight:900; box-shadow:0 15px 35px rgba(0,0,0,0.2); cursor:pointer; }
+        /* 🚀 STORE LAYER: Full Width Fit */
+        #storeLayer { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg,#6C5CE7,#00B894); 
+            height: 100vh; 
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* Fit to Screen Width */
+        .storeCard { 
+            background: white; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Spans full width of container */
+            max-width: 450px; /* Limits width on tablets/PC for better UI */
+            padding: 35px 20px; /* Increased vertical padding for height */
+            text-align: center; 
+            border-radius: 20px; 
+            font-size: 26px; 
+            font-weight: 900; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            cursor: pointer; 
+            transition: transform 0.1s;
+        }
         .storeCard:active { transform: scale(0.96); opacity: 0.9; }
         
         /* 🏛️ TOP BAR */
@@ -108,18 +133,18 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
 
-// ⚡ Speculative Warming: Connects to Amazon while the user is still pressing down
 function prewarm(url) {
     if(!url) return;
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = new URL(url).origin;
-    document.head.appendChild(link);
+    try {
+        const link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = new URL(url).origin;
+        document.head.appendChild(link);
+    } catch(e){}
 }
 
 function fastRedirect(url) {
     if(!url) return;
-    // 🚀 Reflex Action: replace is faster as it doesn't wait to snapshot history state
     location.replace(url);
 }
 
@@ -199,13 +224,11 @@ function renC() {
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
-
 function renP(sid = null) {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         const sl = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        // 🔥 Performance: ontouchstart pre-warms the link while finger is still touching screen
         g.innerHTML += `
             <div class="card" id="${p.id}" ontouchstart="prewarm('${p.link}')">
                 <button class="link-symbol" onclick="cp('${sl}',event)">🔗</button>
