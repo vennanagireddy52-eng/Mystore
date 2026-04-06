@@ -72,7 +72,6 @@
         <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
         <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
         <input type="text" id="pName" placeholder="Product Name">
-        <textarea id="pDesc" placeholder="Description"></textarea>
         <input type="text" id="pPrice" placeholder="Price">
         <input type="text" id="pImg" placeholder="Image URL">
         <input type="text" id="pLink" placeholder="Affiliate Link">
@@ -106,7 +105,6 @@ const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mysto
 let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
 let curStore = "", curCat = "", cc = 0;
 
-// --- 🛡️ LOGIC ---
 function filterItems(gridId, val) {
     const query = val.toLowerCase();
     document.querySelectorAll(`#${gridId} .card`).forEach(card => {
@@ -145,7 +143,6 @@ async function init() {
     syncUI();
 }
 
-// --- ADMIN FUNCTIONS ---
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -184,13 +181,27 @@ function deleteCatManual() {
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     const p = data[s][c]?.find(x => x.id === id);
-    ['pName','pDesc','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
+    // Removed pDesc from key mapping
+    ['pName','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
 }
 
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(!c) return alert("Select Category");
-    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: document.getElementById('pDesc').value, price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
+    
+    // Existing description is preserved if editing, otherwise blank for new
+    const existingP = data[s][c].find(x => x.id === id);
+    const currentDesc = existingP ? (existingP.desc || "") : "";
+
+    let p = { 
+        id: id || "p"+Date.now(), 
+        name: document.getElementById('pName').value, 
+        desc: currentDesc, // Preserving data integrity
+        price: document.getElementById('pPrice').value, 
+        img: document.getElementById('pImg').value, 
+        link: document.getElementById('pLink').value 
+    };
+    
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
     saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
 }
@@ -200,7 +211,6 @@ function deletePManual() {
     if(id && confirm("Delete?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); if(curCat === c) renP(); }
 }
 
-// --- RENDERERS ---
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     if(!data[curStore]) return;
