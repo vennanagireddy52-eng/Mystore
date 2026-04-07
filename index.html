@@ -1,259 +1,471 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer">
-    <title>Pro Store Sync</title>
-    
-    <link rel="preconnect" href="https://www.amazon.in">
-    <link rel="preconnect" href="https://www.amazon.com">
-    <link rel="preconnect" href="https://images.weserv.nl">
-    
-    <style>
-        * { touch-action: manipulation; box-sizing: border-box; }
-        
-        body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
-        .active { display:block; }
-        
-        /* 🚀 STORE LAYER: Full Width Fit */
-        #storeLayer { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg,#6C5CE7,#00B894); 
-            height: 100vh; 
-            padding: 20px;
-            gap: 20px;
-        }
-        
-        /* Fit to Screen Width */
-        .storeCard { 
-            background: white; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%; /* Spans full width of container */
-            max-width: 450px; /* Limits width on tablets/PC for better UI */
-            padding: 35px 20px; /* Increased vertical padding for height */
-            text-align: center; 
-            border-radius: 20px; 
-            font-size: 26px; 
-            font-weight: 900; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-            cursor: pointer; 
-            transition: transform 0.1s;
-        }
-        .storeCard:active { transform: scale(0.96); opacity: 0.9; }
-        
-        /* 🏛️ TOP BAR */
-        .topbar { padding: 10px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); gap: 10px; }
-        .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
-        .search-container { flex-grow: 1; }
-        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); color: #333; font-weight: 500; }
-
-        /* GRID & CARDS */
-        .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; transition: transform 0.1s; }
-        .card:active { transform: scale(0.98); }
-        .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; cursor: pointer; }
-        
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: 1.5px solid #6C5CE7; border-radius: 50%; width: 34px; height: 34px; z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
-        .info { padding:12px; cursor: pointer; }
-        .info b { font-size: 14px; display: block; margin-bottom: 4px; line-height: 1.2; color: #222; }
-        .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
-        .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:14px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
-        
-        /* ⚙️ ADMIN PANEL */
-        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: white; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 25px; overflow-y: auto; }
-        #adminPanel.active { display: flex; }
-        .admin-section { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
-        input, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; }
-        .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-del { background: #ff7675 !important; }
-
-        #toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.9); color:white; padding:10px 25px; border-radius:30px; display:none; z-index:3000; font-size: 13px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-<div id="toast">Link Copied!</div>
-
-<div id="adminPanel">
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0; color:#6C5CE7;">Cloud Admin</h2>
-        <button onclick="closeAdmin()" style="border:none; background:#eee; width:45px; height:45px; border-radius:50%; font-size:20px;">✕</button>
-    </div>
-    <div class="admin-section"><button class="btn-main" onclick="copyForGithub()" style="background:orange;">📋 COPY FOR GITHUB</button></div>
-    <div class="admin-section">
-        <h3>Categories</h3>
-        <select id="manageStore" onchange="syncUI()"><option value="IND">🇮🇳 India</option><option value="US">🇺🇸 US</option></select>
-        <select id="editCatSelect" onchange="loadCat()"><option value="">-- Edit Category --</option></select>
-        <input type="text" id="catInp" placeholder="Category Name">
-        <input type="text" id="catImgInp" placeholder="Category Image URL">
-        <div style="display:flex; gap:8px;"><button class="btn-main" style="flex:2" onclick="saveCat()">Save</button><button class="btn-main btn-del" style="flex:1" onclick="deleteCatManual()">Delete</button></div>
-    </div>
-    <div class="admin-section">
-        <h3>Products</h3>
-        <select id="pCatSel" onchange="syncPList()"><option value="">Select Category</option></select>
-        <select id="editPSel" onchange="loadP()"><option value="">-- New Product --</option></select>
-        <input type="text" id="pName" placeholder="Product Name">
-        <input type="text" id="pPrice" placeholder="Price">
-        <input type="text" id="pImg" placeholder="Image URL">
-        <input type="text" id="pLink" placeholder="Affiliate Link">
-        <div style="display:flex; gap:8px;"><button class="btn-main" style="flex:2; background:#00B894;" onclick="saveP()">Save Product</button><button class="btn-main btn-del" style="flex:1" onclick="deletePManual()">Delete</button></div>
-    </div>
-</div>
-
-<div id="storeLayer" class="layer active">
-    <div class="storeCard" onclick="hSec('IND')">🇮🇳 INDIA STORE</div>
-    <div class="storeCard" onclick="hSec('US')">🇺🇸 US STORE</div>
-</div>
-
-<div id="catLayer" class="layer">
-    <div class="topbar">
-        <button class="back-icon" onclick="window.history.back()">←</button>
-        <div class="search-container"><input type="text" class="search-bar" id="catSearch" placeholder="Search categories..." onkeyup="filterItems('catGrid', this.value)"></div>
-    </div>
-    <div id="catGrid" class="grid"></div>
-</div>
-
-<div id="pLayer" class="layer">
-    <div class="topbar">
-        <button class="back-icon" onclick="window.history.back()">←</button>
-        <div class="search-container"><input type="text" class="search-bar" id="pSearch" placeholder="Search products..." onkeyup="filterItems('pGrid', this.value)"></div>
-    </div>
-    <div id="pGrid" class="grid"></div>
-</div>
-
-<script>
-const GITHUB_URL = "https://raw.githubusercontent.com/vennanagireddy52-eng/Mystore/main/store-data.json";
-let data = { IND:{}, US:{}, META:{ IND:{}, US:{} } };
-let curStore = "", curCat = "", cc = 0;
-
-function prewarm(url) {
-    if(!url) return;
-    try {
-        const link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = new URL(url).origin;
-        document.head.appendChild(link);
-    } catch(e){}
+{
+  "IND": {
+    "Tech": [
+      {
+        "id": "p1775053546321",
+        "name": "Headset wireless ",
+        "desc": "boAt Rockerz 480 RGB Headphones | 60H Battery, Beast Mode Gaming, Wireless Over-Ear Headset",
+        "price": "₹1439 , 4.1 ⭐",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23414d7f-2106-49f3-aa17-6ac3f6276246.jpg",
+        "link": "https://amzn.to/4siyVII"
+      },
+      {
+        "id": "p1775154524059",
+        "name": "URBN power bank ",
+        "desc": "URBN 20000mAh Power Bank 22.5W Fast Charging PD – Best Deal Portable Charger",
+        "price": "₹999 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/15b6e347-cb69-49f6-9f7b-3b15ba1ddb0b.jpg",
+        "link": "https://amzn.to/4sfxzOG"
+      },
+      {
+        "id": "p1775240427778",
+        "name": "Oneplus buds",
+        "desc": "Trending OnePlus Nord Buds 2r TWS Earbuds |",
+        "price": "₹1599 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3aa7fd71-c2ad-496e-8870-20dce95684e3.jpg",
+        "link": "https://amzn.to/41d4XL4"
+      },
+      {
+        "id": "p1775312678230",
+        "name": "Boat smartwatch ",
+        "desc": "boAt Wave Call 3 Smartwatch | BT Calling, 1.83” HD Display, IP68",
+        "price": "₹1099 ⭐4.1 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e5a5b4c0-57fb-4df3-b8ad-041cc6608157.jpg",
+        "link": "https://amzn.to/4tqUDLl"
+      },
+      {
+        "id": "p1775414820627",
+        "name": "Selfie Stick Tripod",
+        "price": "₹1598 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0a594479-a717-4cf4-ac9f-7c89e380e9e5.jpg",
+        "link": "https://amzn.to/4tsHT71"
+      },
+      {
+        "id": "p1775493333469",
+        "name": "Portronics Bluetooth Mouse",
+        "desc": "",
+        "price": "499 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9191f589-99a6-4b0d-8814-edc285347d21.jpg",
+        "link": "https://amzn.to/4veuX6u"
+      }
+    ],
+    "Fashion": [
+      {
+        "id": "p1775053942122",
+        "name": "Men's casual ",
+        "desc": "DEELMO Men’s Linen Casual Shirt | Stylish Summer Beach Wear, Breathable Button-Down Fashion Shirt",
+        "price": "₹491 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg",
+        "link": "https://amzn.to/4srj0I9"
+      },
+      {
+        "id": "p1775415365971",
+        "name": "Men's hoodie ",
+        "price": "₹599 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4435cb7b-1fe8-4f38-847f-4d4b8eb197ee.jpg",
+        "link": "https://amzn.to/41frUNC"
+      },
+      {
+        "id": "p1775493136641",
+        "name": "Soft Sports Sneakers ",
+        "desc": "",
+        "price": "₹1299 ⭐4.7 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f38000ea-4117-4c10-aca1-33e8c016fc08.jpg",
+        "link": "https://amzn.to/4cbbTxg"
+      }
+    ],
+    "Kitchen": [
+      {
+        "id": "p1775063145221",
+        "name": "Vegetable chopper ",
+        "desc": "Amazon Solimo 15-in-1 Vegetable Chopper | Stainless Steel Multi Cutter, Kitchen Must-Have Tool",
+        "price": " ₹579 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg",
+        "link": "https://amzn.to/48nmPqi"
+      },
+      {
+        "id": "p1775240704664",
+        "name": "Door mats",
+        "desc": "Must-Have Anti-Fatigue Kitchen & Bath Mat Pack of 2 | Waterproof",
+        "price": "₹599 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a23acb40-c0a5-4996-8bda-dd35e32ac51a.webp",
+        "link": "https://amzn.to/4mc0S3i"
+      },
+      {
+        "id": "p1775312228967",
+        "name": "Dining plates ",
+        "desc": "CELLO Opalware Dinner Set 18pcs | Microwave Safe Family Crockery",
+        "price": "₹1007 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9767e8be-7a5c-47a2-982a-de4c296819d7.jpg",
+        "link": "https://amzn.to/4sMsv5q"
+      },
+      {
+        "id": "p1775414628636",
+        "name": "Kitchen Cutting Platform",
+        "price": "₹988 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/223859a4-9580-42b1-9b56-5c7827814197.jpg",
+        "link": "https://amzn.to/4crtEJW"
+      }
+    ],
+    "Home": [
+      {
+        "id": "p1775065584986",
+        "name": "Wall hooks ",
+        "desc": "JIALTO Wooden Wall Hooks Set | 6PCS Self-Adhesive Bathroom & Kitchen Hooks, Stylish Home Decor Organizer",
+        "price": "₹499 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp",
+        "link": "https://amzn.to/4s3LkQB"
+      },
+      {
+        "id": "p1775154973545",
+        "name": "Night lamp ",
+        "desc": "Electric Kapoor Dani Diffuser Night Lamp – Aroma Burner Best Deal Pooja Essential",
+        "price": "₹216 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5f4a23b4-b37d-4809-b3f9-77384b0ed603.jpg",
+        "link": "https://amzn.to/47FFQEb"
+      },
+      {
+        "id": "p1775241269001",
+        "name": "LED Strip light",
+        "desc": "Trending Warm White LED Neon Strip Light 4M | Room Decor Light ",
+        "price": "₹398 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/49515a35-fb2a-4556-bfd3-141b64228b9f.webp",
+        "link": "https://amzn.to/3QhDMw6"
+      },
+      {
+        "id": "p1775312028591",
+        "name": "Godrej aer Matic ",
+        "desc": "Godrej aer Matic Kit | Automatic Room Freshener 60 Days Fragrance",
+        "price": "  ₹410 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b8fe0708-ef06-4682-98c9-e90740b7fbd5.jpg",
+        "link": "https://amzn.to/47HxbRK"
+      },
+      {
+        "id": "p1775415648559",
+        "name": "Under Desk Cable Organizer",
+        "price": "₹994 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/64365184-8fe2-48b5-a332-8358c3a9ff5e.jpg",
+        "link": "https://amzn.to/4ttWaQK"
+      }
+    ],
+    "Books": [
+      {
+        "id": "p1775155445207",
+        "name": "Stop Letting Everything Affect You",
+        "desc": "Stop Letting Everything Affect You Book – Break Overthinking Best Deal",
+        "price": "₹260 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp",
+        "link": "https://amzn.to/4dUImu8"
+      }
+    ],
+    "Desk set-up": [
+      {
+        "id": "p1775155803901",
+        "name": "Laptop stand ",
+        "desc": "Dyazo Adjustable Aluminum Laptop Stand – Ergonomic Foldable Riser",
+        "price": "₹369 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp",
+        "link": "https://amzn.to/3PQthzO"
+      },
+      {
+        "id": "p1775492264554",
+        "name": "Weird Wolf Study Lamp",
+        "desc": "",
+        "price": "₹448 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/df378fb5-eef3-4549-9a76-db620aa44f3f.jpg",
+        "link": "https://amzn.to/41V6qWp"
+      },
+      {
+        "id": "p1775492791461",
+        "name": "Gesto Mini Fan",
+        "desc": "",
+        "price": "₹420 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3689d112-9e7b-4656-a76b-30bff4214538.jpg",
+        "link": "https://amzn.to/4t5L04Q"
+      }
+    ],
+    "Toys & games": [
+      {
+        "id": "p1775241046954",
+        "name": "Drift stunt car",
+        "desc": "Trending 4WD Drift Stunt Car for Kids | 360° Rotating RC Toy",
+        "price": "₹1099 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg",
+        "link": "https://amzn.to/4c4r63c"
+      }
+    ],
+    "Wall accessories ": [
+      {
+        "id": "p1775311900231",
+        "name": "Charging phone holder",
+        "desc": "Wall Mobile Holder | Charging Stand, Remote & Key Holder",
+        "price": " ₹399 ⭐4.2  ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg",
+        "link": "https://amzn.to/4v1vQiy"
+      }
+    ]
+  },
+  "US": {
+    "Tech": [
+      {
+        "id": "p1775068080779",
+        "name": "Ear buds ",
+        "desc": "Soundcore P20i Wireless Earbuds | Big Bass Bluetooth 5.3 Earphones",
+        "price": "$24.99 | ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg",
+        "link": "https://amzn.to/4tqi3kb"
+      },
+      {
+        "id": "p1775158794746",
+        "name": "Headset",
+        "desc": "Razer BlackShark V2 X Gaming Headset | 50mm Drivers & Noise Isolation – Best Gamer Pick",
+        "price": "$37.99 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/82a6332a-e5ba-4c57-83a6-286a7beb9a83.jpg",
+        "link": "https://amzn.to/4dXGbG6"
+      },
+      {
+        "id": "p1775242442403",
+        "name": "RBG  Gaming Keyboard ",
+        "desc": "Redragon K556 PRO Wireless RGB Gaming Keyboard | Tri-Mode Mechanical",
+        "price": "$39.43 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b648d5f3-50b6-42b4-a00a-1a433cc07c8e.jpg",
+        "link": "https://amzn.to/4vsbOyb"
+      },
+      {
+        "id": "p1775313412737",
+        "name": "Men's smartwatch ",
+        "desc": "Smart Watch 1.83\" HD | Bluetooth Calling | 110+ Sports Modes |",
+        "price": "$19.99 ⭐5.0 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/deb82fc8-355f-4847-a9c8-c8f88732d986.webp",
+        "link": "https://amzn.to/4c7WLAP"
+      },
+      {
+        "id": "p1775412453383",
+        "name": "Foldable Bluetooth Keyboard & Mouse",
+        "desc": "Samsers Foldable Bluetooth Keyboard & Mouse Combo | Portable Travel Set | $53.99 ⭐4.5 Deal",
+        "price": "$53.99 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fe0eac46-1a53-4de9-8c87-8689d7117a85.jpg",
+        "link": "https://amzn.to/4vdT2tU"
+      },
+      {
+        "id": "p1775490971066",
+        "name": "Slim Pocket Cooling Fan",
+        "desc": "",
+        "price": "$9.99 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bbaa753d-36d2-4b68-a2ba-585715ee12af.jpg",
+        "link": "https://amzn.to/4crKB6W"
+      },
+      {
+        "id": "p1775492898406",
+        "name": "Waterproof Party Speaker",
+        "desc": "",
+        "price": " $39.99 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6f8cde0c-c806-406b-bb95-6989b18cfbc9.jpg",
+        "link": "https://amzn.to/3PRasws"
+      }
+    ],
+    "Kitchen": [
+      {
+        "id": "p1775068420455",
+        "name": "Knife set",
+        "desc": "14-Piece Kitchen Knife Set Wood Block | Stainless Steel Chef Knife Set",
+        "price": "$69.99 | ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3329afce-132b-4ed6-870f-6092df149d72.jpg",
+        "link": "https://amzn.to/4scCz6T"
+      },
+      {
+        "id": "p1775242640601",
+        "name": "Air Fryer ",
+        "desc": "COSORI 9-in-1 TurboBlaze Air Fryer | Cooking Kitchen upgrade",
+        "price": "$89.87 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7daddd1d-12dd-48fb-a770-c6d3202f1397.jpg",
+        "link": "https://amzn.to/4cpwHlO"
+      },
+      {
+        "id": "p1775313176315",
+        "name": "Dining plates ",
+        "desc": "18-Piece Dinnerware Set for 6 | Microwave Safe Plates & Bowls |",
+        "price": "$39.99 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c87c2a74-1556-4171-afd1-76710f00409d.jpg",
+        "link": "https://amzn.to/4c3JUPY"
+      },
+      {
+        "id": "p1775414302062",
+        "name": "Food warming mat",
+        "price": "$46.99 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e8a81e11-e961-40d7-9936-d8cbc01f511b.jpg",
+        "link": "https://amzn.to/47MQ5qq"
+      },
+      {
+        "id": "p1775572244771",
+        "name": "Noodle Express Hot Pot",
+        "desc": "",
+        "price": "$16.99 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
+        "link": "https://amzn.to/47N1K8J"
+      }
+    ],
+    "Home": [
+      {
+        "id": "p1775068712329",
+        "name": "Air purifier ",
+        "desc": "LEVOIT Core Mini-P Air Purifier | Compact 3-in-1 Bedroom Air Cleaner",
+        "price": "$39.99 | ⭐4.6 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/acca3151-aac0-4342-94f4-727fcf485fa6.jpg",
+        "link": "https://amzn.to/47Bkkk0"
+      },
+      {
+        "id": "p1775157734548",
+        "name": "EUDELE Shower Caddy",
+        "desc": "EUDELE Shower Caddy 5-Pack | No-Drill Rustproof Bathroom Organize",
+        "price": "$18.98 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/867ae68b-2582-42ab-8119-8c157f575ec0.jpg",
+        "link": "https://amzn.to/48rWDLd"
+      },
+      {
+        "id": "p1775159263226",
+        "name": "RGB Corner Lamp",
+        "desc": "RGB LED Corner Floor Lamp with Music Sync & App Control Gaming Room Light",
+        "price": "$39.99 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/39e19f91-1127-4dcc-9d9d-4be017427c9f.jpg",
+        "link": "https://amzn.to/47Dlg7q"
+      },
+      {
+        "id": "p1775313844398",
+        "name": "Modern Candle lamp ",
+        "desc": "Modern Candle Warmer Lamp Dimmable with Timer | Cozy Home",
+        "price": "$26.99 ⭐4.6 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fa8e5623-d15e-4e05-85c8-68c5d3cdd7cb.jpg",
+        "link": "https://amzn.to/3POzOLq"
+      },
+      {
+        "id": "p1775491611681",
+        "name": "Retro Quote Canvas Art",
+        "desc": "",
+        "price": "$7.77 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9fe04c40-084f-496b-9dc3-a7c5d2e30a0c.jpg",
+        "link": "https://amzn.to/4sWPUkR"
+      },
+      {
+        "id": "p1775572367372",
+        "name": "Galaxy Star Projector",
+        "desc": "",
+        "price": " $16.77 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ad908153-877e-46d4-ad30-7d62af6d2a34.jpg",
+        "link": "https://amzn.to/47OSmRP"
+      }
+    ],
+    "Fashion": [
+      {
+        "id": "p1775069064279",
+        "name": "Men hoodies ",
+        "desc": "Real Essentials Men’s Cotton Henley Hoodie 3-Pack |",
+        "price": "$31.44 | ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg",
+        "link": "https://amzn.to/4m5bwbV"
+      },
+      {
+        "id": "p1775158163760",
+        "name": "Summer beach wear ",
+        "desc": "COOFANDY Men’s Summer Beach Shirt | Casual Textured Button Down",
+        "price": "$27.99 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/dda3dadc-8d0c-44cb-9010-0be6dad64cb6.jpg",
+        "link": "https://amzn.to/4c0MQNg"
+      },
+      {
+        "id": "p1775242153400",
+        "name": "Men’s Summer Casual",
+        "desc": "COOFANDY Men’s Summer Casual Button Down Shirt | Trendy Untucked Style",
+        "price": "$17.99 ⭐4.3 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ee06a4a9-65d3-43fb-9a45-638c84a6519f.jpg",
+        "link": "https://amzn.to/3PO5Aby"
+      },
+      {
+        "id": "p1775313044346",
+        "name": "Men's polo shirt ",
+        "desc": "JMIERR Men’s Textured Knit Polo Shirt|Casual Summer & Beach Style",
+        "price": "$14.99 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4f72f34b-de67-4993-8d6b-558d996717fb.jpg",
+        "link": "https://amzn.to/4cpE64D"
+      },
+      {
+        "id": "p1775413821750",
+        "name": "Men’s Casual Summer shirt",
+        "price": "$17.99 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e00a.jpg",
+        "link": "https://amzn.to/3PQLyNC"
+      },
+      {
+        "id": "p1775491391230",
+        "name": "Charged Surge 4 Sneakers",
+        "desc": "",
+        "price": " $49.99 ⭐4.6           ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cc6cb70b-b2ad-4e51-9d13-cfd056e96176.jpg",
+        "link": "https://amzn.to/4sUK7fB"
+      }
+    ],
+    "Toys & games ": [
+      {
+        "id": "p1775241935416",
+        "name": "RC Stunt Car ",
+        "desc": "RC Stunt Car for Boys | LED Spray Remote Control Toy ",
+        "price": "$39.99 ⭐4.5 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg",
+        "link": "https://amzn.to/41foqe1"
+      },
+      {
+        "id": "p1775413435910",
+        "name": "Infinity Cube ",
+        "desc": "Infinity Cube Fidget Toy Stress Relief Gadget for Kids & Adults",
+        "price": "$9.99 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/29fe1b52-f600-4727-9bf8-652920f7e5c2.jpg",
+        "link": "https://amzn.to/4duogqz"
+      }
+    ]
+  },
+  "META": {
+    "IND": {
+      "Tech": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23414d7f-2106-49f3-aa17-6ac3f6276246.jpg"
+      },
+      "Fashion": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg"
+      },
+      "Kitchen": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg"
+      },
+      "Home": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5cf4fd33-304d-486a-a5aa-80f7c75753c3.webp"
+      },
+      "Books": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp"
+      },
+      "Desk set-up": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp"
+      },
+      "Toys & games": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a07b61f7-889d-4d19-8ecc-ba5d080445d2.jpg"
+      },
+      "Wall accessories ": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg"
+      }
+    },
+    "US": {
+      "Tech": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg"
+      },
+      "Kitchen": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3329afce-132b-4ed6-870f-6092df149d72.jpg"
+      },
+      "Home": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/39e19f91-1127-4dcc-9d9d-4be017427c9f.jpg"
+      },
+      "Fashion": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg"
+      },
+      "Toys & games ": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg"
+      }
+    }
+  }
 }
-
-function fastRedirect(url) {
-    if(!url) return;
-    location.replace(url);
-}
-
-function filterItems(gridId, val) {
-    const q = val.toLowerCase();
-    document.querySelectorAll(`#${gridId} .card`).forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none");
-}
-
-function showLayer(id, push = true) {
-    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    const target = document.getElementById(id);
-    if(target) { target.classList.add('active'); target.scrollTop = 0; }
-    if (push) window.history.pushState({ layer: id }, "");
-}
-
-window.onpopstate = (e) => showLayer(e.state?.layer || 'storeLayer', false);
-
-async function init() {
-    try {
-        const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-        data = res.ok ? await res.json() : JSON.parse(localStorage.getItem('storeData'));
-    } catch (e) { data = JSON.parse(localStorage.getItem('storeData')) || { IND:{}, US:{} }; }
-    if(!data.META) data.META = { IND:{}, US:{} };
-    syncUI();
-}
-
-// --- ADMIN ---
-function syncUI() {
-    const s = document.getElementById('manageStore').value;
-    const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
-    let h = '<option value="">-- Select --</option>';
-    if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
-    cSel.innerHTML = h; pCSel.innerHTML = h;
-}
-function syncPList() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
-    const pSel = document.getElementById('editPSel'); pSel.innerHTML = '<option value="">-- New --</option>';
-    if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
-}
-function loadCat() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    document.getElementById('catInp').value = c;
-    document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
-}
-function saveCat() {
-    const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
-    if(!n) return;
-    if(old && old!==n) { data[s][n] = data[s][old]; delete data[s][old]; if(data.META[s][old]) { data.META[s][n] = data.META[s][old]; delete data.META[s][old]; } }
-    else if(!data[s][n]) data[s][n] = [];
-    if(!data.META[s][n]) data.META[s][n] = {};
-    data.META[s][n].img = img;
-    saveLoc(); syncUI(); renC(); alert("Saved!");
-}
-function loadP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    const p = data[s][c]?.find(x => x.id === id);
-    ['pName','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
-}
-function saveP() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(!c) return alert("Select Category");
-    let p = { id: id || "p"+Date.now(), name: document.getElementById('pName').value, desc: "", price: document.getElementById('pPrice').value, img: document.getElementById('pImg').value, link: document.getElementById('pLink').value };
-    if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
-    saveLoc(); syncPList(); if(curCat === c) renP(); alert("Saved!");
-}
-function deletePManual() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
-    if(id && confirm("Delete?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); if(curCat === c) renP(); }
-}
-
-// --- RENDERERS ---
-function renC() {
-    const g = document.getElementById('catGrid'); g.innerHTML = "";
-    if(!data[curStore]) return;
-    Object.keys(data[curStore]).forEach(c => {
-        const img = (data.META && data.META[curStore] && data.META[curStore][c]?.img) || data[curStore][c][0]?.img;
-        g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
-    });
-}
-function renP(sid = null) {
-    const g = document.getElementById('pGrid'); g.innerHTML = "";
-    if(!data[curStore] || !data[curStore][curCat]) return;
-    data[curStore][curCat].forEach(p => {
-        const sl = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        g.innerHTML += `
-            <div class="card" id="${p.id}" ontouchstart="prewarm('${p.link}')">
-                <button class="link-symbol" onclick="cp('${sl}',event)">🔗</button>
-                <div onclick="fastRedirect('${p.link}')">
-                    <img src="${getImg(p.img)}">
-                    <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
-                </div>
-                <a class="buy-btn" href="javascript:void(0)" onclick="fastRedirect('${p.link}')">Buy Now</a>
-            </div>`;
-    });
-    if(sid) setTimeout(() => document.getElementById(sid)?.scrollIntoView({behavior:'smooth', block:'center'}), 800);
-}
-
-function hSec(s) { cc++; setTimeout(() => { if(cc >= 3) { if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc === 1) { curStore = s; renC(); showLayer('catLayer'); } cc = 0; }, 400); }
-function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
-function getImg(u) { return u ? `https://images.weserv.nl/?url=${encodeURIComponent(u)}` : "https://via.placeholder.com/300x200"; }
-function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); document.getElementById('toast').style.display='block'; setTimeout(()=>document.getElementById('toast').style.display='none', 2000); }
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert("Copied!"); }
-function closeAdmin() { document.getElementById('adminPanel').classList.remove('active'); }
-function deleteCatManual() {
-    const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
-    if(c && confirm("Delete?")) { delete data[s][c]; if(data.META[s]) delete data.META[s][c]; saveLoc(); syncUI(); renC(); }
-}
-window.onload = init;
-</script>
-</body>
-</html>
