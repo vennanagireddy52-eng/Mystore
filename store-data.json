@@ -295,6 +295,14 @@
         "price": "$46.99 ⭐4.6",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e8a81e11-e961-40d7-9936-d8cbc01f511b.jpg",
         "link": "https://amzn.to/47MQ5qq"
+      },
+      {
+        "id": "p1775572244771",
+        "name": "Noodle Express Hot Pot",
+        "desc": "",
+        "price": "$16.99 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
+        "link": "https://amzn.to/47N1K8J"
       }
     ],
     "Home": [
@@ -337,6 +345,22 @@
         "price": "$7.77 ⭐4.4",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9fe04c40-084f-496b-9dc3-a7c5d2e30a0c.jpg",
         "link": "https://amzn.to/4sWPUkR"
+      },
+      {
+        "id": "p1775572367372",
+        "name": "Galaxy Star Projector",
+        "desc": "",
+        "price": " $16.77 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ad908153-877e-46d4-ad30-7d62af6d2a34.jpg",
+        "link": "https://amzn.to/47OSmRP"
+      },
+      {
+        "id": "p1775572552146",
+        "name": "Sunco 6\" LED Can Lights",
+        "desc": "",
+        "price": " $43.39 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/354a7d1f-e638-44df-a298-6703ed3ca737.jpg",
+        "link": "https://amzn.to/48k9b7n"
       }
     ],
     "Fashion": [
@@ -404,6 +428,14 @@
         "price": "$9.99 ⭐4.6",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/29fe1b52-f600-4727-9bf8-652920f7e5c2.jpg",
         "link": "https://amzn.to/4duogqz"
+      },
+      {
+        "id": "p1775572655864",
+        "name": "Keyboard Clicker Fidget Toy",
+        "desc": "",
+        "price": "$8.99 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3eab267d-c14a-45d1-b469-0ad3fa411837.jpg",
+        "link": "https://amzn.to/4c9kqR7"
       }
     ]
   },
@@ -448,8 +480,4 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg"
       },
       "Toys & games ": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg"
-      }
-    }
-  }
-}
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710
