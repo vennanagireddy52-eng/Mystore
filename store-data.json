@@ -203,6 +203,16 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg",
         "link": "https://amzn.to/4v1vQiy"
       }
+    ],
+    "Photography": [
+      {
+        "id": "p1775576791681",
+        "name": "Kratos Ring Light Kit",
+        "desc": "",
+        "price": "₹799 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b94feb9a-d17c-4fca-859d-8b2c73da6f86.jpg",
+        "link": "https://amzn.to/4sDd3YJ"
+      }
     ]
   },
   "US": {
@@ -464,6 +474,9 @@
       },
       "Wall accessories ": {
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg"
+      },
+      "Photography": {
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b94feb9a-d17c-4fca-859d-8b2c73da6f86.jpg"
       }
     },
     "US": {
@@ -471,13 +484,4 @@
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg"
       },
       "Kitchen": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3329afce-132b-4ed6-870f-6092df149d72.jpg"
-      },
-      "Home": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/39e19f91-1127-4dcc-9d9d-4be017427c9f.jpg"
-      },
-      "Fashion": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/610332df-90cb-4320-8770-ae5b58cdddf1.jpg"
-      },
-      "Toys & games ": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710
+        "img": "https://i.supai
