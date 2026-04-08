@@ -337,6 +337,14 @@
         "price": "$16.99 ⭐4.4 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
         "link": "https://amzn.to/47N1K8J"
+      },
+      {
+        "id": "p1775664900113",
+        "name": "Dough Scraper",
+        "desc": "",
+        "price": "$14.95 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2d52b6aa-a908-4b9b-b51a-9b601138bc08.jpg",
+        "link": "https://amzn.to/3PYFKl5"
       }
     ],
     "Home": [
@@ -395,6 +403,14 @@
         "price": " $43.39 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/354a7d1f-e638-44df-a298-6703ed3ca737.jpg",
         "link": "https://amzn.to/48k9b7n"
+      },
+      {
+        "id": "p1775664981198",
+        "name": "Lighted Willow Vine",
+        "desc": "",
+        "price": " $28.79 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0373a1d6-d2b3-4013-83d0-d7b597198ba7.jpg",
+        "link": "https://amzn.to/3O2o5Zb"
       }
     ],
     "Fashion": [
@@ -444,6 +460,14 @@
         "price": " $49.99 ⭐4.6           ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cc6cb70b-b2ad-4e51-9d13-cfd056e96176.jpg",
         "link": "https://amzn.to/4sUK7fB"
+      },
+      {
+        "id": "p1775664643849",
+        "name": "COOFANDY Linen Shirt",
+        "desc": "",
+        "price": "$26.99 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ad2f1073-6b9e-453d-9a33-6b1a0819e6c2.jpg",
+        "link": "https://amzn.to/3OvcEcB"
       }
     ],
     "Toys & games ": [
@@ -465,27 +489,4 @@
       },
       {
         "id": "p1775572655864",
-        "name": "Keyboard Clicker Fidget Toy",
-        "desc": "",
-        "price": "$8.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3eab267d-c14a-45d1-b469-0ad3fa411837.jpg",
-        "link": "https://amzn.to/4c9kqR7"
-      }
-    ]
-  },
-  "META": {
-    "IND": {
-      "Tech": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23414d7f-2106-49f3-aa17-6ac3f6276246.jpg"
-      },
-      "Fashion": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg"
-      },
-      "Kitchen": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5be4f497-1d3a-45dc-8ea0-4eecee4442cc.jpg"
-      },
-      "Home": {
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/49515a35-fb2a-4556-bfd3-141b64228b9f.webp"
-      },
-      "Books": {
-        "img": "https://i.supaimg.com/e6a
+        "name": "Keyboard Clicker Fidge
