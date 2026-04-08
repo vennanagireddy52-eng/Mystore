@@ -12,23 +12,25 @@
     <style>
         * { touch-action: manipulation; box-sizing: border-box; }
         body { margin:0; font-family:system-ui, -apple-system, sans-serif; background:#f4f7f6; color: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
+        
+        /* 🚀 GLOBAL LAYER STYLE */
+        .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🚀 STORE LAYER: Full Width Fit */
+        /* 🎯 SPECIFIC BG COLOR FOR SECTIONS */
+        #catLayer, #pLayer { background: #cdf8f9; }
+        
         #storeLayer { display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; padding: 20px; gap: 20px; }
         .storeCard { background: white; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 450px; padding: 35px 20px; text-align: center; border-radius: 20px; font-size: 26px; font-weight: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.1s; }
         .storeCard:active { transform: scale(0.96); opacity: 0.9; }
         
-        /* 🏛️ TOP BAR */
         .topbar { padding: 10px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); gap: 10px; }
         .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
         .search-container { flex-grow: 1; }
         .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); color: #333; font-weight: 500; }
 
-        /* GRID & CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; transition: transform 0.1s; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 8px 20px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.3); transition: transform 0.1s; }
         .card:active { transform: scale(0.98); }
         .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; cursor: pointer; }
         
@@ -38,7 +40,6 @@
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
         .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:14px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        /* ⚙️ ADMIN PANEL */
         #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: #fff; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 20px; overflow-y: auto; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
         #adminPanel.active { display: flex; }
         .admin-section { background: #fdfdfd; padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #eaeaea; }
@@ -58,10 +59,7 @@
         <h2 style="margin:0; color:#6C5CE7;">Fast Editor</h2>
         <button onclick="closeAdmin()" style="border:none; background:#eee; width:40px; height:40px; border-radius:50%;">✕</button>
     </div>
-    
-    <button class="btn-main" onclick="copyForGithub()" style="background:#f39c12; margin-bottom:20px;">
-        💾 COPY DATA FOR GITHUB
-    </button>
+    <button class="btn-main" onclick="copyForGithub()" style="background:#f39c12; margin-bottom:20px;">💾 COPY DATA FOR GITHUB</button>
 
     <div class="admin-section">
         <h3>1. Categories</h3>
@@ -111,7 +109,6 @@ function showToast(m) { const t = document.getElementById('toast'); t.innerText 
 async function init() {
     const local = localStorage.getItem('storeData');
     if(local) data = JSON.parse(local);
-    
     try {
         const res = await fetch(GITHUB_URL + "?nocache=" + Date.now());
         if(res.ok) {
@@ -122,26 +119,13 @@ async function init() {
             }
         }
     } catch (e) { console.warn("Using Local Data"); }
-    
     if(!data.META) data.META = { IND:{}, US:{} };
     syncUI();
-
-    // 🔗 DEEP LINK LOGIC
     const urlParams = new URLSearchParams(window.location.search);
-    const s = urlParams.get('store');
-    const c = urlParams.get('cat');
-    const pId = urlParams.get('prod');
-
+    const s = urlParams.get('store'), c = urlParams.get('cat'), pId = urlParams.get('prod');
     if (s && data[s]) {
-        curStore = s;
-        renC();
-        showLayer('catLayer', false);
-        if (c && data[s][c]) {
-            curCat = c;
-            renP(pId);
-            showLayer('pLayer', false);
-        }
-        // ✨ CLEAN URL: Reset browser history so manual refresh starts at Store Layer
+        curStore = s; renC(); showLayer('catLayer', false);
+        if (c && data[s][c]) { curCat = c; renP(pId); showLayer('pLayer', false); }
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 }
@@ -150,7 +134,6 @@ function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); sh
 function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 2)); showToast("Copied! Paste to GitHub."); }
 function fastRedirect(url) { if(url) location.replace(url); }
 function prewarm(url) { if(!url) return; try { const l = document.createElement('link'); l.rel = 'preconnect'; l.href = new URL(url).origin; document.head.appendChild(l); } catch(e){} }
-
 function syncUI() {
     const s = document.getElementById('manageStore').value;
     const cSel = document.getElementById('editCatSelect'), pCSel = document.getElementById('pCatSel');
@@ -158,19 +141,16 @@ function syncUI() {
     if(data[s]) Object.keys(data[s]).forEach(c => h += `<option value="${c}">${c}</option>`);
     cSel.innerHTML = h; pCSel.innerHTML = h;
 }
-
 function syncPList() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value;
     const pSel = document.getElementById('editPSel'); pSel.innerHTML = '<option value="">+ Add Product</option>';
     if(c && data[s][c]) data[s][c].forEach(p => pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`);
 }
-
 function loadCat() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     document.getElementById('catInp').value = c;
     document.getElementById('catImgInp').value = (c && data.META[s] && data.META[s][c]) ? (data.META[s][c].img || "") : "";
 }
-
 function saveCat() {
     const s = document.getElementById('manageStore').value, old = document.getElementById('editCatSelect').value, n = document.getElementById('catInp').value.trim(), img = document.getElementById('catImgInp').value;
     if(!n) return;
@@ -180,13 +160,11 @@ function saveCat() {
     data.META[s][n].img = img;
     saveLoc(); syncUI(); renC();
 }
-
 function loadP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     const p = data[s][c]?.find(x => x.id === id);
     ['pName','pPrice','pImg','pLink'].forEach(k => document.getElementById(k).value = p ? p[k.substring(1).toLowerCase()] : "");
 }
-
 function saveP() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(!c) return alert("Select Category!");
@@ -194,17 +172,14 @@ function saveP() {
     if(id) { const i = data[s][c].findIndex(x=>x.id===id); data[s][c][i]=p; } else data[s][c].push(p);
     saveLoc(); syncPList(); if(curCat === c) renP();
 }
-
 function deletePManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('pCatSel').value, id = document.getElementById('editPSel').value;
     if(id && confirm("Delete?")) { data[s][c] = data[s][c].filter(x => x.id !== id); saveLoc(); syncPList(); if(curCat === c) renP(); }
 }
-
 function deleteCatManual() {
     const s = document.getElementById('manageStore').value, c = document.getElementById('editCatSelect').value;
     if(c && confirm("Delete category?")) { delete data[s][c]; if(data.META[s]) delete data.META[s][c]; saveLoc(); syncUI(); renC(); }
 }
-
 function renC() {
     const g = document.getElementById('catGrid'); g.innerHTML = "";
     if(!data[curStore]) return;
@@ -213,28 +188,15 @@ function renC() {
         g.innerHTML += `<div class="card" onclick="openC('${c}')"><img src="${getImg(img)}"><div class="info"><b>${c}</b></div></div>`;
     });
 }
-
 function renP(sid = null) {
     const g = document.getElementById('pGrid'); g.innerHTML = "";
     if(!data[curStore] || !data[curStore][curCat]) return;
     data[curStore][curCat].forEach(p => {
         const sl = `${location.origin}${location.pathname}?store=${curStore}&cat=${encodeURIComponent(curCat)}&prod=${p.id}`;
-        g.innerHTML += `
-            <div class="card" id="${p.id}" ontouchstart="prewarm('${p.link}')">
-                <button class="link-symbol" onclick="cp('${sl}',event)">🔗</button>
-                <div onclick="fastRedirect('${p.link}')">
-                    <img src="${getImg(p.img)}">
-                    <div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div>
-                </div>
-                <a class="buy-btn" href="javascript:void(0)" onclick="fastRedirect('${p.link}')">Buy Now</a>
-            </div>`;
+        g.innerHTML += `<div class="card" id="${p.id}" ontouchstart="prewarm('${p.link}')"><button class="link-symbol" onclick="cp('${sl}',event)">🔗</button><div onclick="fastRedirect('${p.link}')"><img src="${getImg(p.img)}"><div class="info"><b>${p.name}</b><span class="price">${p.price}</span></div></div><a class="buy-btn" href="javascript:void(0)" onclick="fastRedirect('${p.link}')">Buy Now</a></div>`;
     });
-    if(sid) setTimeout(() => {
-        const el = document.getElementById(sid);
-        if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
-    }, 500);
+    if(sid) setTimeout(() => { const el = document.getElementById(sid); if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }, 500);
 }
-
 function filterItems(gridId, val) { const q = val.toLowerCase(); document.querySelectorAll(`#${gridId} .card`).forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none"); }
 function showLayer(id, push = true) { document.querySelectorAll('.layer').forEach(l => l.classList.remove('active')); document.getElementById(id).classList.add('active'); if (push) window.history.pushState({ layer: id }, ""); }
 window.onpopstate = (e) => showLayer(e.state?.layer || 'storeLayer', false);
