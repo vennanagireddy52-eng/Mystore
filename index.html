@@ -15,28 +15,34 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; background:#f4f7f6; padding-bottom: 80px; }
         .active { display:block; }
         
+        /* 🚀 STORE LAYER: Full Width Fit */
         #storeLayer { display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg,#6C5CE7,#00B894); height: 100vh; padding: 20px; gap: 20px; }
-        .storeCard { background: white; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 450px; padding: 35px 20px; text-align: center; border-radius: 20px; font-size: 26px; font-weight: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; }
+        .storeCard { background: white; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 450px; padding: 35px 20px; text-align: center; border-radius: 20px; font-size: 26px; font-weight: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.1s; }
+        .storeCard:active { transform: scale(0.96); opacity: 0.9; }
         
+        /* 🏛️ TOP BAR */
         .topbar { padding: 10px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; background: #6C5CE7; box-shadow: 0 2px 10px rgba(0,0,0,0.1); gap: 10px; }
-        .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .back-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
         .search-container { flex-grow: 1; }
-        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); }
+        .search-bar { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; font-size: 15px; background: rgba(255,255,255,0.95); color: #333; font-weight: 500; }
 
+        /* GRID & CARDS */
         .grid { column-count:2; column-gap:12px; padding:12px; }
-        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; }
-        .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; }
+        .card { break-inside: avoid; background:white; margin-bottom:15px; border-radius:18px; overflow:hidden; position:relative; box-shadow:0 5px 15px rgba(0,0,0,0.06); border: 1px solid #eee; transition: transform 0.1s; }
+        .card:active { transform: scale(0.98); }
+        .card img { width:100%; display:block; object-fit: contain; min-height: 140px; background: #fff; cursor: pointer; }
         
-        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: 1.5px solid #6C5CE7; border-radius: 50%; width: 34px; height: 34px; z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; }
-        .info { padding:12px; }
-        .info b { font-size: 14px; display: block; margin-bottom: 4px; color: #222; }
+        .link-symbol { position:absolute; top:10px; right:10px; background:white; border: 1.5px solid #6C5CE7; border-radius: 50%; width: 34px; height: 34px; z-index: 10; display: flex; align-items: center; justify-content: center; color: #6C5CE7; cursor: pointer; }
+        .info { padding:12px; cursor: pointer; }
+        .info b { font-size: 14px; display: block; margin-bottom: 4px; line-height: 1.2; color: #222; }
         .price { font-weight: 800; color: #00b894; font-size: 15px; display: block; }
-        .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:14px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; }
+        .buy-btn { display:block; background:#00b894; color:white; text-align:center; padding:14px; text-decoration:none; font-weight:bold; border-radius: 0 0 18px 18px; font-size: 14px; }
         
-        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: #fff; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
+        /* ⚙️ ADMIN PANEL */
+        #adminPanel { position: fixed; bottom: 0; left: 0; width: 100%; height: 92%; background: #fff; z-index: 2000; border-radius: 30px 30px 0 0; display: none; flex-direction: column; padding: 20px; overflow-y: auto; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
         #adminPanel.active { display: flex; }
         .admin-section { background: #fdfdfd; padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #eaeaea; }
-        input, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 14px; }
+        input, select, .btn-main { width: 100%; padding: 14px; margin: 6px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 14px; outline: none; }
         .btn-main { background: #6C5CE7; color: white; border: none; font-weight: bold; cursor: pointer; }
         .btn-del { background: #ff7675 !important; margin-top: 10px; }
 
@@ -120,7 +126,7 @@ async function init() {
     if(!data.META) data.META = { IND:{}, US:{} };
     syncUI();
 
-    // 🔗 DEEP LINK LOGIC: Auto-open store/cat/product from URL
+    // 🔗 DEEP LINK LOGIC
     const urlParams = new URLSearchParams(window.location.search);
     const s = urlParams.get('store');
     const c = urlParams.get('cat');
@@ -135,6 +141,8 @@ async function init() {
             renP(pId);
             showLayer('pLayer', false);
         }
+        // ✨ CLEAN URL: Reset browser history so manual refresh starts at Store Layer
+        window.history.replaceState({}, document.title, window.location.pathname);
     }
 }
 
@@ -221,7 +229,6 @@ function renP(sid = null) {
                 <a class="buy-btn" href="javascript:void(0)" onclick="fastRedirect('${p.link}')">Buy Now</a>
             </div>`;
     });
-    // Auto-scroll to the product if shared via link
     if(sid) setTimeout(() => {
         const el = document.getElementById(sid);
         if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
