@@ -47,6 +47,14 @@
         "price": "499 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9191f589-99a6-4b0d-8814-edc285347d21.jpg",
         "link": "https://amzn.to/4veuX6u"
+      },
+      {
+        "id": "p1775665373092",
+        "name": "Magnetic Phone Holder",
+        "desc": "",
+        "price": "₹699 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6cb19b80-dc89-4a94-95f2-f16ab905e8cd.jpg",
+        "link": "https://amzn.to/4bV4cfK"
       }
     ],
     "Fashion": [
@@ -72,6 +80,14 @@
         "price": "₹1299 ⭐4.7 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f38000ea-4117-4c10-aca1-33e8c016fc08.jpg",
         "link": "https://amzn.to/4cbbTxg"
+      },
+      {
+        "id": "p1775665453565",
+        "name": "Casual Cotton Shirt",
+        "desc": "",
+        "price": "₹495 ⭐3.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/34e3572a-4aee-47a5-a91e-f735ff3789e2.jpg",
+        "link": "https://amzn.to/4soCOvI"
       }
     ],
     "Kitchen": [
@@ -113,6 +129,14 @@
         "price": "₹999 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e34993ef-15b0-41ab-bc20-5cb0b105a9d2.jpg",
         "link": "https://amzn.to/4snCtZT"
+      },
+      {
+        "id": "p1775665236962",
+        "name": "Kitchen Storage Rack",
+        "desc": "",
+        "price": "₹299 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1362be79-19bd-42b6-8187-75a4d709c1e1.jpg",
+        "link": "https://amzn.to/4meIsPj"
       }
     ],
     "Home": [
@@ -172,6 +196,14 @@
         "price": "₹260 ⭐4.7",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp",
         "link": "https://amzn.to/4dUImu8"
+      },
+      {
+        "id": "p1775665162741",
+        "name": "Chanakya Neeti",
+        "desc": "",
+        "price": "₹237 ⭐4.5 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/35b0dfd7-abed-49bd-9372-460ae1dacaee.jpg",
+        "link": "https://amzn.to/4t2Rba2"
       }
     ],
     "Desk set-up": [
@@ -198,6 +230,14 @@
         "price": "₹420 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3689d112-9e7b-4656-a76b-30bff4214538.jpg",
         "link": "https://amzn.to/4t5L04Q"
+      },
+      {
+        "id": "p1775665361438",
+        "name": "Magnetic Phone Holder",
+        "desc": "",
+        "price": "₹699 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6cb19b80-dc89-4a94-95f2-f16ab905e8cd.jpg",
+        "link": "https://amzn.to/4bV4cfK"
       }
     ],
     "Toys & games": [
@@ -450,43 +490,4 @@
         "id": "p1775413821750",
         "name": "Men’s Casual Summer shirt",
         "price": "$17.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e00a.jpg",
-        "link": "https://amzn.to/3PQLyNC"
-      },
-      {
-        "id": "p1775491391230",
-        "name": "Charged Surge 4 Sneakers",
-        "desc": "",
-        "price": " $49.99 ⭐4.6           ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cc6cb70b-b2ad-4e51-9d13-cfd056e96176.jpg",
-        "link": "https://amzn.to/4sUK7fB"
-      },
-      {
-        "id": "p1775664643849",
-        "name": "COOFANDY Linen Shirt",
-        "desc": "",
-        "price": "$26.99 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ad2f1073-6b9e-453d-9a33-6b1a0819e6c2.jpg",
-        "link": "https://amzn.to/3OvcEcB"
-      }
-    ],
-    "Toys & games ": [
-      {
-        "id": "p1775241935416",
-        "name": "RC Stunt Car ",
-        "desc": "RC Stunt Car for Boys | LED Spray Remote Control Toy ",
-        "price": "$39.99 ⭐4.5 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/08b5d23e-bde3-479a-98dd-c6a733270eb0.jpg",
-        "link": "https://amzn.to/41foqe1"
-      },
-      {
-        "id": "p1775413435910",
-        "name": "Infinity Cube ",
-        "desc": "Infinity Cube Fidget Toy Stress Relief Gadget for Kids & Adults",
-        "price": "$9.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/29fe1b52-f600-4727-9bf8-652920f7e5c2.jpg",
-        "link": "https://amzn.to/4duogqz"
-      },
-      {
-        "id": "p1775572655864",
-        "name": "Keyboard Clicker Fidge
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e0
