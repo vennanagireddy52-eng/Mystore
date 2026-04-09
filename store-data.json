@@ -55,6 +55,14 @@
         "price": "₹699 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6cb19b80-dc89-4a94-95f2-f16ab905e8cd.jpg",
         "link": "https://amzn.to/4bV4cfK"
+      },
+      {
+        "id": "p1775758526005",
+        "name": "Wireless Mouse",
+        "desc": "",
+        "price": "₹899 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/024bf5ce-dcca-499e-8cc0-12030a4b3713.jpg",
+        "link": "https://amzn.to/4vjH6a3"
       }
     ],
     "Fashion": [
@@ -186,6 +194,14 @@
         "price": " ₹999 5.0 ⭐",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ad908153-877e-46d4-ad30-7d62af6d2a34.jpg",
         "link": "https://amzn.to/4bXAbvT"
+      },
+      {
+        "id": "p1775758355771",
+        "name": "LED Wall Light",
+        "desc": "",
+        "price": " ₹198 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/feebe116-c741-4990-a2ec-70ac2dddf378.jpg",
+        "link": "https://amzn.to/3OqtDwJ"
       }
     ],
     "Books": [
@@ -256,6 +272,14 @@
         "price": "₹ 299",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b74107e3-bf99-416f-9a99-8aa7d161f5c9.jpg",
         "link": "https://amzn.to/4twgJvW"
+      },
+      {
+        "id": "p1775758439599",
+        "name": "Diecast Rolls Royce Car",
+        "desc": "",
+        "price": "₹999 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7fcc4e86-b95a-477f-b9bc-198820113756.jpg",
+        "link": "https://amzn.to/4t1N5Pz"
       }
     ],
     "Wall accessories ": [
@@ -276,6 +300,16 @@
         "price": "₹799 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b94feb9a-d17c-4fca-859d-8b2c73da6f86.jpg",
         "link": "https://amzn.to/4sDd3YJ"
+      }
+    ],
+    "Fitness": [
+      {
+        "id": "p1775758244718",
+        "name": "Resistance Bands Kit",
+        "desc": "",
+        "price": "₹1398 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5212a15c-56c7-49d1-ae4a-089e7a30d609.jpg",
+        "link": "https://amzn.to/3Q2d9v8"
       }
     ]
   },
@@ -465,29 +499,4 @@
       {
         "id": "p1775158163760",
         "name": "Summer beach wear ",
-        "desc": "COOFANDY Men’s Summer Beach Shirt | Casual Textured Button Down",
-        "price": "$27.99 ⭐4.4 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/dda3dadc-8d0c-44cb-9010-0be6dad64cb6.jpg",
-        "link": "https://amzn.to/4c0MQNg"
-      },
-      {
-        "id": "p1775242153400",
-        "name": "Men’s Summer Casual",
-        "desc": "COOFANDY Men’s Summer Casual Button Down Shirt | Trendy Untucked Style",
-        "price": "$17.99 ⭐4.3 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ee06a4a9-65d3-43fb-9a45-638c84a6519f.jpg",
-        "link": "https://amzn.to/3PO5Aby"
-      },
-      {
-        "id": "p1775313044346",
-        "name": "Men's polo shirt ",
-        "desc": "JMIERR Men’s Textured Knit Polo Shirt|Casual Summer & Beach Style",
-        "price": "$14.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4f72f34b-de67-4993-8d6b-558d996717fb.jpg",
-        "link": "https://amzn.to/4cpE64D"
-      },
-      {
-        "id": "p1775413821750",
-        "name": "Men’s Casual Summer shirt",
-        "price": "$17.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23a6e6ed-5b25-44e8-8457-8b719a32e0
+        "desc": "COOFANDY Men’s 
