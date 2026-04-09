@@ -121,14 +121,57 @@ async function init() {
     } catch (e) { console.warn("Using Local Data"); }
     if(!data.META) data.META = { IND:{}, US:{} };
     syncUI();
+
     const urlParams = new URLSearchParams(window.location.search);
     const s = urlParams.get('store'), c = urlParams.get('cat'), pId = urlParams.get('prod');
+
     if (s && data[s]) {
-        curStore = s; renC(); showLayer('catLayer', false);
-        if (c && data[s][c]) { curCat = c; renP(pId); showLayer('pLayer', false); }
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // Step 1: Replace current entry with Store layer (bottom of in-app stack)
+        // Pressing back from here exits to Pinterest
+        window.history.replaceState({ layer: 'storeLayer' }, "");
+
+        // Step 2: Push Category layer on top of Store
+        curStore = s;
+        renC();
+        window.history.pushState({ layer: 'catLayer' }, "");
+
+        if (c && data[s][c]) {
+            // Step 3: Push Product layer on top of Category
+            curCat = c;
+            renP(pId);
+            window.history.pushState({ layer: 'pLayer' }, "");
+        }
+
+        // Show the top layer without pushing history again
+        const topLayer = (c && data[s][c]) ? 'pLayer' : 'catLayer';
+        _showLayerOnly(topLayer);
+
+    } else {
+        // Normal entry — record storeLayer in history
+        window.history.replaceState({ layer: 'storeLayer' }, "");
     }
 }
+
+// Switches visible layer WITHOUT touching history
+function _showLayerOnly(id) {
+    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// Switches visible layer AND pushes a history entry (for in-app taps)
+function showLayer(id, push = true) {
+    _showLayerOnly(id);
+    if (push) window.history.pushState({ layer: id }, "");
+}
+
+// OS back button / in-app back button handler
+window.onpopstate = (e) => {
+    const layer = e.state?.layer || 'storeLayer';
+    _showLayerOnly(layer);
+    if (layer === 'storeLayer') { curStore = ""; curCat = ""; }
+    if (layer === 'catLayer')   { curCat = ""; renC(); }
+    if (layer === 'pLayer')     { renP(); }
+};
 
 function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); showToast("Saved to Phone!"); }
 function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 2)); showToast("Copied! Paste to GitHub."); }
@@ -198,9 +241,20 @@ function renP(sid = null) {
     if(sid) setTimeout(() => { const el = document.getElementById(sid); if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }, 500);
 }
 function filterItems(gridId, val) { const q = val.toLowerCase(); document.querySelectorAll(`#${gridId} .card`).forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none"); }
-function showLayer(id, push = true) { document.querySelectorAll('.layer').forEach(l => l.classList.remove('active')); document.getElementById(id).classList.add('active'); if (push) window.history.pushState({ layer: id }, ""); }
-window.onpopstate = (e) => showLayer(e.state?.layer || 'storeLayer', false);
-function hSec(s) { cc++; setTimeout(() => { if(cc >= 3) { if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active'); } else if(cc === 1) { curStore = s; renC(); showLayer('catLayer'); } cc = 0; }, 400); }
+
+function hSec(s) {
+    cc++;
+    setTimeout(() => {
+        if(cc >= 3) {
+            if(prompt("Pin:") === "1234") document.getElementById('adminPanel').classList.add('active');
+        } else if(cc === 1) {
+            curStore = s;
+            renC();
+            showLayer('catLayer');
+        }
+        cc = 0;
+    }, 400);
+}
 function openC(c) { curCat = c; renP(); showLayer('pLayer'); }
 function getImg(u) { return u ? `https://images.weserv.nl/?url=${encodeURIComponent(u)}` : "https://via.placeholder.com/300x200"; }
 function cp(t, e) { e.stopPropagation(); navigator.clipboard.writeText(t); showToast("Link Copied!"); }
