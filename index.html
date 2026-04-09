@@ -16,7 +16,7 @@
         .layer { display:none; position:fixed; top:0; left:0; width:100%; height:100%; overflow-y:auto; padding-bottom: 80px; }
         .active { display:block; }
         
-        /* 🎯 BG COLOR FOR SECTIONS */
+        /* 🎯 NEW BG COLOR FOR SECTIONS */
         #catLayer, #pLayer { background: #1bdaff; }
         
         /* 🔄 LOADING OVERLAY */
@@ -56,7 +56,7 @@
 
 <div id="loader">
     <div class="spinner"></div>
-    <span>Syncing Store Data...</span>
+    <span>Loading Store...</span>
 </div>
 
 <div id="toast">Copied!</div>
@@ -114,38 +114,41 @@ let curStore = "", curCat = "", cc = 0;
 function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display='block'; setTimeout(()=>t.style.display='none', 2000); }
 
 async function init() {
+    // 1. Load Local
     const local = localStorage.getItem('storeData');
-    if(local) {
-        data = JSON.parse(local);
-        document.getElementById('loader').style.display = 'none'; // Hide loader early if we have local data
-    }
+    if(local) data = JSON.parse(local);
     
+    // 2. Load Remote (Force wait for remote if local is missing/empty)
     try {
         const res = await fetch(GITHUB_URL + "?nocache=" + Date.now());
         if(res.ok) {
-            const remoteData = await res.json();
-            data = remoteData;
+            data = await res.json();
             localStorage.setItem('storeData', JSON.stringify(data));
         }
-    } catch (e) { console.warn("Fetch failed"); }
-    
-    // Final check to hide loader
-    document.getElementById('loader').style.display = 'none';
-    
+    } catch (e) { console.error("Sync failed"); }
+
     if(!data.META) data.META = { IND:{}, US:{} };
     syncUI();
 
+    // 3. Handle Deep Link
     const urlParams = new URLSearchParams(window.location.search);
     const s = urlParams.get('store'), c = urlParams.get('cat'), pId = urlParams.get('prod');
+    
     if (s && data[s]) {
         curStore = s; renC(); showLayer('catLayer', false);
-        if (c && data[s][c]) { curCat = c; renP(pId); showLayer('pLayer', false); }
+        if (c && data[s][c]) {
+            curCat = c; renP(pId); showLayer('pLayer', false);
+        }
+        // Clean URL after opening so refresh starts at home
         window.history.replaceState({}, document.title, window.location.pathname);
     }
+    
+    // 4. Hide Loader
+    document.getElementById('loader').style.display = 'none';
 }
 
-function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); showToast("Saved to Phone!"); }
-function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 2)); showToast("Copied! Paste to GitHub."); }
+function saveLoc() { localStorage.setItem('storeData', JSON.stringify(data)); showToast("Saved Locally!"); }
+function copyForGithub() { navigator.clipboard.writeText(JSON.stringify(data, null, 2)); showToast("Copied Data!"); }
 function fastRedirect(url) { if(url) location.replace(url); }
 function prewarm(url) { if(!url) return; try { const l = document.createElement('link'); l.rel = 'preconnect'; l.href = new URL(url).origin; document.head.appendChild(l); } catch(e){} }
 
