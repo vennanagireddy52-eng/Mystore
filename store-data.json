@@ -380,6 +380,14 @@
         "price": " $8.02 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f4feb44e-4cef-4d88-83f8-5265ce868802.webp",
         "link": "https://amzn.to/4tC9aUu"
+      },
+      {
+        "id": "p1775801315565",
+        "name": "Echo Dot Speaker",
+        "desc": "",
+        "price": " $34.08 ⭐4.7 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e28d8315-4c9e-45cd-88dd-2b3703e815ac.jpg",
+        "link": "https://amzn.to/4vAiFFM"
       }
     ],
     "Kitchen": [
@@ -443,9 +451,9 @@
       {
         "id": "p1775157734548",
         "name": "EUDELE Shower Caddy",
-        "desc": "EUDELE Shower Caddy 5-Pack | No-Drill Rustproof Bathroom Organize",
+        "desc": "",
         "price": "$18.98 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/867ae68b-2582-42ab-8119-8c157f575ec0.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4a27d333-b845-4a08-aceb-289871f8a2f2.jpg",
         "link": "https://amzn.to/48rWDLd"
       },
       {
@@ -459,9 +467,9 @@
       {
         "id": "p1775313844398",
         "name": "Modern Candle lamp ",
-        "desc": "Modern Candle Warmer Lamp Dimmable with Timer | Cozy Home",
+        "desc": "",
         "price": "$26.99 ⭐4.6 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fa8e5623-d15e-4e05-85c8-68c5d3cdd7cb.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/54bd40ed-98f7-460e-adc0-f0a6b686f0e4.jpg",
         "link": "https://amzn.to/3POzOLq"
       },
       {
@@ -469,7 +477,7 @@
         "name": "Retro Quote Canvas Art",
         "desc": "",
         "price": "$7.77 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9fe04c40-084f-496b-9dc3-a7c5d2e30a0c.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e91668fa-0547-4713-bf8c-7af91848b685.jpg",
         "link": "https://amzn.to/4sWPUkR"
       },
       {
@@ -499,7 +507,4 @@
       {
         "id": "p1775758908379",
         "name": "Echo Dot Speaker",
-        "desc": "",
-        "price": " $34.08 ⭐4.7 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e28d8315-4c9e-45cd-88dd-2b3703e815ac.jpg",
-        "link": "h
+        "desc
