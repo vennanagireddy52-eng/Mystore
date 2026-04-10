@@ -64,6 +64,14 @@
         "price": "₹1099 ⭐4.1 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/02434ae5-0a83-4a51-a2ab-e060fd71fcfb.jpg",
         "link": "https://amzn.to/4tqUDLl"
+      },
+      {
+        "id": "p1775830854797",
+        "name": "boAt Aavante Bar 490",
+        "desc": "",
+        "price": "₹999 ⭐4.1 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/401cbbfa-1a74-45df-99de-12f30b28da44.jpg",
+        "link": "https://amzn.to/4cpNrse"
       }
     ],
     "Fashion": [
@@ -147,6 +155,14 @@
         "price": "₹299 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1362be79-19bd-42b6-8187-75a4d709c1e1.jpg",
         "link": "https://amzn.to/4meIsPj"
+      },
+      {
+        "id": "p1775831109005",
+        "name": "Wood Spoon Set",
+        "desc": "",
+        "price": "₹699 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/dc662a8d-ea5a-4fec-bf75-5cec197f835e.jpg",
+        "link": "https://amzn.to/4vnyrn0"
       }
     ],
     "Home": [
@@ -204,6 +220,14 @@
         "price": " ₹198 ⭐4.2 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/feebe116-c741-4990-a2ec-70ac2dddf378.jpg",
         "link": "https://amzn.to/3OqtDwJ"
+      },
+      {
+        "id": "p1775830941379",
+        "name": "Mini Air Cooler",
+        "desc": "",
+        "price": "₹699 ⭐4.9",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/11097abf-51d7-4ed4-af23-c9f788272bee.jpg",
+        "link": "https://amzn.to/4dFBl0g"
       }
     ],
     "Books": [
@@ -282,6 +306,14 @@
         "price": "₹999 ⭐4.1",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7fcc4e86-b95a-477f-b9bc-198820113756.jpg",
         "link": "https://amzn.to/4t1N5Pz"
+      },
+      {
+        "id": "p1775831201215",
+        "name": "MRF Cricket Bat",
+        "desc": "",
+        "price": "₹1298 ⭐5.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c4fa3056-3f85-4644-ad45-736e36ab067a.jpg",
+        "link": "https://amzn.to/3QeFSgi"
       }
     ],
     "Wall accessories ": [
@@ -476,35 +508,4 @@
         "id": "p1775491611681",
         "name": "Retro Quote Canvas Art",
         "desc": "",
-        "price": "$7.77 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e91668fa-0547-4713-bf8c-7af91848b685.jpg",
-        "link": "https://amzn.to/4sWPUkR"
-      },
-      {
-        "id": "p1775572367372",
-        "name": "Galaxy Star Projector",
-        "desc": "",
-        "price": " $16.77 ⭐4.4 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f781da4b-5f8f-4b1f-865a-791c1655765e.jpg",
-        "link": "https://amzn.to/47OSmRP"
-      },
-      {
-        "id": "p1775572552146",
-        "name": "Sunco 6\" LED Can Lights",
-        "desc": "",
-        "price": " $43.39 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/354a7d1f-e638-44df-a298-6703ed3ca737.jpg",
-        "link": "https://amzn.to/48k9b7n"
-      },
-      {
-        "id": "p1775664981198",
-        "name": "Lighted Willow Vine",
-        "desc": "",
-        "price": " $28.79 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0373a1d6-d2b3-4013-83d0-d7b597198ba7.jpg",
-        "link": "https://amzn.to/3O2o5Zb"
-      },
-      {
-        "id": "p1775758908379",
-        "name": "Echo Dot Speaker",
-        "desc
+        "price": "
