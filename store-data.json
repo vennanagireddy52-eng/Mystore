@@ -26,18 +26,11 @@
         "link": "https://amzn.to/41d4XL4"
       },
       {
-        "id": "p1775312678230",
-        "name": "Boat smartwatch ",
-        "desc": "boAt Wave Call 3 Smartwatch | BT Calling, 1.83” HD Display, IP68",
-        "price": "₹1099 ⭐4.1 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e5a5b4c0-57fb-4df3-b8ad-041cc6608157.jpg",
-        "link": "https://amzn.to/4tqUDLl"
-      },
-      {
         "id": "p1775414820627",
         "name": "Selfie Stick Tripod",
+        "desc": "",
         "price": "₹1598 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0a594479-a717-4cf4-ac9f-7c89e380e9e5.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1317409e-9396-4ef5-8257-841d50e21627.jpg",
         "link": "https://amzn.to/4tsHT71"
       },
       {
@@ -63,6 +56,14 @@
         "price": "₹899 ⭐4.1",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/024bf5ce-dcca-499e-8cc0-12030a4b3713.jpg",
         "link": "https://amzn.to/4vjH6a3"
+      },
+      {
+        "id": "p1775796911177",
+        "name": "Boat smartwatch ",
+        "desc": "",
+        "price": "₹1099 ⭐4.1 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/02434ae5-0a83-4a51-a2ab-e060fd71fcfb.jpg",
+        "link": "https://amzn.to/4tqUDLl"
       }
     ],
     "Fashion": [
@@ -118,16 +119,17 @@
       {
         "id": "p1775312228967",
         "name": "Dining plates ",
-        "desc": "CELLO Opalware Dinner Set 18pcs | Microwave Safe Family Crockery",
+        "desc": "",
         "price": "₹1007 ⭐4.1",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9767e8be-7a5c-47a2-982a-de4c296819d7.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3e5d2cc8-5206-4ca9-8353-af8f22b5fccf.jpg",
         "link": "https://amzn.to/4sMsv5q"
       },
       {
         "id": "p1775414628636",
         "name": "Kitchen Cutting Platform",
+        "desc": "",
         "price": "₹988 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/223859a4-9580-42b1-9b56-5c7827814197.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/941e9fbb-4357-46f8-890a-77cbab3ed02a.jpg",
         "link": "https://amzn.to/4crtEJW"
       },
       {
@@ -244,7 +246,7 @@
         "name": "Gesto Mini Fan",
         "desc": "",
         "price": "₹420 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3689d112-9e7b-4656-a76b-30bff4214538.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/68da0f8c-46e4-4b46-8817-fb3234e80c75.jpg",
         "link": "https://amzn.to/4t5L04Q"
       },
       {
@@ -270,7 +272,7 @@
         "name": "LED Fidget Keychain",
         "desc": "",
         "price": "₹ 299",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b74107e3-bf99-416f-9a99-8aa7d161f5c9.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/89ea94d9-ea3f-487e-a094-2cc86e28e710.jpg",
         "link": "https://amzn.to/4twgJvW"
       },
       {
@@ -298,7 +300,7 @@
         "name": "Kratos Ring Light Kit",
         "desc": "",
         "price": "₹799 ⭐4.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b94feb9a-d17c-4fca-859d-8b2c73da6f86.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4d2a9036-bebe-4afd-92da-b4fb989564ae.jpg",
         "link": "https://amzn.to/4sDd3YJ"
       }
     ],
@@ -499,4 +501,5 @@
         "name": "Echo Dot Speaker",
         "desc": "",
         "price": " $34.08 ⭐4.7 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e28d8315-4c9e-45cd-88dd-2b3703e815ac.jpg",
+        "link": "h
