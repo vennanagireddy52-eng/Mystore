@@ -420,6 +420,22 @@
         "price": " $34.08 ⭐4.7 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e28d8315-4c9e-45cd-88dd-2b3703e815ac.jpg",
         "link": "https://amzn.to/4vAiFFM"
+      },
+      {
+        "id": "p1775836692152",
+        "name": "Fitness Calling Smartwatch",
+        "desc": "",
+        "price": "$18.99 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ff208519-e2ee-4481-8972-29e0553ac1c2.jpg",
+        "link": "https://amzn.to/4dzhorU"
+      },
+      {
+        "id": "p1775836810814",
+        "name": "MZEIBO 80W Soundbar",
+        "desc": "",
+        "price": "$59.99 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37812ce9-3aa1-4c06-b857-d241eee15195.jpg",
+        "link": "https://amzn.to/3Oh88ym"
       }
     ],
     "Kitchen": [
@@ -469,6 +485,14 @@
         "price": "$14.95 ⭐4.8",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2d52b6aa-a908-4b9b-b51a-9b601138bc08.jpg",
         "link": "https://amzn.to/3PYFKl5"
+      },
+      {
+        "id": "p1775836594121",
+        "name": "Cooking Utensil Set",
+        "desc": "",
+        "price": "$19.64 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/19f15545-570b-46d3-b890-539b6a747763.jpg",
+        "link": "https://amzn.to/4vljCRV"
       }
     ],
     "Home": [
@@ -485,27 +509,4 @@
         "name": "EUDELE Shower Caddy",
         "desc": "",
         "price": "$18.98 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4a27d333-b845-4a08-aceb-289871f8a2f2.jpg",
-        "link": "https://amzn.to/48rWDLd"
-      },
-      {
-        "id": "p1775159263226",
-        "name": "RGB Corner Lamp",
-        "desc": "RGB LED Corner Floor Lamp with Music Sync & App Control Gaming Room Light",
-        "price": "$39.99 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/39e19f91-1127-4dcc-9d9d-4be017427c9f.jpg",
-        "link": "https://amzn.to/47Dlg7q"
-      },
-      {
-        "id": "p1775313844398",
-        "name": "Modern Candle lamp ",
-        "desc": "",
-        "price": "$26.99 ⭐4.6 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/54bd40ed-98f7-460e-adc0-f0a6b686f0e4.jpg",
-        "link": "https://amzn.to/3POzOLq"
-      },
-      {
-        "id": "p1775491611681",
-        "name": "Retro Quote Canvas Art",
-        "desc": "",
-        "price": "
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-
