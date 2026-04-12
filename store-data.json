@@ -1,3 +1,4 @@
+
 {
   "IND": {
     "Tech": [
@@ -72,6 +73,13 @@
         "price": "₹999 ⭐4.1 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/401cbbfa-1a74-45df-99de-12f30b28da44.jpg",
         "link": "https://amzn.to/4cpNrse"
+      },
+      {
+        "id": "p1776011416990",
+        "name": "Dell KB216 Keyboard",
+        "price": "₹597 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/20d23605-10aa-45d1-b7f0-212e13242d71.jpg",
+        "link": "https://amzn.to/3Oj9JUm"
       }
     ],
     "Fashion": [
@@ -105,6 +113,13 @@
         "price": "₹495 ⭐3.7",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/34e3572a-4aee-47a5-a91e-f735ff3789e2.jpg",
         "link": "https://amzn.to/4soCOvI"
+      },
+      {
+        "id": "p1776011498853",
+        "name": "INKAST Casual Shirt",
+        "price": "₹599 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7ad15083-cdd8-4044-bfbe-f0de58f46aeb.jpg",
+        "link": "https://amzn.to/421W6vU"
       }
     ],
     "Kitchen": [
@@ -228,6 +243,13 @@
         "price": "₹699 ⭐4.9",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/11097abf-51d7-4ed4-af23-c9f788272bee.jpg",
         "link": "https://amzn.to/4dFBl0g"
+      },
+      {
+        "id": "p1776011880600",
+        "name": "3 Shelf Wall Organizer",
+        "price": "₹699 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/8ebee5a5-cfa5-4b4e-93d0-3be863d3e927.jpg",
+        "link": "https://amzn.to/3O0dqOK"
       }
     ],
     "Books": [
@@ -487,26 +509,4 @@
         "link": "https://amzn.to/3PYFKl5"
       },
       {
-        "id": "p1775836594121",
-        "name": "Cooking Utensil Set",
-        "desc": "",
-        "price": "$19.64 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/19f15545-570b-46d3-b890-539b6a747763.jpg",
-        "link": "https://amzn.to/4vljCRV"
-      }
-    ],
-    "Home": [
-      {
-        "id": "p1775068712329",
-        "name": "Air purifier ",
-        "desc": "LEVOIT Core Mini-P Air Purifier | Compact 3-in-1 Bedroom Air Cleaner",
-        "price": "$39.99 | ⭐4.6 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/acca3151-aac0-4342-94f4-727fcf485fa6.jpg",
-        "link": "https://amzn.to/47Bkkk0"
-      },
-      {
-        "id": "p1775157734548",
-        "name": "EUDELE Shower Caddy",
-        "desc": "",
-        "price": "$18.98 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-
+        "id": "p1775836
