@@ -248,9 +248,8 @@
       {
         "id": "p1775155445207",
         "name": "Stop Letting Everything Affect You",
-        "desc": "Stop Letting Everything Affect You Book – Break Overthinking Best Deal",
         "price": "₹260 ⭐4.7",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/845d4b8c-6ba7-4691-99e1-273e57a62ac1.webp",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/132a2d6c-4452-4fa3-8dde-1dddcd2bb9a1.jpg",
         "link": "https://amzn.to/4dUImu8"
       },
       {
@@ -327,23 +326,6 @@
         "link": "https://amzn.to/3QeFSgi"
       }
     ],
-    "Wall accessories ": [
-      {
-        "id": "p1775311900231",
-        "name": "Charging phone holder",
-        "desc": "Wall Mobile Holder | Charging Stand, Remote & Key Holder",
-        "price": " ₹399 ⭐4.2  ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/161265dd-9d27-4eff-a84c-ee9bfccd4e2e.jpg",
-        "link": "https://amzn.to/4v1vQiy"
-      },
-      {
-        "id": "p1776106271369",
-        "name": "Wall hooks ",
-        "price": "₹499 ⭐4.2 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/01ca99d5-a412-4930-bfe6-2a4122330214.jpg",
-        "link": "https://amzn.to/4s3LkQB"
-      }
-    ],
     "Photography": [
       {
         "id": "p1775576791681",
@@ -362,6 +344,22 @@
         "price": "₹1398 ⭐4.6",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5212a15c-56c7-49d1-ae4a-089e7a30d609.jpg",
         "link": "https://amzn.to/3Q2d9v8"
+      }
+    ],
+    "Wall accessories": [
+      {
+        "id": "p1775311900231",
+        "name": "Charging phone holder",
+        "price": " ₹399 ⭐4.2  ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f4f0e2c2-e841-4b16-8c01-9aa5a5d3e5d5.jpg",
+        "link": "https://amzn.to/4v1vQiy"
+      },
+      {
+        "id": "p1776106271369",
+        "name": "Wall hooks ",
+        "price": "₹499 ⭐4.2 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/01ca99d5-a412-4930-bfe6-2a4122330214.jpg",
+        "link": "https://amzn.to/4s3LkQB"
       }
     ]
   },
@@ -523,4 +521,10 @@
         "id": "p1776100708858",
         "name": "Magnetic Spice Rack",
         "price": "$19.99 ⭐4.8",
-        "img": "https://i.supaimg.com/e6a65b
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/06ebfe9c-65fc-49ca-98de-229bbecc6945.jpg",
+        "link": "https://amzn.to/4cDzVlM"
+      }
+    ],
+    "Home": [
+      {
+        "id": "
