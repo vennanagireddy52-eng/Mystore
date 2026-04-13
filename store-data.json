@@ -1,4 +1,3 @@
-
 {
   "IND": {
     "Tech": [
@@ -178,6 +177,13 @@
         "price": "₹699 ⭐4.8",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/dc662a8d-ea5a-4fec-bf75-5cec197f835e.jpg",
         "link": "https://amzn.to/4vnyrn0"
+      },
+      {
+        "id": "p1776100107691",
+        "name": "Kitchen Cleaner",
+        "price": "₹183 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/591ffa75-ee4a-4556-b6e6-0e77273f0a64.jpg",
+        "link": "https://amzn.to/4swrzRU"
       }
     ],
     "Home": [
@@ -502,11 +508,4 @@
       },
       {
         "id": "p1775664900113",
-        "name": "Dough Scraper",
-        "desc": "",
-        "price": "$14.95 ⭐4.8",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2d52b6aa-a908-4b9b-b51a-9b601138bc08.jpg",
-        "link": "https://amzn.to/3PYFKl5"
-      },
-      {
-        "id": "p1775836
+        "na
