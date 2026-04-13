@@ -464,6 +464,13 @@
         "price": "$59.99 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37812ce9-3aa1-4c06-b857-d241eee15195.jpg",
         "link": "https://amzn.to/3Oh88ym"
+      },
+      {
+        "id": "p1776100934111",
+        "name": "Wireless KB Mouse",
+        "price": "$31.39 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/eb10f132-55bd-470b-827e-efb0f517f24b.jpg",
+        "link": "https://amzn.to/4vvHfHR"
       }
     ],
     "Kitchen": [
@@ -500,12 +507,4 @@
       },
       {
         "id": "p1775572244771",
-        "name": "Noodle Express Hot Pot",
-        "desc": "",
-        "price": "$16.99 ⭐4.4 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
-        "link": "https://amzn.to/47N1K8J"
-      },
-      {
-        "id": "p1775664900113",
-        "na
+        "name": "Noodle Express Hot Pot
