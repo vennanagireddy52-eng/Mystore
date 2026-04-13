@@ -2,27 +2,17 @@
   "IND": {
     "Tech": [
       {
-        "id": "p1775053546321",
-        "name": "Headset wireless ",
-        "desc": "boAt Rockerz 480 RGB Headphones | 60H Battery, Beast Mode Gaming, Wireless Over-Ear Headset",
-        "price": "₹1439 , 4.1 ⭐",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/23414d7f-2106-49f3-aa17-6ac3f6276246.jpg",
-        "link": "https://amzn.to/4siyVII"
-      },
-      {
         "id": "p1775154524059",
         "name": "URBN power bank ",
-        "desc": "URBN 20000mAh Power Bank 22.5W Fast Charging PD – Best Deal Portable Charger",
         "price": "₹999 ⭐4.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/15b6e347-cb69-49f6-9f7b-3b15ba1ddb0b.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d493ff39-734b-47e1-8d39-8eb2ee81e508.jpg",
         "link": "https://amzn.to/4sfxzOG"
       },
       {
         "id": "p1775240427778",
         "name": "Oneplus buds",
-        "desc": "Trending OnePlus Nord Buds 2r TWS Earbuds |",
         "price": "₹1599 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3aa7fd71-c2ad-496e-8870-20dce95684e3.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e80c5b-72a6-4c34-99d2-716770f2ee53.jpg",
         "link": "https://amzn.to/41d4XL4"
       },
       {
@@ -36,9 +26,8 @@
       {
         "id": "p1775493333469",
         "name": "Portronics Bluetooth Mouse",
-        "desc": "",
         "price": "499 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9191f589-99a6-4b0d-8814-edc285347d21.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/555c60be-46e2-4c38-b0c4-54ff956e5b4d.jpg",
         "link": "https://amzn.to/4veuX6u"
       },
       {
@@ -79,30 +68,35 @@
         "price": "₹597 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/20d23605-10aa-45d1-b7f0-212e13242d71.jpg",
         "link": "https://amzn.to/3Oj9JUm"
+      },
+      {
+        "id": "p1776103528138",
+        "name": "Headset wireless ",
+        "price": "₹1439 , 4.1 ⭐",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/980f4668-2168-41ed-866e-99ef5562684c.jpg",
+        "link": "https://amzn.to/4siyVII"
       }
     ],
     "Fashion": [
       {
         "id": "p1775053942122",
         "name": "Men's casual ",
-        "desc": "DEELMO Men’s Linen Casual Shirt | Stylish Summer Beach Wear, Breathable Button-Down Fashion Shirt",
         "price": "₹491 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4e336ee4-485f-45b5-8f76-cd0fc42ee395.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3cfc65e4-e8c0-4238-b460-cd3c4301be3e.jpg",
         "link": "https://amzn.to/4srj0I9"
       },
       {
         "id": "p1775415365971",
         "name": "Men's hoodie ",
         "price": "₹599 ⭐4.8",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4435cb7b-1fe8-4f38-847f-4d4b8eb197ee.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/15ca46cf-db0c-46fb-90dd-5ffd52667116.jpg",
         "link": "https://amzn.to/41frUNC"
       },
       {
         "id": "p1775493136641",
         "name": "Soft Sports Sneakers ",
-        "desc": "",
         "price": "₹1299 ⭐4.7 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f38000ea-4117-4c10-aca1-33e8c016fc08.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1cf1d4d2-7b6c-4efc-9bc1-a1f8828d0de2.jpg",
         "link": "https://amzn.to/4cbbTxg"
       },
       {
@@ -280,17 +274,15 @@
       {
         "id": "p1775155803901",
         "name": "Laptop stand ",
-        "desc": "Dyazo Adjustable Aluminum Laptop Stand – Ergonomic Foldable Riser",
         "price": "₹369 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/17365847-0d06-4796-aff7-16c317d5b78b.webp",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/738e1cb0-de87-4a45-b3ce-42949646de1d.jpg",
         "link": "https://amzn.to/3PQthzO"
       },
       {
         "id": "p1775492264554",
         "name": "Weird Wolf Study Lamp",
-        "desc": "",
         "price": "₹448 ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/df378fb5-eef3-4549-9a76-db620aa44f3f.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6dd70110-d143-4e0c-b2a4-b5bc51eefa7d.jpg",
         "link": "https://amzn.to/41V6qWp"
       },
       {
@@ -507,4 +499,19 @@
       },
       {
         "id": "p1775572244771",
-        "name": "Noodle Express Hot Pot
+        "name": "Noodle Express Hot Pot",
+        "desc": "",
+        "price": "$16.99 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
+        "link": "https://amzn.to/47N1K8J"
+      },
+      {
+        "id": "p1775664900113",
+        "name": "Dough Scraper",
+        "desc": "",
+        "price": "$14.95 ⭐4.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2d52b6aa-a908-4b9b-b51a-9b601138bc08.jpg",
+        "link": "https://amzn.to/3PYFKl5"
+      },
+      {
+    
