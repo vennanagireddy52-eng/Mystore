@@ -368,49 +368,43 @@
       {
         "id": "p1775068080779",
         "name": "Ear buds ",
-        "desc": "Soundcore P20i Wireless Earbuds | Big Bass Bluetooth 5.3 Earphones",
         "price": "$24.99 | ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/18e520a6-f637-4edc-8a2c-15fcf88fde43.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f93994cb-1e50-4134-9241-ebecbb8e723e.jpg",
         "link": "https://amzn.to/4tqi3kb"
       },
       {
         "id": "p1775158794746",
         "name": "Headset",
-        "desc": "Razer BlackShark V2 X Gaming Headset | 50mm Drivers & Noise Isolation – Best Gamer Pick",
         "price": "$37.99 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/82a6332a-e5ba-4c57-83a6-286a7beb9a83.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d774f2ad-c2d7-49ae-a6d6-f1f551151eac.jpg",
         "link": "https://amzn.to/4dXGbG6"
       },
       {
         "id": "p1775242442403",
         "name": "RBG  Gaming Keyboard ",
-        "desc": "Redragon K556 PRO Wireless RGB Gaming Keyboard | Tri-Mode Mechanical",
         "price": "$39.43 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b648d5f3-50b6-42b4-a00a-1a433cc07c8e.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b9df91fc-3ff8-4dff-9410-6f0189e47ca0.jpg",
         "link": "https://amzn.to/4vsbOyb"
       },
       {
         "id": "p1775313412737",
         "name": "Men's smartwatch ",
-        "desc": "Smart Watch 1.83\" HD | Bluetooth Calling | 110+ Sports Modes |",
         "price": "$19.99 ⭐5.0 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/deb82fc8-355f-4847-a9c8-c8f88732d986.webp",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bc322f55-735f-466d-91d3-14993e4e2788.jpg",
         "link": "https://amzn.to/4c7WLAP"
       },
       {
         "id": "p1775412453383",
         "name": "Foldable Bluetooth Keyboard & Mouse",
-        "desc": "Samsers Foldable Bluetooth Keyboard & Mouse Combo | Portable Travel Set | $53.99 ⭐4.5 Deal",
         "price": "$53.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fe0eac46-1a53-4de9-8c87-8689d7117a85.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2821af2b-efc0-4fc4-a73d-a2b9fb46e4ed.jpg",
         "link": "https://amzn.to/4vdT2tU"
       },
       {
         "id": "p1775490971066",
         "name": "Slim Pocket Cooling Fan",
-        "desc": "",
         "price": "$9.99 ⭐4.7",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bbaa753d-36d2-4b68-a2ba-585715ee12af.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3b709828-7235-4f47-ae03-a5ee05b35ee6.jpg",
         "link": "https://amzn.to/4crKB6W"
       },
       {
@@ -463,14 +457,6 @@
     ],
     "Kitchen": [
       {
-        "id": "p1775068420455",
-        "name": "Knife set",
-        "desc": "14-Piece Kitchen Knife Set Wood Block | Stainless Steel Chef Knife Set",
-        "price": "$69.99 | ⭐4.7",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3329afce-132b-4ed6-870f-6092df149d72.jpg",
-        "link": "https://amzn.to/4scCz6T"
-      },
-      {
         "id": "p1775242640601",
         "name": "Air Fryer ",
         "desc": "COSORI 9-in-1 TurboBlaze Air Fryer | Cooking Kitchen upgrade",
@@ -496,9 +482,8 @@
       {
         "id": "p1775572244771",
         "name": "Noodle Express Hot Pot",
-        "desc": "",
         "price": "$16.99 ⭐4.4 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/13536efe-ea41-4729-b807-65958f7fa321.jpg",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/30c0c0f7-2838-4413-b1c8-b50c6b457d33.jpg",
         "link": "https://amzn.to/47N1K8J"
       },
       {
@@ -523,8 +508,28 @@
         "price": "$19.99 ⭐4.8",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/06ebfe9c-65fc-49ca-98de-229bbecc6945.jpg",
         "link": "https://amzn.to/4cDzVlM"
+      },
+      {
+        "id": "p1776139814819",
+        "name": "Knife set",
+        "price": "$69.99 | ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/15c37f17-6a82-497b-8920-940df16dc89b.jpg",
+        "link": "https://amzn.to/4scCz6T"
       }
     ],
     "Home": [
       {
-        "id": "
+        "id": "p1775068712329",
+        "name": "Air purifier ",
+        "desc": "LEVOIT Core Mini-P Air Purifier | Compact 3-in-1 Bedroom Air Cleaner",
+        "price": "$39.99 | ⭐4.6 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/acca3151-aac0-4342-94f4-727fcf485fa6.jpg",
+        "link": "https://amzn.to/47Bkkk0"
+      },
+      {
+        "id": "p1775157734548",
+        "name": "EUDELE Shower Caddy",
+        "desc": "",
+        "price": "$18.98 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4a27d333-b845-4a08-aceb-289871f8a2f2.jpg",
+        "link"
