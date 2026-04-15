@@ -82,6 +82,13 @@
         "price": "₹799 ⭐3.9",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f9dae1b4-d8a7-44a0-a990-a26bfd76d1fb.jpg",
         "link": "https://amzn.to/3OofDDI"
+      },
+      {
+        "id": "p1776269701534",
+        "name": "Grenaro Wireless Mic",
+        "price": "765 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e5fde49b-9032-4f2b-a8cb-d7a6841d1d9c.jpg",
+        "link": "https://amzn.to/3Q2xpNo"
       }
     ],
     "Fashion": [
@@ -120,6 +127,13 @@
         "price": "₹599 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7ad15083-cdd8-4044-bfbe-f0de58f46aeb.jpg",
         "link": "https://amzn.to/421W6vU"
+      },
+      {
+        "id": "p1776269571218",
+        "name": "Deelmo Casual Shirt",
+        "price": "₹495 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/8ae5c872-eb3c-4238-b12b-e49d3b954204.jpg",
+        "link": "https://amzn.to/3Q8UTAp"
       }
     ],
     "Kitchen": [
@@ -189,6 +203,13 @@
         "price": "₹599 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ee70ad35-29a8-4d94-8014-b6fd7173c5ed.jpg",
         "link": "https://amzn.to/4cmjyZB"
+      },
+      {
+        "id": "p1776269496460",
+        "name": "Butterfly Cookware Set",
+        "price": "₹1699 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3b563b69-0f10-4530-aef3-bc8a412cdac1.jpg",
+        "link": "https://amzn.to/4sCGjyD"
       }
     ],
     "Home": [
@@ -263,6 +284,13 @@
         "price": "₹446 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5497153a-309e-466a-8fce-b052beec6593.jpg",
         "link": "https://amzn.to/4tbpU5a"
+      },
+      {
+        "id": "p1776269638626",
+        "name": "Meditating Buddha Idol",
+        "price": "372 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/73621747-1f89-406b-93fc-6dc84b65f084.jpg",
+        "link": "https://amzn.to/4myPe2P"
       }
     ],
     "Books": [
@@ -495,42 +523,13 @@
         "price": "| $21.98 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84eb362d-e399-47c2-8d84-9042a34fc55e.webp",
         "link": "https://amzn.to/4808mRa"
+      },
+      {
+        "id": "p1776274930458",
+        "name": "Soundcore ANC Headphones",
+        "price": "$39.98 ⭐4.6",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d4870c59-ec67-4224-ad99-927daba6c89e.jpg",
+        "link": "https://amzn.to/3Qpr2DL"
       }
     ],
-    "Kitchen": [
-      {
-        "id": "p1775242640601",
-        "name": "Air Fryer ",
-        "price": "$89.87 ⭐4.8",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/520506bd-e63b-4157-9cce-64d5d98b18db.jpg",
-        "link": "https://amzn.to/4cpwHlO"
-      },
-      {
-        "id": "p1775313176315",
-        "name": "Dining plates ",
-        "price": "$39.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/751fb59f-d7f3-4735-8b7a-7fdbfb0f62b5.jpg",
-        "link": "https://amzn.to/4c3JUPY"
-      },
-      {
-        "id": "p1775414302062",
-        "name": "Food warming mat",
-        "price": "$46.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/663b98be-44b8-4ea0-9608-622163bc6686.jpg",
-        "link": "https://amzn.to/47MQ5qq"
-      },
-      {
-        "id": "p1775572244771",
-        "name": "Noodle Express Hot Pot",
-        "price": "$16.99 ⭐4.4 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/30c0c0f7-2838-4413-b1c8-b50c6b457d33.jpg",
-        "link": "https://amzn.to/47N1K8J"
-      },
-      {
-        "id": "p1775664900113",
-        "name": "Dough Scraper",
-        "desc": "",
-        "price": "$14.95 ⭐4.8",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2d52b6aa-a908-4b9b-b51a-9b601138bc08.jpg",
-        "link": "https://amzn.to/3PYFKl5"
-      },
+    "Kitchen":
