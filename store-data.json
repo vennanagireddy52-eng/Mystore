@@ -89,6 +89,13 @@
         "price": "765 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e5fde49b-9032-4f2b-a8cb-d7a6841d1d9c.jpg",
         "link": "https://amzn.to/3Q2xpNo"
+      },
+      {
+        "id": "p1776358905286",
+        "name": "Portronics Snapcase Cable Kit",
+        "price": "₹299 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/77145433-8039-43c5-a916-d222fc8a6044.jpg",
+        "link": "https://amzn.to/4vpyMpo"
       }
     ],
     "Fashion": [
@@ -210,6 +217,13 @@
         "price": "₹1699 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3b563b69-0f10-4530-aef3-bc8a412cdac1.jpg",
         "link": "https://amzn.to/4sCGjyD"
+      },
+      {
+        "id": "p1776358975631",
+        "name": "Borosil Glass Set",
+        "price": "₹459 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0bf6f630-4e4f-496c-bb21-ae2cc4efdbc1.jpg",
+        "link": "https://amzn.to/41D1SEi"
       }
     ],
     "Home": [
@@ -291,6 +305,13 @@
         "price": "372 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/73621747-1f89-406b-93fc-6dc84b65f084.jpg",
         "link": "https://amzn.to/4myPe2P"
+      },
+      {
+        "id": "p1776359057577",
+        "name": "Adiyogi Shiva Idol",
+        "price": "₹239 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c3323099-9dfe-4728-8786-b410558ae646.jpg",
+        "link": "https://amzn.to/3Obj5S9"
       }
     ],
     "Books": [
@@ -380,6 +401,13 @@
         "price": " ₹699",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/70ac81ad-98c0-46e3-958a-5dfd623ac09d.jpg",
         "link": "https://amzn.to/4vumlJ1"
+      },
+      {
+        "id": "p1776359146369",
+        "name": "Memory Match Game",
+        "price": "₹205 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6b5078cd-da13-4ec7-90a2-aff9689636c8.jpg",
+        "link": "https://amzn.to/481Kug6"
       }
     ],
     "Photography": [
@@ -504,32 +532,4 @@
       },
       {
         "id": "p1775836810814",
-        "name": "MZEIBO 80W Soundbar",
-        "desc": "",
-        "price": "$59.99 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/37812ce9-3aa1-4c06-b857-d241eee15195.jpg",
-        "link": "https://amzn.to/3Oh88ym"
-      },
-      {
-        "id": "p1776100934111",
-        "name": "Wireless KB Mouse",
-        "price": "$31.39 ⭐4.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/eb10f132-55bd-470b-827e-efb0f517f24b.jpg",
-        "link": "https://amzn.to/4vvHfHR"
-      },
-      {
-        "id": "p1776168715683",
-        "name": "BolaButty BT Speaker",
-        "price": "| $21.98 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/84eb362d-e399-47c2-8d84-9042a34fc55e.webp",
-        "link": "https://amzn.to/4808mRa"
-      },
-      {
-        "id": "p1776274930458",
-        "name": "Soundcore ANC Headphones",
-        "price": "$39.98 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d4870c59-ec67-4224-ad99-927daba6c89e.jpg",
-        "link": "https://amzn.to/3Qpr2DL"
-      }
-    ],
-    "Kitchen":
+        "n
