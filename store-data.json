@@ -96,6 +96,20 @@
         "price": "₹299 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/77145433-8039-43c5-a916-d222fc8a6044.jpg",
         "link": "https://amzn.to/4vpyMpo"
+      },
+      {
+        "id": "p1776539821477",
+        "name": "Zebronics Astra 35",
+        "price": " ₹739 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/deb6e4a3-84e8-4557-9367-78b9b2538291.jpg",
+        "link": "https://amzn.to/4cDO7u9"
+      },
+      {
+        "id": "p1776625960686",
+        "name": "Mi Power Bank 4i",
+        "price": "₹1099 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5fc13139-bbf9-40d3-ae63-b2cda3804198.png",
+        "link": "https://amzn.to/489HRJ0"
       }
     ],
     "Fashion": [
@@ -141,6 +155,13 @@
         "price": "₹495 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/8ae5c872-eb3c-4238-b12b-e49d3b954204.jpg",
         "link": "https://amzn.to/3Q8UTAp"
+      },
+      {
+        "id": "p1776539957274",
+        "name": "Man Printed Shirt",
+        "price": "₹398 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bda9127f-10cf-4483-83c1-1077d2ac4c48.jpg",
+        "link": "https://amzn.to/4tlHrIc"
       }
     ],
     "Kitchen": [
@@ -224,6 +245,27 @@
         "price": "₹459 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/0bf6f630-4e4f-496c-bb21-ae2cc4efdbc1.jpg",
         "link": "https://amzn.to/41D1SEi"
+      },
+      {
+        "id": "p1776450792054",
+        "name": "Boilex Electric Kettle",
+        "price": "₹571 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d77bd45c-9d9d-4a7d-b96c-16e139e3a9b7.jpg",
+        "link": "https://amzn.to/3Q7Gvsh"
+      },
+      {
+        "id": "p1776540175408",
+        "name": "NutriPro Mixer Grinder",
+        "price": "₹1599 ⭐4.4",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/839004ae-2329-4bab-be8d-3bbac9c49253.jpg",
+        "link": "https://amzn.to/41Hedr4"
+      },
+      {
+        "id": "p1776625691603",
+        "name": "Cruise OTG Oven",
+        "price": "₹1499 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a7a7b472-049b-4750-8fce-7d57006cfda3.jpg",
+        "link": "https://amzn.to/4clx9lb"
       }
     ],
     "Home": [
@@ -312,6 +354,20 @@
         "price": "₹239 ⭐4.3",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c3323099-9dfe-4728-8786-b410558ae646.jpg",
         "link": "https://amzn.to/3Obj5S9"
+      },
+      {
+        "id": "p1776450613277",
+        "name": "Seeds Plant Pots",
+        "price": "₹629 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ebcf1e32-e30c-468c-ace4-8fdc371f4323.jpg",
+        "link": "https://amzn.to/4dOxFt8"
+      },
+      {
+        "id": "p1776625902003",
+        "name": "Galaxy Crystal Lamp",
+        "price": "₹179 ⭐4.7 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f75d097e-1c0f-44d2-80f2-f6a344f5eab2.jpg",
+        "link": "https://amzn.to/4mCf9GR"
       }
     ],
     "Books": [
@@ -361,6 +417,13 @@
         "price": "₹699 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6cb19b80-dc89-4a94-95f2-f16ab905e8cd.jpg",
         "link": "https://amzn.to/4bV4cfK"
+      },
+      {
+        "id": "p1776450935389",
+        "name": "Sand Timer",
+        "price": "₹385 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/87217c39-7422-4dbd-9515-34affbf69d4f.jpg",
+        "link": "https://amzn.to/4cjJrKZ"
       }
     ],
     "Toys & games": [
@@ -408,6 +471,27 @@
         "price": "₹205 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6b5078cd-da13-4ec7-90a2-aff9689636c8.jpg",
         "link": "https://amzn.to/481Kug6"
+      },
+      {
+        "id": "p1776451488227",
+        "name": "Skytouch Solitaire Game",
+        "price": "₹299",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b4d8b26b-9a41-44bb-92af-40814663a818.jpg",
+        "link": "https://amzn.to/48b3Xe9"
+      },
+      {
+        "id": "p1776540245197",
+        "name": "Spinning Top Set",
+        "price": "₹399 ⭐4.2",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cf33cc95-803f-4894-893f-1cce404eab3d.jpg",
+        "link": "https://amzn.to/4sKzjzU"
+      },
+      {
+        "id": "p1776625819778",
+        "name": "Magnet Dart Game",
+        "price": "₹399 ⭐4.1 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/448efc71-6e9e-426a-8065-ee86cfc62065.jpg",
+        "link": "https://amzn.to/42iPzgs"
       }
     ],
     "Photography": [
@@ -442,94 +526,4 @@
         "id": "p1776106271369",
         "name": "Wall hooks ",
         "price": "₹499 ⭐4.2 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/01ca99d5-a412-4930-bfe6-2a4122330214.jpg",
-        "link": "https://amzn.to/4s3LkQB"
-      },
-      {
-        "id": "p1776168100213",
-        "name": "Photo Frame Set",
-        "price": "₹446 ⭐4.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5497153a-309e-466a-8fce-b052beec6593.jpg",
-        "link": "https://amzn.to/4tbpU5a"
-      }
-    ]
-  },
-  "US": {
-    "Tech": [
-      {
-        "id": "p1775068080779",
-        "name": "Ear buds ",
-        "price": "$24.99 | ⭐4.4",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f93994cb-1e50-4134-9241-ebecbb8e723e.jpg",
-        "link": "https://amzn.to/4tqi3kb"
-      },
-      {
-        "id": "p1775158794746",
-        "name": "Headset",
-        "price": "$37.99 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d774f2ad-c2d7-49ae-a6d6-f1f551151eac.jpg",
-        "link": "https://amzn.to/4dXGbG6"
-      },
-      {
-        "id": "p1775242442403",
-        "name": "RBG  Gaming Keyboard ",
-        "price": "$39.43 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b9df91fc-3ff8-4dff-9410-6f0189e47ca0.jpg",
-        "link": "https://amzn.to/4vsbOyb"
-      },
-      {
-        "id": "p1775313412737",
-        "name": "Men's smartwatch ",
-        "price": "$19.99 ⭐5.0 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/bc322f55-735f-466d-91d3-14993e4e2788.jpg",
-        "link": "https://amzn.to/4c7WLAP"
-      },
-      {
-        "id": "p1775412453383",
-        "name": "Foldable Bluetooth Keyboard & Mouse",
-        "price": "$53.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/2821af2b-efc0-4fc4-a73d-a2b9fb46e4ed.jpg",
-        "link": "https://amzn.to/4vdT2tU"
-      },
-      {
-        "id": "p1775490971066",
-        "name": "Slim Pocket Cooling Fan",
-        "price": "$9.99 ⭐4.7",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/3b709828-7235-4f47-ae03-a5ee05b35ee6.jpg",
-        "link": "https://amzn.to/4crKB6W"
-      },
-      {
-        "id": "p1775492898406",
-        "name": "Waterproof Party Speaker",
-        "desc": "",
-        "price": " $39.99 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/be431925-61cc-408d-a470-e3ffb8c64801.jpg",
-        "link": "https://amzn.to/3PRasws"
-      },
-      {
-        "id": "p1775758997560",
-        "name": "Logitech M185 Mouse",
-        "desc": "",
-        "price": " $8.02 ⭐4.3",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f4feb44e-4cef-4d88-83f8-5265ce868802.webp",
-        "link": "https://amzn.to/4tC9aUu"
-      },
-      {
-        "id": "p1775801315565",
-        "name": "Echo Dot Speaker",
-        "desc": "",
-        "price": " $34.08 ⭐4.7 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/e28d8315-4c9e-45cd-88dd-2b3703e815ac.jpg",
-        "link": "https://amzn.to/4vAiFFM"
-      },
-      {
-        "id": "p1775836692152",
-        "name": "Fitness Calling Smartwatch",
-        "desc": "",
-        "price": "$18.99 ⭐4.5",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ff208519-e2ee-4481-8972-29e0553ac1c2.jpg",
-        "link": "https://amzn.to/4dzhorU"
-      },
-      {
-        "id": "p1775836810814",
-        "n
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/01ca99d5-a412-4930-bfe6-2a
