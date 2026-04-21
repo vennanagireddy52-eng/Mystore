@@ -103,6 +103,9 @@ async function init() {
     if(!data.META) data.META = { IND:{}, US:{} };
     syncUI();
     
+    // Set initial history state
+    if (!history.state) history.replaceState({layer: 'storeLayer'}, "");
+
     // Deep Link Check
     const urlParams = new URLSearchParams(window.location.search);
     const s = urlParams.get('store'), c = urlParams.get('cat'), pId = urlParams.get('prod');
@@ -118,16 +121,23 @@ async function init() {
     document.getElementById('loader').style.display = 'none';
 }
 
-// History Handling
+// Unified Navigation Logic
 function showLayer(id, push = false) {
     document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     if (push) history.pushState({layer: id}, "");
 }
+
+// Mobile/Physical Back Button Handler
 window.onpopstate = (e) => {
-    const layer = e.state ? e.state.layer : 'storeLayer';
-    document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-    document.getElementById(layer).classList.add('active');
+    if (e.state && e.state.layer) {
+        document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+        document.getElementById(e.state.layer).classList.add('active');
+    } else {
+        // Fallback to ensure we don't get stuck
+        document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+        document.getElementById('storeLayer').classList.add('active');
+    }
 };
 
 function fastRedirect(url) { 
