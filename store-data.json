@@ -110,6 +110,20 @@
         "price": "₹1099 ⭐4.2",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5fc13139-bbf9-40d3-ae63-b2cda3804198.png",
         "link": "https://amzn.to/489HRJ0"
+      },
+      {
+        "id": "p1776711234945",
+        "name": "OnePlus 80W Cable",
+        "price": "₹287 ⭐4.3",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/aef52de1-8b5c-43c9-9fa0-afb8e42b570a.png",
+        "link": "https://amzn.to/4tqjzDh"
+      },
+      {
+        "id": "p1776840871775",
+        "name": "pTron Astra Earbuds",
+        "price": " ₹857 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ec025521-1bc6-4e28-84df-aa1758447c3c.png",
+        "link": "https://amzn.to/4sRMFKL"
       }
     ],
     "Fashion": [
@@ -266,6 +280,20 @@
         "price": "₹1499 ⭐4.1",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a7a7b472-049b-4750-8fce-7d57006cfda3.jpg",
         "link": "https://amzn.to/4clx9lb"
+      },
+      {
+        "id": "p1776711322864",
+        "name": "Supermom Jug Set",
+        "price": " ₹449 ⭐5.0 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/d0fd0f3c-b58b-4838-be3f-3e2af7938766.png",
+        "link": "https://amzn.to/4vD5pQA"
+      },
+      {
+        "id": "p1776840972886",
+        "name": "Oats Mason Jar",
+        "price": " ₹187 ⭐4.7",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/a63fdb85-814f-4cb1-8b7b-d45a2d6c0c9d.png",
+        "link": "https://amzn.to/3QTqjLh"
       }
     ],
     "Home": [
@@ -368,6 +396,20 @@
         "price": "₹179 ⭐4.7 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f75d097e-1c0f-44d2-80f2-f6a344f5eab2.jpg",
         "link": "https://amzn.to/4mCf9GR"
+      },
+      {
+        "id": "p1776711444954",
+        "name": "Moon Crystal Lamp",
+        "price": "₹179",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7d1af643-4256-4bdb-832f-24667a1f340b.jpg",
+        "link": "https://amzn.to/4ewYGkX"
+      },
+      {
+        "id": "p1776841164200",
+        "name": "Philips LED Batten",
+        "price": "₹194 ⭐4.1 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1e5df5b0-03cb-4ca6-8fac-82c5e2b65009.png",
+        "link": "https://amzn.to/3QpAgjt"
       }
     ],
     "Books": [
@@ -385,6 +427,13 @@
         "price": "₹237 ⭐4.5 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/35b0dfd7-abed-49bd-9372-460ae1dacaee.jpg",
         "link": "https://amzn.to/4t2Rba2"
+      },
+      {
+        "id": "p1776841070885",
+        "name": "Power of Subconscious Mind",
+        "price": " ₹149 ⭐4.4 ",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/59e81ec7-8ab4-44e7-8a9a-d6507e76caa7.jpg",
+        "link": "https://amzn.to/4tsPF1d"
       }
     ],
     "Desk set-up": [
@@ -474,56 +523,4 @@
       },
       {
         "id": "p1776451488227",
-        "name": "Skytouch Solitaire Game",
-        "price": "₹299",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/b4d8b26b-9a41-44bb-92af-40814663a818.jpg",
-        "link": "https://amzn.to/48b3Xe9"
-      },
-      {
-        "id": "p1776540245197",
-        "name": "Spinning Top Set",
-        "price": "₹399 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/cf33cc95-803f-4894-893f-1cce404eab3d.jpg",
-        "link": "https://amzn.to/4sKzjzU"
-      },
-      {
-        "id": "p1776625819778",
-        "name": "Magnet Dart Game",
-        "price": "₹399 ⭐4.1 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/448efc71-6e9e-426a-8065-ee86cfc62065.jpg",
-        "link": "https://amzn.to/42iPzgs"
-      }
-    ],
-    "Photography": [
-      {
-        "id": "p1775576791681",
-        "name": "Kratos Ring Light Kit",
-        "desc": "",
-        "price": "₹799 ⭐4.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/4d2a9036-bebe-4afd-92da-b4fb989564ae.jpg",
-        "link": "https://amzn.to/4sDd3YJ"
-      }
-    ],
-    "Fitness": [
-      {
-        "id": "p1775758244718",
-        "name": "Resistance Bands Kit",
-        "desc": "",
-        "price": "₹1398 ⭐4.6",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/5212a15c-56c7-49d1-ae4a-089e7a30d609.jpg",
-        "link": "https://amzn.to/3Q2d9v8"
-      }
-    ],
-    "Wall accessories": [
-      {
-        "id": "p1775311900231",
-        "name": "Charging phone holder",
-        "price": " ₹399 ⭐4.2  ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/f4f0e2c2-e841-4b16-8c01-9aa5a5d3e5d5.jpg",
-        "link": "https://amzn.to/4v1vQiy"
-      },
-      {
-        "id": "p1776106271369",
-        "name": "Wall hooks ",
-        "price": "₹499 ⭐4.2 ",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/01ca99d5-a412-4930-bfe6-2a
+        "name"
