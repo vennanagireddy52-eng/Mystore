@@ -124,6 +124,13 @@
         "price": " ₹857 ⭐4.0",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ec025521-1bc6-4e28-84df-aa1758447c3c.png",
         "link": "https://amzn.to/4sRMFKL"
+      },
+      {
+        "id": "p1777059013671",
+        "name": "HP H200 Headset",
+        "price": "₹1306 ⭐4.0",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c7e91dd5-a58c-47ec-b35e-6147ac65c466.png",
+        "link": "https://amzn.to/4mPXawE"
       }
     ],
     "Fashion": [
@@ -410,6 +417,13 @@
         "price": "₹194 ⭐4.1 ",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/1e5df5b0-03cb-4ca6-8fac-82c5e2b65009.png",
         "link": "https://amzn.to/3QpAgjt"
+      },
+      {
+        "id": "p1776972951389",
+        "name": "RGB DJ PAR Light",
+        "price": "₹379 ⭐4.5",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/9c427673-bfba-4c36-b6ce-1e56e9feee74.jpg",
+        "link": "https://amzn.to/48eaHYU"
       }
     ],
     "Books": [
@@ -473,6 +487,20 @@
         "price": "₹385 ⭐4.5",
         "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/87217c39-7422-4dbd-9515-34affbf69d4f.jpg",
         "link": "https://amzn.to/4cjJrKZ"
+      },
+      {
+        "id": "p1776972746975",
+        "name": "Art Desk Organizer",
+        "price": "₹198 ⭐4.1",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/fdeded66-2a3d-43c4-adb9-fa1911ff3c0e.jpg",
+        "link": "https://amzn.to/4cJGXUY"
+      },
+      {
+        "id": "p1777058944714",
+        "name": "USB Desk Lamp",
+        "price": "₹299 ⭐3.8",
+        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/ecb75f64-a61b-46a9-96eb-e47041ea0123.png",
+        "link": "https://amzn.to/4mKIXko"
       }
     ],
     "Toys & games": [
@@ -495,32 +523,4 @@
         "id": "p1775758439599",
         "name": "Diecast Rolls Royce Car",
         "desc": "",
-        "price": "₹999 ⭐4.1",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/7fcc4e86-b95a-477f-b9bc-198820113756.jpg",
-        "link": "https://amzn.to/4t1N5Pz"
-      },
-      {
-        "id": "p1775831201215",
-        "name": "MRF Cricket Bat",
-        "desc": "",
-        "price": "₹1298 ⭐5.0",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/c4fa3056-3f85-4644-ad45-736e36ab067a.jpg",
-        "link": "https://amzn.to/3QeFSgi"
-      },
-      {
-        "id": "p1776168285090",
-        "name": "Magnetic Balls Cube Set",
-        "price": " ₹699",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/70ac81ad-98c0-46e3-958a-5dfd623ac09d.jpg",
-        "link": "https://amzn.to/4vumlJ1"
-      },
-      {
-        "id": "p1776359146369",
-        "name": "Memory Match Game",
-        "price": "₹205 ⭐4.2",
-        "img": "https://i.supaimg.com/e6a65bbc-d4e3-4657-8388-0945710f9b08/6b5078cd-da13-4ec7-90a2-aff9689636c8.jpg",
-        "link": "https://amzn.to/481Kug6"
-      },
-      {
-        "id": "p1776451488227",
-        "name"
+   
